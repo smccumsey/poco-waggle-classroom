@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'social.apps.django_app.default',
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -52,6 +53,11 @@ MIDDLEWARE_CLASSES = [
 ]
 
 ROOT_URLCONF = 'mysite.urls'
+
+TEMPLATE_CONTEXT_PROCESSORS = (
+        'social.apps.django_app.context_processors.backends',
+        'social.apps.django_app.context_processors.login_redirect',
+        )
 
 TEMPLATES = [
     {
@@ -71,6 +77,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'mysite.wsgi.application'
 
+SOCIAL_AUTH_URL_NAMESPACE = 'social'
 
 # Database
 # https://docs.djangoproject.com/en/1.9/ref/settings/#databases
@@ -82,6 +89,12 @@ DATABASES = {
     }
 }
 
+AUTHENTICATION_BACKENDS = (
+        'social.backends.google.GoogleOpenId',
+        'social.backends.google.GoogleOAuth2',
+        'social.backends.google.GoogleOAuth',
+        'django.contrib.auth.backends.ModelBackend',
+        )
 
 # Password validation
 # https://docs.djangoproject.com/en/1.9/ref/settings/#auth-password-validators

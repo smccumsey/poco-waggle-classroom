@@ -17,7 +17,6 @@ class Assessment(models.Model):
     module = models.ForeignKey(Module, on_delete=models.CASCADE)
     description = models.TextField()
     soln = models.FileField(upload_to="/Users/smeo/django_waggle/mysite/waggle/solnFiles/", default="challengeXsoln.py")
-    tests = models.TextField()
     def __str__(self):
         return "Challenge %s from %s" % (self.id, self.module)
 
@@ -33,7 +32,16 @@ class Related(models.Model):
     links = models.TextField()
     def __str__(self):
         return "Related from %s" % self.module
+
 '''
-class UserStats(models.Model):
-pass
+class User(models.Model):
+    gmail = models.EmailField()
+    registered_courses
+    module_progress
+    # assessment progress
+    history_of_submitted_code
+    submission_results
+    # content progress
+    video_notes
+    video_time
 '''

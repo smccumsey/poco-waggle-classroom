@@ -1,5 +1,5 @@
 from django.shortcuts import get_object_or_404, render, render_to_response
-from django.http import HttpResponseRedirect, JsonResponse
+from django.http import HttpResponseRedirect, JsonResponse, HttpResponse
 from django.core.urlresolvers import reverse
 from django.views import generic
 from django.views.generic.edit import FormView, CreateView
@@ -17,6 +17,11 @@ import os
 import sys
 import subprocess
 from shutil import copyfile
+from django.template import RequestContext
+
+
+class LoginView(generic.TemplateView):
+    template_name = 'waggle/login.html'
 
 
 class AssessmentView(generic.ListView):
@@ -26,7 +31,9 @@ class AssessmentView(generic.ListView):
     template_name = 'waggle/assessment.html'
     # vars that are added to context
     code_id=''
-    submit_result = {}
+    name = {}
+    short_desc = {}
+    long_desc = {}
     user_code = "# Type your python code here"
 
     def handleResult(self, pipeVals):
@@ -35,9 +42,18 @@ class AssessmentView(generic.ListView):
             submission = str(stdout.decode('ASCII').rstrip())
             solution = str(Assessment.objects.get(id=int(self.code_id)).tests)
             if (submission == solution):
-                return True
-            return "STDOUT "+str(stdout.decode('ASCII'))
-        return "STDERR "+str(stderr).decode('ASCII')
+                self.name = 'CORRECT'
+                self.short_desc = 'submission == solution -> True' 
+                self.long_desc = 'Your code produced the correct output of %s' % submission
+                return 
+            self.name = 'INCORRECT'
+            self.short_desc = 'submission == solution -> False' 
+            self.long_desc = 'Your code produced an incorrect output of %s' % submission
+            return 
+        self.name = 'ERROR'
+        self.short_desc = ([word for word in str(stderr.decode('ASCII')).split() if 'Error' in word])
+        self.long_desc = "STDERR "+str(stderr.decode('ASCII'))
+        return 
 
     def setupEnv(self, code, envFile):
         test_filename = os.path.dirname(os.path.abspath(envFile))+'/test.py'
@@ -67,14 +83,15 @@ class AssessmentView(generic.ListView):
             envFile = Assessment.objects.get(id=int(self.code_id)).soln.name
             testFile = self.setupEnv(self.user_code, envFile)
             result = self.runCode(testFile)
-            result = self.handleResult(result)
-            self.submit_result = result
+            self.handleResult(result)
         return self.get(request, *args, **kwargs)
     
     def get_context_data(self, **kwargs):
         context = super(AssessmentView, self).get_context_data(**kwargs)
         context['now'] = timezone.now()
-        context['result'] = self.submit_result
+        context['name'] = self.name
+        context['short_desc'] = self.short_desc
+        context['long_desc'] = self.long_desc
         context['codefill'] = self.user_code
         return context
 

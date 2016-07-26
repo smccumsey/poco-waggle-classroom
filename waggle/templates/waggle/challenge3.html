@@ -1,0 +1,525 @@
+<html>
+
+<head>
+
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<title>Waggle</title>
+
+	<link rel="stylesheet" href="../bootstrap/css/bootstrap.css" />
+	<!--link rel="stylesheet" href="../../../bootstrap/css/bootstrap-responsive.css"/-->
+
+	<!--link rel="stylesheet" href="../css/tablet.css"/-->
+
+	<link rel="stylesheet" href="../../static/codemirror/lib/codemirror.css">
+	<link rel="stylesheet" href="../../static/codemirror/addon/hint/show-hint.css">
+
+	<style>
+		.CodeMirror {
+		  height: auto;
+		}
+
+		.spinnerbox {
+			display:none; /* Hide the DIV */
+			position:fixed;
+			height:20%;
+			width:100%;
+			align:center;
+			left: 0px;
+			top: 278px;
+			z-index:100;
+			margin-left: 15px;
+			padding:15px;
+		}
+
+		.modal-dialog {
+		  padding-top: 10%;
+		}
+
+	</style>
+
+	<script src="../codemirror/lib/codemirror.js"></script>
+	<script src="../codemirror/addon/hint/show-hint.js"></script>
+	<script src="../codemirror/addon/hint/javascript-hint.js"></script>
+	<script src="../codemirror/mode/javascript/javascript.js"></script>
+	<script src="../codemirror/mode/python/python.js"></script>
+	<script src="../codemirror/mode/markdown/markdown.js"></script>
+
+	<script src="../../static/jquery/jquery-1.11.1.js"></script>
+	<script src="../../static/bootstrap/js/bootstrap.js"></script>
+
+	<!--script src="../../../js/DecimalFormat.js"></script-->
+
+
+	<!--script src="js/jquery.mobile-1.1.0-rc.1.js"></script-->
+	<!--script src="js/jgestures.min.js"></script-->
+    <!--<script src="js/jquery.js"></script-->
+
+
+	<script type="text/javascript">
+	<!--
+
+		var notes = [];
+
+		function submitOnEnter(myfield, e){
+			var keycode;
+			if(window.event)
+				keycode = window.event.keyCode;
+			else if(e)
+				keycode = e.which;
+			else
+				return true;
+
+			if (keycode == 13){
+		   		myfield.form.submit();
+		   		return false;
+		   	}else
+		   		return true;
+		}
+
+
+
+		function init(){
+
+			var token = sessionStorage.getItem('token');
+
+			//Should we revalidate???
+			/*
+			//This asks the validate servlet for our username (based on the session token).
+			var http = new XMLHttpRequest();
+			var params = "token="+token;
+			http.open("POST", "../validate", true);
+
+			//Send the proper header information along with the request
+			http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
+			http.onreadystatechange = function() {
+				if(http.readyState == 4 && http.status == 200) {
+					console.log("Response: "+http.responseText);
+
+					if( http.responseText != null && http.responseText.length > 0 && http.responseText.trim() != "fail" ){
+
+						success();
+
+					//if fail to validate redirect to login page
+					}else{
+
+						window.location.href = "login.html";
+					}
+
+
+				}
+			}
+			http.send(params);
+			*/
+			success();
+
+
+
+		}
+
+
+		function success(){
+
+			var username = sessionStorage.getItem('username');
+			var clientname = sessionStorage.getItem('clientname');
+
+			if( clientname != null && clientname.length > 0 )
+				$("#username").text(username+" ("+clientname+")");
+			else
+				$("#username").text(username);
+
+
+			//load other stuff here?
+		}
+
+
+
+		function loadResults(){
+
+			$('#resultsTable').hide();
+			$('#previewTable').show();
+			$(".spinnerbox").show();
+
+			setTimeout(function(){
+
+				$(".spinnerbox").hide();
+
+				$('#previewTable').hide();
+				$('#resultsTable').show();
+
+			},3000);
+		}
+
+
+		function showHint(num){
+
+			$('#myModal'+num).modal('show')
+
+		}
+
+
+		function showMore(){
+			$('#less').hide();
+			$('#more').show();
+		}
+
+		function showLess(){
+			$('#more').hide();
+			$('#less').show();
+		}
+
+		function takeNote(pauseOrPlay){
+
+			var video = document.getElementById("video1");
+			if( pauseOrPlay )
+				video.pause();
+			else
+				video.play();
+		}
+
+		function saveNote(){
+
+			var video = document.getElementById("video1");
+
+			notes.push({text:$('#newNote').val(),time:video.currentTime});
+
+			var minutes = parseInt( video.currentTime / 60 ) % 60;
+			var seconds = Math.round(video.currentTime % 60);
+			if( seconds < 10 )
+				seconds = "0"+seconds;
+
+			$('#noteTable').append('<tr><td colspan="2">'+$('#newNote').val()+' (<a href="#" onclick="goToNote('+video.currentTime+');">'+minutes+':'+seconds+'</a>)</td></tr>');
+
+			$('#newNote').val("");
+
+			video.play();
+		}
+
+		function goToNote(time){
+
+			var video = document.getElementById("video1");
+
+			video.pause();
+			video.currentTime = time;
+			video.play();
+
+			return false;
+		}
+
+
+
+		function switchToContent(){
+
+		   //if Disqus exists, call it's reset method with new parameters
+		   DISQUS.reset({
+			  reload: true,
+			  config: function () {
+				this.page.url = "http://www.coglink.com/waggle/html/challenge3.html";
+				this.page.identifier = "abc";
+			  }
+   		   });
+
+   		}
+
+		function switchToAssessment(){
+
+		   //if Disqus exists, call it's reset method with new parameters
+		   DISQUS.reset({
+			  reload: true,
+			  config: function () {
+				this.page.url = "http://www.coglink.com/waggle/html/challenge3.html#!assessment";
+				this.page.identifier = "123";
+			  }
+   		   });
+
+   		}
+
+	-->
+	</script>
+
+</head>
+
+
+<body onload="init();">
+
+	<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="profile.html" style="font-size:22px;">Waggle</a>
+        </div>
+        <div class="navbar-collapse collapse">
+          <form class="navbar-form navbar-right" role="form" action="login.html">
+
+          	<span id="username" style="color:#fff;"></span>&nbsp;&nbsp;
+
+            <!--div class="form-group">
+              <input type="text" placeholder="Email" class="form-control">
+            </div>
+            <div class="form-group">
+              <input type="password" placeholder="Password" class="form-control">
+            </div>
+            <button type="submit" class="btn btn-success">Sign in</button-->
+
+            <button type="submit" class="btn btn-danger">Sign out</button>
+
+          </form>
+        </div><!--/.navbar-collapse -->
+      </div>
+    </div>
+
+
+
+    <!-- Main jumbotron for a primary marketing message or call to action -->
+    <div class="jumbotron" style="padding-bottom:15px;">
+      <div class="container">
+      	<br/>
+      	<img src="../images/i15.png" width="48px" height="48px" style="float:left; margin-right:10px; margin-top:12px;"/>
+
+        <h2>Challenge 2</h2>
+        <div id="less">
+        	<p>And you can swap only <b>N*(N-1)/2</b> times, where N - is a quantity of rods. <a href="#" onclick="showMore();">More</a></p>
+
+        </div>
+        <div id="more" style="display:none;">
+        	<p>And you can swap only <b>N*(N-1)/2</b> times, where N - is a quantity of rods.
+        	<img src="../images/actions.png" width="600px"/>
+        	<br/>
+        	<a href="#" style="margin-left:600px;" onclick="showLess();">Less</a></p>
+      	</div>
+      </div>
+    </div>
+
+
+
+    <div class="container">
+
+		<div class="row">
+
+
+			<div class="col-md-7 col-sm-7">
+
+			  <!-- Nav tabs -->
+			  <ul class="nav nav-tabs" role="tablist">
+				<li role="presentation" class="active"><a href="#content" aria-controls="content" role="tab" data-toggle="tab" onclick="switchToContent();">Content</a></li>
+				<li role="presentation"><a href="#assessment" aria-controls="assessment" role="tab" data-toggle="tab" onclick="switchToAssessment();">Assessment</a></li>
+				<li role="presentation"><a href="#other" aria-controls="other" role="tab" data-toggle="tab">Other</a></li>
+			  </ul>
+
+			  <!-- Tab panes -->
+			  <div class="tab-content" style="border: 1px #CCC solid; border-top: 0px; height:60%; overflow-y:auto;">
+
+				<div role="tabpanel" class="tab-pane active" id="content">
+
+					Blah blah blah
+					<br/>
+					<video id="video1" width="490" height="280" controls>
+						<source src="../video/name_error.mp4" type="video/mp4">
+						Your browser does not support the video tag.
+					</video>
+					<br/>
+					<table id="noteTable" class="table">
+						<tr>
+							<td style="border:none;">
+								<textarea id="newNote" rows="2" style="width:100%" onfocus="takeNote(true);" onblur="takeNote(false);"></textarea>
+							</td>
+							<td valign="middle" style="border:none; vertical-align:middle;">
+								&nbsp;<button type="button" class="btn btn-default" onclick="saveNote();">Save Note</button>
+							</td>
+						</tr>
+						<tr>
+							<td style="border:none;">
+								<b>Notes:</b>
+							</td>
+							<td style="border:none;">
+								&nbsp;
+							</td>
+						</tr>
+					</table>
+
+				</div>
+
+				<div role="tabpanel" class="tab-pane" id="assessment">
+					...
+				</div>
+
+				<div role="tabpanel" class="tab-pane" id="other">
+					...
+				</div>
+
+			  </div>
+
+			</div>
+
+
+			<div class="col-md-5 col-sm-5">
+
+				<table id="previewTable" style="width:100%;">
+					<tr>
+						<td>
+							<div id="disqus_thread"></div>
+							<script>
+								/**
+								 *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+								 *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables
+								 */
+								/*
+
+								TODO: Use this to make various discussion threads unique.
+
+								var disqus_config = function () {
+									this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+									this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+								};
+								*/
+
+								var disqus_config = function () {
+									this.page.url = "http://www.coglink.com/waggle/html/challenge3.html";  // Replace PAGE_URL with your page's canonical URL variable
+									this.page.identifier = "abc"; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+								};
+
+								(function() {  // DON'T EDIT BELOW THIS LINE
+									var d = document, s = d.createElement('script');
+
+									s.src = 'https:///waggleuo.disqus.com/embed.js';
+
+									s.setAttribute('data-timestamp', +new Date());
+									(d.head || d.body).appendChild(s);
+								})();
+							</script>
+							<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+						</td>
+					</tr>
+
+				</table>
+
+
+
+				<div id="disqus_container_2"></div>
+
+			</div>
+
+
+		</div>
+
+   	</div>
+
+
+	<div class="spinnerbox">
+		<center><img src="../images/spinner.gif"/></center>
+	</div>
+
+
+	<div id="myModal1" class="modal fade" tabindex="-1" role="dialog">
+	  <div class="modal-dialog">
+		<div class="modal-content">
+		  <div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			<h4 class="modal-title">Challenge Hint</h4>
+		  </div>
+		  <div class="modal-body">
+			<!--p> </p-->
+
+			<iframe width="560" height="315" src="https://www.youtube.com/embed/cWhUxw8v404" frameborder="0"></iframe>
+
+		  </div>
+		  <div class="modal-footer">
+			<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+			<!--button type="button" class="btn btn-primary">Save changes</button-->
+		  </div>
+		</div><!-- /.modal-content -->
+	  </div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
+
+	<div id="myModal2" class="modal fade" tabindex="-1" role="dialog">
+	  <div class="modal-dialog">
+		<div class="modal-content">
+		  <div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			<h4 class="modal-title">Challenge Hint</h4>
+		  </div>
+		  <div class="modal-body">
+			<!--p> </p-->
+
+			<video width="560" height="380" controls>
+			  <source src="../video/name_error.mp4" type="video/mp4">
+				Your browser does not support the video tag.
+			</video>
+
+		  </div>
+		  <div class="modal-footer">
+			<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+			<!--button type="button" class="btn btn-primary">Save changes</button-->
+		  </div>
+		</div><!-- /.modal-content -->
+	  </div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
+
+	<script>
+		/*
+		var editor = CodeMirror.fromTextArea(document.getElementById("code"), {
+		  lineNumbers: true,
+		  extraKeys: {"Ctrl-Space": "autocomplete"},
+		  mode: {name: "javascript", globalVars: true}
+		});
+		*/
+	    var editor = CodeMirror.fromTextArea(document.getElementById("code"), {
+		        mode: {name: "python",
+		               version: 3,
+		               singleLineStringErrors: false},
+		        lineNumbers: true,
+		        indentUnit: 4,
+		        matchBrackets: true
+    	});
+
+		if (typeof Promise !== undefined) {
+		  var comp = [
+			["here", "hither"],
+			["asynchronous", "nonsynchronous"],
+			["completion", "achievement", "conclusion", "culmination", "expirations"],
+			["hinting", "advive", "broach", "imply"],
+			["function","action"],
+			["provide", "add", "bring", "give"],
+			["synonyms", "equivalents"],
+			["words", "token"],
+			["each", "every"],
+		  ]
+
+		  function synonyms(cm, option) {
+			return new Promise(function(accept) {
+			  setTimeout(function() {
+				var cursor = cm.getCursor(), line = cm.getLine(cursor.line)
+				var start = cursor.ch, end = cursor.ch
+				while (start && /\w/.test(line.charAt(start - 1))) --start
+				while (end < line.length && /\w/.test(line.charAt(end))) ++end
+				var word = line.slice(start, end).toLowerCase()
+				for (var i = 0; i < comp.length; i++) if (comp[i].indexOf(word) != -1)
+				  return accept({list: comp[i],
+								 from: CodeMirror.Pos(cursor.line, start),
+								 to: CodeMirror.Pos(cursor.line, end)})
+				return accept(null)
+			  }, 100)
+			})
+		  }
+
+		  var editor2 = CodeMirror.fromTextArea(document.getElementById("synonyms"), {
+			extraKeys: {"Ctrl-Space": "autocomplete"},
+			lineNumbers: true,
+			lineWrapping: true,
+			mode: "text/x-markdown",
+			hintOptions: {hint: synonyms}
+		  })
+		}
+
+	</script>
+
+
+</body>
+
+</html>

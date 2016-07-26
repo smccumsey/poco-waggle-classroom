@@ -4,6 +4,5 @@
 my_list = [10,20,30,40]
 
 # Type your python code here
-print(my_list[2])
 
 
