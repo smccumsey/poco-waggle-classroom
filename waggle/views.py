@@ -42,19 +42,17 @@ class AssessmentView(generic.ListView):
     def handleResult(self, pipeVals):
         stdout, stderr = pipeVals
         if not stderr:
-            submission = str(stdout.decode('ASCII').rstrip())
-            solution = str(Assessment.objects.get(id=int(self.code_id)).tests)
-            if (submission == solution):
+            if ('CORRECT' in stdout.decode('ASCII')):
                 self.name = 'CORRECT'
-                self.short_desc = 'submission == solution -> True' 
-                self.long_desc = 'Your code produced the correct output of %s' % submission
+                self.short_desc = 'answer == solution -> True' 
+                self.long_desc = stdout.decode('ASCII') 
                 return 
             self.name = 'INCORRECT'
-            self.short_desc = 'submission == solution -> False' 
-            self.long_desc = 'Your code produced an incorrect output of %s' % submission
+            self.short_desc = 'answer == solution -> False' 
+            self.long_desc = stdout.decode('ASCII') 
             return 
         self.name = 'ERROR'
-        self.short_desc = ([word for word in str(stderr.decode('ASCII')).split() if 'Error' in word])
+        self.short_desc = ([word[:-1] for word in str(stderr.decode('ASCII')).split() if 'Error' in word])
         self.long_desc = "STDERR "+str(stderr.decode('ASCII'))
         return 
 
