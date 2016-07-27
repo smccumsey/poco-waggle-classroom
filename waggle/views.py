@@ -20,6 +20,9 @@ from shutil import copyfile
 from django.template import RequestContext
 
 
+class GoogleView(generic.TemplateView):
+    template_name = 'waggle/google8a43fbed4f8a62b6.html'
+
 class LoginView(generic.TemplateView):
     template_name = 'waggle/login.html'
 
