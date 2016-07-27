@@ -12,9 +12,6 @@ answer = my_list[3]
 
 
 
-
-
-
 solution = my_list[2]
 if solution == answer:
     print('CORRECT. Good job!')

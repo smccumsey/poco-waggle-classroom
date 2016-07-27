@@ -130,6 +130,14 @@
 				console.log("ID Token: " + id_token);
 
 				//window.location.href = "login.html";
+                // Send the ID token to your server with an HTTPS POST request
+                var xhr = new XMLHttpRequest();
+                xhr.open('POST', 'https://smccumsey.pythonanywhere.com/waggle/tokensignin');
+                xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+                xhr.onload = function() {
+                      console.log('Signed in as: ' + xhr.responseText);
+                };
+                xhr.send('idtoken=' + id_token);
 			  };
 			</script>
 

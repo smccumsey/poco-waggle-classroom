@@ -16,7 +16,7 @@ class Module(models.Model):
 class Assessment(models.Model):
     module = models.ForeignKey(Module, on_delete=models.CASCADE)
     description = models.TextField()
-    soln = models.FileField(upload_to="/Users/smeo/django_waggle/mysite/waggle/solnFiles/", default="challengeXsoln.py")
+    soln = models.FileField(upload_to="/home/smccumsey/waggle-classroom//waggle/solnFiles/", default="challenge1soln_DCR6J7d.py")
     def __str__(self):
         return "Challenge %s from %s" % (self.id, self.module)
 
