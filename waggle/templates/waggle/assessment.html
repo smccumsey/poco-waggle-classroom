@@ -282,7 +282,7 @@ function goToNote(time){
 
 
 
-function switchToContent(){
+function switchToDebug(){
 
     //if Disqus exists, call it's reset method with new parameters
     DISQUS.reset({
@@ -449,18 +449,13 @@ $('#form').submit(function(e){
         </div>
     </div>
 
-
-
     <div class="container">
-
         <div class="row">
-
-
             <div class="col-md-7 col-sm-7">
-
                 <!-- Nav tabs -->
                 <ul class="nav nav-tabs" role="tablist">
-                    <li role="presentation" class="active"><a href="#content" aria-controls="content" role="tab" data-toggle="tab" onclick="switchToContent();">Content</a></li>
+                    <li role="presentation" class="active"><a href="#content" aria-controls="content" role="tab" data-toggle="tab">Content</a></li>
+                    <li role="presentation"><a href="#debug" aria-controls="debug" role="tab" data-toggle="tab" onclick="switchToDebug();">Debugging with Steve</a></li>
                     <li role="presentation"><a href="#assessment" aria-controls="assessment" role="tab" data-toggle="tab" onclick="switchToAssessment();">Assessment</a></li>
                     <li role="presentation"><a href="#other" aria-controls="other" role="tab" data-toggle="tab">Other</a></li>
                 </ul>
@@ -469,8 +464,11 @@ $('#form').submit(function(e){
                 <div class="tab-content" style="border: 1px #CCC solid; border-top: 0px; height:60%; overflow-y:auto;">
 
                     <div role="tabpanel" class="tab-pane active" id="content">
+                        <p>Blah blah blah</p>
+                    </div>
 
-                        Blah blah blah
+                    <div role="tabpanel" class="tab-pane" id="debug">
+
                         <br/>
                         <video id="video1" width="490" height="280" controls>
                         <source src="../../static/video/name_error.mp4" type="video/mp4">
@@ -495,9 +493,7 @@ $('#form').submit(function(e){
                                 </td>
                             </tr>
                         </table>
-
-                    </div>
-
+                    </div
                     <div role="tabpanel" class="tab-pane" id="assessment">
                         <!-- Start triple -->
                         {% for challenge in object_list%}
@@ -564,7 +560,6 @@ $('#form').submit(function(e){
                         <!-- End triple -->
                         {% endfor %}
 
-                        ...
                     </div>
 
                     <div role="tabpanel" class="tab-pane" id="other">
