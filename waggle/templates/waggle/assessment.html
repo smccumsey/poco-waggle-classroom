@@ -389,9 +389,6 @@ $('#form').submit(function(e){
 
 </script>
 
-
-
-
 </head>
 
 
@@ -435,7 +432,7 @@ $('#form').submit(function(e){
             <br/>
             <img src="../../static/images/i15.png" width="48px" height="48px" style="float:left; margin-right:10px; margin-top:12px;"/>
 
-            <h2>Challenge 2</h2>
+            <h2>Module</h2>
             <div id="less">
                 <p>And you can swap only <b>N*(N-1)/2</b> times, where N - is a quantity of rods. <a href="#" onclick="showMore();">More</a></p>
 
@@ -451,7 +448,7 @@ $('#form').submit(function(e){
 
     <div class="container">
         <div class="row">
-            <div class="col-md-7 col-sm-7">
+            <div class="col-md-9 col-sm-9">
                 <!-- Nav tabs -->
                 <ul class="nav nav-tabs" role="tablist">
                     <li role="presentation" class="active"><a href="#content" aria-controls="content" role="tab" data-toggle="tab">Content</a></li>
@@ -464,7 +461,14 @@ $('#form').submit(function(e){
                 <div class="tab-content" style="border: 1px #CCC solid; border-top: 0px; height:60%; overflow-y:auto;">
 
                     <div role="tabpanel" class="tab-pane active" id="content">
-                        <p>Blah blah blah</p>
+                        <center>
+                        </br>
+                        <p>Download the IPython Notebook  <a href="../../static/notebooks/data_intro.ipynb">data_intro.ipynb</a> </p>
+                        <p>Note in order to run code in the notebook displayed below you'll need to download the .ipynb file </p>
+                        <hr>
+                        </center>
+
+                        <iframe id="frame" src="../../static/notebooks/data_intro.htm" style="border:1px;" height=100% width=100%></iframe>
                     </div>
 
                     <div role="tabpanel" class="tab-pane" id="debug">
@@ -570,7 +574,7 @@ $('#form').submit(function(e){
 
             </div>
 
-            <div class="col-md-5 col-sm-5">
+            <div class="col-md-3 col-sm-3">
 
                 <table id="previewTable" style="width:100%;">
                     <tr>

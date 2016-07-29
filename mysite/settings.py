@@ -37,9 +37,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'social.apps.django_app.default',
-    'oauth2_provider',
-    'corsheaders',
+    #'social.apps.django_app.default',
+    #'oauth2_provider',
+    #'corsheaders',
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -69,8 +69,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'social.apps.django_app.context_processors.backends',
-                'social.apps.django_app.context_processors.login_redirect',
+                #'social.apps.django_app.context_processors.backends',
+                #'social.apps.django_app.context_processors.login_redirect',
             ],
         },
     },
@@ -88,10 +88,12 @@ DATABASES = {
     }
 }
 
+'''
 AUTHENTICATION_BACKENDS = (
     'social.backends.google.GoogleOAuth2',
     'django.contrib.auth.backends.ModelBackend',
 )
+'''
 
 LOGIN_REDIRECT_URL = '/'
 
