@@ -33,6 +33,21 @@ class Related(models.Model):
     def __str__(self):
         return "Related from %s" % self.module
 
+from django.contrib.auth.models import User
+from django.db import models
+from oauth2client.contrib.django_orm import FlowField
+...
+class FlowModel(models.Model):
+      id = models.ForeignKey(User, primary_key=True)
+      flow = FlowField()
+
+from django.contrib.auth.models import User
+from django.db import models
+from oauth2client.contrib.django_orm import CredentialsField
+...
+class CredentialsModel(models.Model):
+      id = models.ForeignKey(User, primary_key=True)
+      credential = CredentialsField()
 '''
 class User(models.Model):
     gmail = models.EmailField()

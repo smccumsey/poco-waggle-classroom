@@ -22,12 +22,11 @@
 	<!--script src="js/jgestures.min.js"></script-->
     <!--<script src="js/jquery.js"></script-->
 
-
+	<script src="../../static/js-cookie/src/js.cookie.js"></script>
 
     <meta name="google-signin-scope" content="profile email">
     <meta name="google-signin-client_id" content="297483480770-nfghb6iqsqd5drhl1m9a1ns39hb62224.apps.googleusercontent.com">
     <script src="https://apis.google.com/js/platform.js" async defer></script>
-
 
 	<script type="text/javascript">
 	<!--
@@ -132,12 +131,14 @@
 				//window.location.href = "login.html";
                 // Send the ID token to your server with an HTTPS POST request
                 var xhr = new XMLHttpRequest();
-                xhr.open('POST', 'https://smccumsey.pythonanywhere.com/waggle/tokensignin');
+                var csrftoken = Cookies.get('csrftoken');
+                xhr.open('POST', '/waggle/login/');
                 xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-                xhr.onload = function() {
-                      console.log('Signed in as: ' + xhr.responseText);
-                };
-                xhr.send('idtoken=' + id_token);
+                //xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                //xhr.onload = function() {
+                  //    console.log('Signed in as: ' + xhr.responseText);
+                //};
+                xhr.send('idtoken=' + id_token + '&csrfmiddlewaretoken=' + '{{ csrf_token }}' );
 			  };
 			</script>
 

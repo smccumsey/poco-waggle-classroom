@@ -18,8 +18,8 @@ import sys
 import subprocess
 from shutil import copyfile
 from django.template import RequestContext
-
 from oauth2client import client, crypt
+from django.conf import settings
 
 class GoogleView(generic.TemplateView):
     template_name = 'waggle/google8a43fbed4f8a62b6.html'
@@ -27,23 +27,40 @@ class GoogleView(generic.TemplateView):
 class LoginView(generic.TemplateView):
     template_name = 'waggle/login.html'
 
+    def verifyGoogleToken(self, token):
+        # (Receive token by HTTPS POST)
+        try:
+            idinfo = client.verify_id_token(token, settings.CLIENT_ID)
+            # If multiple clients access the backend server:
+            '''
+            if idinfo['aud'] not in [ANDROID_CLIENT_ID, IOS_CLIENT_ID, WEB_CLIENT_ID]:
+                raise crypt.AppIdentityError("Unrecognized client.")
+            if idinfo['iss'] not in ['accounts.google.com', 'https://accounts.google.com']:
+                raise crypt.AppIdentityError("Wrong issuer.")
+            if idinfo['hd'] != APPS_DOMAIN_NAME:
+                raise crypt.AppIdentityError("Wrong hosted domain.")
+            '''
+        except crypt.AppIdentityError:
+            # Invalid token
+            pass
+        userid = idinfo['sub']
+        print("USERID",userid)
+        print("IDINFO",idinfo)
+
+    def post(self, request, *args, **kwargs):
+        postdata = request.POST.dict()
+        #print("GOT POST")
+        #print(postdata)
+        token = request.POST.get('idtoken')
+        #print(token)
+        self.verifyGoogleToken(token)
+        return self.get(request, *args, **kwargs)
+
+'''
 class VerifyTokenView(generic.View):
     template_name = 'waggle/tokensignin'
-    # (Receive token by HTTPS POST)
-    try:
-        idinfo = client.verify_id_token(token, CLIENT_ID)
-        # If multiple clients access the backend server:
-        if idinfo['aud'] not in [ANDROID_CLIENT_ID, IOS_CLIENT_ID, WEB_CLIENT_ID]:
-            raise crypt.AppIdentityError("Unrecognized client.")
-        if idinfo['iss'] not in ['accounts.google.com', 'https://accounts.google.com']:
-            raise crypt.AppIdentityError("Wrong issuer.")
-        if idinfo['hd'] != APPS_DOMAIN_NAME:
-            raise crypt.AppIdentityError("Wrong hosted domain.")
-    except crypt.AppIdentityError:
-        # Invalid token
-        pass
-    userid = idinfo['sub']
-
+'''
+    
 class AssessmentView(generic.ListView):
     # ListView
     model = Assessment
