@@ -32,20 +32,21 @@ class LoginView(generic.TemplateView):
         try:
             idinfo = client.verify_id_token(token, settings.CLIENT_ID)
             # If multiple clients access the backend server:
+            if idinfo['iss'] not in ['accounts.google.com', 'https://accounts.google.com']:
+                raise crypt.AppIdentityError("Wrong issuer.")
             '''
             if idinfo['aud'] not in [ANDROID_CLIENT_ID, IOS_CLIENT_ID, WEB_CLIENT_ID]:
                 raise crypt.AppIdentityError("Unrecognized client.")
-            if idinfo['iss'] not in ['accounts.google.com', 'https://accounts.google.com']:
-                raise crypt.AppIdentityError("Wrong issuer.")
             if idinfo['hd'] != APPS_DOMAIN_NAME:
                 raise crypt.AppIdentityError("Wrong hosted domain.")
             '''
         except crypt.AppIdentityError:
             # Invalid token
-            pass
+            raise crypt.AppIdentityError("Invalid token.")
         userid = idinfo['sub']
         print("USERID",userid)
         print("IDINFO",idinfo)
+        return idinfo
 
     def post(self, request, *args, **kwargs):
         postdata = request.POST.dict()
@@ -53,8 +54,9 @@ class LoginView(generic.TemplateView):
         #print(postdata)
         token = request.POST.get('idtoken')
         #print(token)
-        self.verifyGoogleToken(token)
-        return self.get(request, *args, **kwargs)
+        idinfo  = self.verifyGoogleToken(token)
+        return HttpResponse(idinfo['email'])
+        #return self.get(request, *args, **kwargs)
 
 '''
 class VerifyTokenView(generic.View):

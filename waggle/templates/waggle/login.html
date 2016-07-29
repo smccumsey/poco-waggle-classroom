@@ -134,15 +134,28 @@
                 var csrftoken = Cookies.get('csrftoken');
                 xhr.open('POST', '/waggle/login/');
                 xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-                //xhr.setRequestHeader("X-CSRFToken", csrftoken);
-                //xhr.onload = function() {
-                  //    console.log('Signed in as: ' + xhr.responseText);
-                //};
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                xhr.onload = function() {
+                      console.log('Signed in as: ' + xhr.responseText);
+                };
                 xhr.send('idtoken=' + id_token + '&csrfmiddlewaretoken=' + '{{ csrf_token }}' );
 			  };
 			</script>
 
+            <center>
+                </br>
+            <a href="#" onclick="signOut();">Sign out</a>
+            </center>
+            <script>
+  function signOut() {
+          var auth2 = gapi.auth2.getAuthInstance();
+              auth2.signOut().then(function () {
+                            console.log('User signed out.');
+                                });
+                }
+            </script>
     </div> <!-- /container -->
+
 
 
 
