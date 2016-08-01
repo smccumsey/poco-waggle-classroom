@@ -95,8 +95,6 @@ AUTHENTICATION_BACKENDS = (
 )
 '''
 
-LOGIN_REDIRECT_URL = '/'
-
 CLIENT_ID = '297483480770-nfghb6iqsqd5drhl1m9a1ns39hb62224.apps.googleusercontent.com'
 
 # Password validation

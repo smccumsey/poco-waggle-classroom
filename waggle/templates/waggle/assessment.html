@@ -499,6 +499,7 @@ $('#form').submit(function(e){
                         </table>
                     </div>
                     <div role="tabpanel" class="tab-pane" id="assessment">
+                        <div id=triple>
                         <!-- Start triple -->
                         {% for challenge in object_list%}
                         <div class="panel panel-default">
@@ -563,7 +564,7 @@ $('#form').submit(function(e){
                         </div>
                         <!-- End triple -->
                         {% endfor %}
-
+                        </div>
                     </div>
 
                     <div role="tabpanel" class="tab-pane" id="other">

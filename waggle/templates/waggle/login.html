@@ -2,159 +2,159 @@
 
 <head>
 
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-	<title>Waggle</title>
+<title>Waggle</title>
 
-	<link rel="stylesheet" href="../../static/bootstrap//dist/css/bootstrap.css" />
-	<!--link rel="stylesheet" href="../../../bootstrap/css/bootstrap-responsive.css"/-->
+<link rel="stylesheet" href="../../static/bootstrap//dist/css/bootstrap.css" />
+<!--link rel="stylesheet" href="../../../bootstrap/css/bootstrap-responsive.css"/-->
 
-	<!--link rel="stylesheet" href="../css/tablet.css"/-->
+<!--link rel="stylesheet" href="../css/tablet.css"/-->
 
-	<script src="../../static//jquery/dist/jquery.js"></script>
+<script src="../../static//jquery/dist/jquery.js"></script>
 
-	<script src="../../static/bootstrap//dist/js/bootstrap.js"></script>
+<script src="../../static/bootstrap//dist/js/bootstrap.js"></script>
 
-	<!--script src="../../../js/DecimalFormat.js"></script-->
-
-
-	<!--script src="js/jquery.mobile-1.1.0-rc.1.js"></script-->
-	<!--script src="js/jgestures.min.js"></script-->
-    <!--<script src="js/jquery.js"></script-->
-
-	<script src="../../static/js-cookie/src/js.cookie.js"></script>
-
-    <meta name="google-signin-scope" content="profile email">
-    <meta name="google-signin-client_id" content="297483480770-nfghb6iqsqd5drhl1m9a1ns39hb62224.apps.googleusercontent.com">
-    <script src="https://apis.google.com/js/platform.js" async defer></script>
-
-	<script type="text/javascript">
-	<!--
-
-		function submitOnEnter(myfield, e){
-			var keycode;
-			if(window.event)
-				keycode = window.event.keyCode;
-			else if(e)
-				keycode = e.which;
-			else
-				return true;
-
-			if (keycode == 13){
-		   		myfield.form.submit();
-		   		return false;
-		   	}else
-		   		return true;
-		}
+<!--script src="../../../js/DecimalFormat.js"></script-->
 
 
-		function getParameterByName(name) {
-			name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
-			var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
-				results = regex.exec(location.search);
-			return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
-		}
+<!--script src="js/jquery.mobile-1.1.0-rc.1.js"></script-->
+<!--script src="js/jgestures.min.js"></script-->
+<!--<script src="js/jquery.js"></script-->
+
+<script src="../../static/js-cookie/src/js.cookie.js"></script>
+
+<meta name="google-signin-scope" content="profile email">
+<meta name="google-signin-client_id" content="297483480770-nfghb6iqsqd5drhl1m9a1ns39hb62224.apps.googleusercontent.com">
+<script src="https://apis.google.com/js/platform.js" async defer></script>
+
+<script type="text/javascript">
+<!--
+
+function submitOnEnter(myfield, e){
+    var keycode;
+    if(window.event)
+        keycode = window.event.keyCode;
+    else if(e)
+        keycode = e.which;
+    else
+        return true;
+
+    if (keycode == 13){
+        myfield.form.submit();
+        return false;
+    }else
+        return true;
+}
 
 
-		function init(){
-
-			var login = getParameterByName('login');
-
-
-			if( login != null && login == "incorrect" ){
-
-				console.log("Show incorrect message");
-				$("#alert").show();
-			}
-
-		}
+function getParameterByName(name) {
+    name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+    var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+        results = regex.exec(location.search);
+    return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+}
 
 
+function init(){
 
-	-->
-	</script>
+    var login = getParameterByName('login');
+
+
+    if( login != null && login == "incorrect" ){
+
+        console.log("Show incorrect message");
+        $("#alert").show();
+    }
+
+}
+
+
+
+-->
+</script>
 
 </head>
 
 
 <body onload="init();">
 
-	<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-      <div class="container">
+<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
         <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <span class="navbar-brand" style="font-size:22px;">Waggle</span>
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <span class="navbar-brand" style="font-size:22px;">Waggle</span>
         </div>
 
-      </div>
     </div>
+</div>
 
 
 
-    <!-- Main jumbotron for a primary marketing message or call to action -->
-    <div class="jumbotron">
-      <div class="container">
-      	<br/>
+<!-- Main jumbotron for a primary marketing message or call to action -->
+<div class="jumbotron">
+    <div class="container">
+        <br/>
         <h1>Waggle</h1>
         <p>This would be a good place to say a little something about Waggle.  Maybe just a sentance
         or two description.</p>
         <!--p><a class="btn btn-primary btn-lg" role="button">Learn more &raquo;</a></p-->
-      </div>
     </div>
+</div>
 
 
 
-    <div class="container" style="width:100%">
-		<center>
-          	<div class="g-signin2" data-onsuccess="onSignIn" data-theme="dark"></div>
-        </center>
-			<script>
-			  function onSignIn(googleUser) {
-				// Useful data for your client-side scripts:
-				var profile = googleUser.getBasicProfile();
-				console.log("ID: " + profile.getId()); // Don't send this directly to your server!
-				console.log('Full Name: ' + profile.getName());
-				console.log('Given Name: ' + profile.getGivenName());
-				console.log('Family Name: ' + profile.getFamilyName());
-				console.log("Image URL: " + profile.getImageUrl());
-				console.log("Email: " + profile.getEmail());
+<div class="container" style="width:100%">
+    <center>
+        <div class="g-signin2" data-onsuccess="onSignIn" data-theme="dark"></div>
+        </br>
+        <div id="message"></div>
+        </br>
+        <a href="#" onclick="signOut();">Sign out</a>
+    </center>
 
-				// The ID token you need to pass to your backend:
-				var id_token = googleUser.getAuthResponse().id_token;
-				console.log("ID Token: " + id_token);
+    <script>
+function onSignIn(googleUser) {
+    // Useful data for your client-side scripts:
+    var profile = googleUser.getBasicProfile();
+    console.log("ID: " + profile.getId()); // Don't send this directly to your server!
+    console.log('Full Name: ' + profile.getName());
+    console.log('Given Name: ' + profile.getGivenName());
+    console.log('Family Name: ' + profile.getFamilyName());
+    console.log("Image URL: " + profile.getImageUrl());
+    console.log("Email: " + profile.getEmail());
 
-				//window.location.href = "login.html";
-                // Send the ID token to your server with an HTTPS POST request
-                var xhr = new XMLHttpRequest();
-                var csrftoken = Cookies.get('csrftoken');
-                xhr.open('POST', '/waggle/login/');
-                xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-                xhr.setRequestHeader("X-CSRFToken", csrftoken);
-                xhr.onload = function() {
-                      console.log('Signed in as: ' + xhr.responseText);
-                };
-                xhr.send('idtoken=' + id_token + '&csrfmiddlewaretoken=' + '{{ csrf_token }}' );
-			  };
-			</script>
+    // The ID token you need to pass to your backend:
+    var id_token = googleUser.getAuthResponse().id_token;
+    console.log("ID Token: " + id_token);
 
-            <center>
-                </br>
-            <a href="#" onclick="signOut();">Sign out</a>
-            </center>
-            <script>
-  function signOut() {
-          var auth2 = gapi.auth2.getAuthInstance();
-              auth2.signOut().then(function () {
-                            console.log('User signed out.');
-                                });
-                }
-            </script>
-    </div> <!-- /container -->
+    //window.location.href = "login.html";
+    // Send the ID token to your server with an HTTPS POST request
+    var xhr = new XMLHttpRequest();
+    var csrftoken = Cookies.get('csrftoken');
+    xhr.open('POST', '/waggle/login/');
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    xhr.setRequestHeader("X-CSRFToken", csrftoken);
+    xhr.onload = function() {
+        console.log('Signed in as: ' + xhr.responseText);
+    };
+    xhr.send('idtoken=' + id_token + '&csrfmiddlewaretoken=' + '{{ csrf_token }}' );
+    document.getElementById("message").innerHTML = "Welcome "+profile.getName();
+};
+function signOut() {
+    var auth2 = gapi.auth2.getAuthInstance();
+    auth2.signOut().then(function () {
+            console.log('User signed out.');
+            });
+    document.getElementById("message").innerHTML = "";
+}
+    </script>
+</div> <!-- /container -->
 
 
 

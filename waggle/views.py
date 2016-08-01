@@ -24,6 +24,9 @@ from django.conf import settings
 class GoogleView(generic.TemplateView):
     template_name = 'waggle/google8a43fbed4f8a62b6.html'
 
+class ProfileView(generic.TemplateView):
+    template_name = 'waggle/profile.html'
+
 class LoginView(generic.TemplateView):
     template_name = 'waggle/login.html'
 
@@ -50,18 +53,10 @@ class LoginView(generic.TemplateView):
 
     def post(self, request, *args, **kwargs):
         postdata = request.POST.dict()
-        #print("GOT POST")
-        #print(postdata)
         token = request.POST.get('idtoken')
-        #print(token)
         idinfo  = self.verifyGoogleToken(token)
         return HttpResponse(idinfo['email'])
-        #return self.get(request, *args, **kwargs)
 
-'''
-class VerifyTokenView(generic.View):
-    template_name = 'waggle/tokensignin'
-'''
     
 class AssessmentView(generic.ListView):
     # ListView
@@ -73,7 +68,7 @@ class AssessmentView(generic.ListView):
     name = {}
     short_desc = {}
     long_desc = {}
-    user_code = "# Type your python code here"
+    user_code = ''
 
     def handleResult(self, pipeVals):
         stdout, stderr = pipeVals
@@ -98,7 +93,7 @@ class AssessmentView(generic.ListView):
         # remove text editor crap from code
         with open(test_filename, "w") as outfile, open(envFile, 'r', encoding='utf-8') as infile:
                 text = infile.read()
-                text_with_code = re.sub('USERCODE', code, text)
+                text_with_code = re.sub('&&&', code, text)
                 outfile.write(text_with_code)
         return test_filename
 
