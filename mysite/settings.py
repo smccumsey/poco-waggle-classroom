@@ -88,12 +88,10 @@ DATABASES = {
     }
 }
 
-'''
 AUTHENTICATION_BACKENDS = (
-    'social.backends.google.GoogleOAuth2',
+    'waggle.backends.GoogleAuthBackend',
     'django.contrib.auth.backends.ModelBackend',
 )
-'''
 
 CLIENT_ID = '297483480770-nfghb6iqsqd5drhl1m9a1ns39hb62224.apps.googleusercontent.com'
 

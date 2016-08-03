@@ -1,7 +1,5 @@
 from django.db import models
 from django.contrib.auth.models import User
-from oauth2client.contrib.django_orm import FlowField
-from oauth2client.contrib.django_orm import CredentialsField
 
 class Course(models.Model):
     name = models.CharField(max_length=128)
@@ -34,18 +32,10 @@ class Related(models.Model):
     def __str__(self):
         return "Related from %s" % self.module
 
-class FlowModel(models.Model):
-      id = models.ForeignKey(User, primary_key=True)
-      flow = FlowField()
-
-class CredentialsModel(models.Model):
-      id = models.ForeignKey(User, primary_key=True)
-      credential = CredentialsField()
-
-
-'''
-class User(models.Model):
+class Student(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     gmail = models.EmailField()
+    '''
     registered_courses
     module_progress
     # assessment progress
@@ -54,4 +44,4 @@ class User(models.Model):
     # content progress
     video_notes
     video_time
-'''
+    '''

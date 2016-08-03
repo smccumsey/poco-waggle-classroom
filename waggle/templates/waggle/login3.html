@@ -77,36 +77,38 @@ function init(){
 </head>
 
 
-<body onload="init();">
+{% if form.errors %}
+<p>Your username and password didn't match. Please try again.</p>
+{% endif %}
 
-<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-    <div class="container">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <span class="navbar-brand" style="font-size:22px;">Waggle</span>
-        </div>
+{% if next %}
+{% if user.is_authenticated %}
+<p>Your account doesn't have access to this page. To proceed,
+please login with an account that has access.</p>
+{% else %}
+<p>Please login to see this page.</p>
+{% endif %}
+{% endif %}
 
-    </div>
-</div>
+<!--
+<form method="post" action="{% url 'waggle:django.contrib.auth.views.login' %}">
+    {% csrf_token %}
+    <table>
+        <tr>
+            <td>{{ form.username.label_tag }}</td>
+            <td>{{ form.username }}</td>
+        </tr>
+        <tr>
+            <td>{{ form.password.label_tag }}</td>
+            <td>{{ form.password }}</td>
+        </tr>
+    </table>
+    <div class="g-signin2" data-onsuccess="onSignIn" data-theme="dark"></div>
 
-
-
-<!-- Main jumbotron for a primary marketing message or call to action -->
-<div class="jumbotron">
-    <div class="container">
-        <br/>
-        <h1>Waggle</h1>
-        <p>This would be a good place to say a little something about Waggle.  Maybe just a sentance
-        or two description.</p>
-        <!--p><a class="btn btn-primary btn-lg" role="button">Learn more &raquo;</a></p-->
-    </div>
-</div>
-
+    <!--<input type="submit" value="login" />-->
+    <input type="hidden" name="next" value="{{ next }}" />
+</form>
+-->
 
 
 <div class="container" style="width:100%">
@@ -142,10 +144,9 @@ function onSignIn(googleUser) {
     xhr.setRequestHeader("X-CSRFToken", csrftoken);
     xhr.onload = function() {
         console.log('Signed in as: ' + xhr.responseText);
-        console.log('response: ' + xhr.response);
     };
     xhr.send('idtoken=' + id_token + '&csrfmiddlewaretoken=' + '{{ csrf_token }}' );
-    document.getElementById("message").innerHTML = "Welcome "+profile.getName()+"<br><br><a href={% url 'waggle:profile' user.pk %}>Go to your profile</a>";
+    document.getElementById("message").innerHTML = "Welcome "+profile.getName();
 };
 function signOut() {
     var auth2 = gapi.auth2.getAuthInstance();
@@ -158,12 +159,3 @@ function signOut() {
 </div> <!-- /container -->
 
 
-
-
-
-
-
-
-</body>
-
-</html>
