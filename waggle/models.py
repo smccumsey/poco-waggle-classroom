@@ -34,7 +34,6 @@ class Related(models.Model):
 
 class Student(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    gmail = models.EmailField()
     '''
     registered_courses
     module_progress
