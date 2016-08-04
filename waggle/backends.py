@@ -1,4 +1,5 @@
 from django.contrib.auth.models import User
+from .models import Student
 from oauth2client import client, crypt
 from django.http import HttpResponse
 from django.conf import settings
@@ -22,14 +23,20 @@ class GoogleAuthBackend(object):
             raise crypt.AppIdentityError("Invalid token.")
             return None
         userid = idinfo['sub']
+        print(idinfo.items())
 
         try:
             user = User.objects.get(username=userid)
+            student = Student(user=user)
         except User.DoesNotExist:
-            user = User(username=userid, email=idinfo['email']) 
+            user = User(username=userid, email=idinfo['email'], 
+                    first_name=idinfo['given_name'], 
+                    last_name=idinfo['family_name']) 
             user.set_unusable_password()
             user.save()
-        return user
+            student = Student(user=user)
+            student.save()
+        return student
 
     def get_user(self, user_id):
         try:
