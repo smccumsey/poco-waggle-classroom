@@ -14,8 +14,7 @@ three = 3
 
 try:
     # paste user code here
-    one=1
-  
+    one=1  
 except Exception as e:
     print('err:' , e)
 else:

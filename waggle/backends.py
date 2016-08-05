@@ -27,7 +27,6 @@ class GoogleAuthBackend(object):
 
         try:
             user = User.objects.get(username=userid)
-            student = Student(user=user)
         except User.DoesNotExist:
             user = User(username=userid, email=idinfo['email'], 
                     first_name=idinfo['given_name'], 
@@ -36,7 +35,7 @@ class GoogleAuthBackend(object):
             user.save()
             student = Student(user=user)
             student.save()
-        return student
+        return user
 
     def get_user(self, user_id):
         try:

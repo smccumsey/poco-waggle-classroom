@@ -32,6 +32,10 @@ from django.contrib.auth import login, authenticate
 class GoogleView(generic.TemplateView):
     template_name = 'waggle/google8a43fbed4f8a62b6.html'
 
+class MenuView(generic.DetailView):
+    template_name = 'waggle/menu.html'
+    model=User
+
 class ProfileView(generic.DetailView):
     template_name = 'waggle/profile.html'
     model = User
@@ -39,9 +43,9 @@ class ProfileView(generic.DetailView):
         # Call the base implementation first to get a context
         c = super(ProfileView, self).get_context_data(**kwargs)
         user = self.request.user
-        print('session: ',self.request.session.items())
-        if User.objects.get(pk=int(self.request.session['_auth_user_id'])) != user:
-            print('ERROR WRONG USER')
+        #print('session: ',self.request.session.items())
+        #if User.objects.get(pk=int(self.request.session['_auth_user_id'])) != user:
+        #    print('ERROR WRONG USER')
         return c
 
 class LoginView(generic.TemplateView):

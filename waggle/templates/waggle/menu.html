@@ -5,21 +5,10 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 	<title>Waggle</title>
+
     <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
-
-
-	<!--link rel="stylesheet" href="../../../bootstrap/css/bootstrap-responsive.css"/-->
-
-	<!--link rel="stylesheet" href="../css/tablet.css"/-->
-
-	<!--script src="../../../js/DecimalFormat.js"></script-->
-
-
-	<!--script src="js/jquery.mobile-1.1.0-rc.1.js"></script-->
-	<!--script src="js/jgestures.min.js"></script-->
-    <!--<script src="js/jquery.js"></script-->
 
 
 	<script type="text/javascript">
@@ -65,7 +54,7 @@
 				token = sessionStorage.getItem('token');
 
 
-			success('{{object.email}}');
+            success('{{object.email}}');
 
 			/*
 			//This asks the validate servlet for our username (based on the session token).
@@ -290,7 +279,7 @@
       <div class="container">
       	<br/>
         <h2>Welcome to Waggle</h2>
-        <p>This would be a good place to say a little something about Waggle.  Below are your courses.  Each course has a set of modules that will help you build your programming and data science skills.  Select a course below to get started</p>
+        <p>This would be a good place to say a little something about Waggle.  Below are your modules.  Each module is a set of challenges that will help you build your programming and data science skills.  Click a module below to get started</p>
         <!--p><a class="btn btn-primary btn-lg" role="button">Learn more &raquo;</a></p-->
       </div>
     </div>
@@ -302,22 +291,31 @@
 		  <table style="width:80%;">
 
             <!-- begin for -->
-            {% for entry in object.student.courseprogress_set.all %}
+
+            {% for entry in object.student.moduleprogress_set.all %}
 			<tr>
 				<td>
 					<nav class="navbar navbar-default">
 						<div class="container-fluid">
 							<div class="navbar-header" style="padding:15px; width:100%; line-height:150%">
 								<div style="float:right;">
-									Completed<br/>Modules: 0/4
+									<!--Difficulty:
+									<span class="glyphicon glyphicon-star" aria-hidden="true"></span>
+									<span class="glyphicon glyphicon-star-empty" aria-hidden="true"></span>
+									<span class="glyphicon glyphicon-star-empty" aria-hidden="true"></span>
+									<span class="glyphicon glyphicon-star-empty" aria-hidden="true"></span>-->
+									Length: 20 minutes
+									<br/>
+									Progress: 1/4
 									<br/>
 									<br/>
-                                    <a class="btn btn-primary" href="{% url 'waggle:menu' pk=object.pk course=entry.course.name|slugify %}" role="button">Explore this Course</a>
+									<a class="btn btn-primary" href="challenge2.html" role="button">Start this Module</a>
 								</div>
-                                <b>{{entry.course.name}}</b>
+                                <b>{{entry.module.name}}</b>
 							  	<br/>
+							  	Here is a brief description of what this group consists of.
 							  	<br/>
-                                {{entry.course.description}}
+							  	Saying anything else here?
 							</div>
 						 </div>
 					 </nav>
