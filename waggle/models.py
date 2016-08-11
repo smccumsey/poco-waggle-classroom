@@ -15,15 +15,28 @@ class Module(models.Model):
     def __str__(self):
         return self.name
 
+def assessment_directory_path(instance, filename):
+    # file will be uploaded to MEDIA_ROOT/course_<id>/module_<id>/assessmentFiles/<filename>
+    return 'course_{0}/module_{1}/assessmentFiles/{2}'.format(instance.module.course.id, instance.module.id, filename)
+
 class Assessment(models.Model):
     module = models.ForeignKey(Module, on_delete=models.CASCADE, related_name='assessments')
     description = models.TextField()
-    soln = models.FileField(upload_to="/home/smccumsey/waggle-classroom//waggle/solnFiles/", null=True)
+    assess_file = models.FileField(upload_to=assessment_directory_path, null=True)
+
+def notebook_directory_path(instance, filename):
+    # file will be uploaded to MEDIA_ROOT/course_<id>/module_<id>/notebooks/<filename>
+    return 'course_{0}/module_{1}/notebooks/{2}'.format(instance.module.course.id, instance.module.id, filename)
+
+def video_directory_path(instance, filename):
+    # file will be uploaded to MEDIA_ROOT/course_<id>/module_<id>/videos/<filename>
+    return 'course_{0}/module_{1}/videos/{2}'.format(instance.module.course.id, instance.module.id, filename)
 
 class Content(models.Model):
     module = models.ForeignKey(Module, on_delete=models.CASCADE, related_name='contents')
-    ipython_notebook = models.FilePathField(path='waggle/static/notebooks/', null=True)
-    video = models.FilePathField(path='waggle/static/video/', null=True)
+    ipython_notebook = models.FileField(upload_to=notebook_directory_path, null=True)
+    html_notebook = models.FileField(upload_to=notebook_directory_path, null=True)
+    video = models.FileField(upload_to=video_directory_path, null=True)
 
 class Related(models.Model):
     module = models.ForeignKey(Module, on_delete=models.CASCADE, related_name='relateds')

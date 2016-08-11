@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html>
-<head><meta charset="utf-8" />
+<!-- saved from url=(0121)https://www.pythonanywhere.com/user/smccumsey/files/home/smccumsey/waggle-classroom/waggle/media/notebooks/data_intro.htm -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>data_intro</title>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<script src="./data_intro_files/require.min.js"></script>
+<script src="./data_intro_files/jquery.min.js"></script>
 
 <style type="text/css">
     /*!
@@ -141,13 +141,13 @@ div#notebook {
 </style>
 
 <!-- Custom stylesheet, it must be in the same directory as the html file -->
-<link rel="stylesheet" href="custom.css">
+<link rel="stylesheet" href="./data_intro_files/custom.css">
 
 <!-- Loading mathjax macro -->
 <!-- Load mathjax -->
-    <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
+    <script src="./data_intro_files/MathJax.js"></script>
     <!-- MathJax configuration -->
-    <script type="text/x-mathjax-config">
+    <script type="text/x-mathjax-config;executed=true">
     MathJax.Hub.Config({
         tex2jax: {
             inlineMath: [ ['$','$'], ["\\(","\\)"] ],
@@ -164,8 +164,103 @@ div#notebook {
         }
     });
     </script>
-    <!-- End of mathjax configuration --></head>
-<body>
+    <!-- End of mathjax configuration --><style type="text/css">.MathJax_Hover_Frame {border-radius: .25em; -webkit-border-radius: .25em; -moz-border-radius: .25em; -khtml-border-radius: .25em; box-shadow: 0px 0px 15px #83A; -webkit-box-shadow: 0px 0px 15px #83A; -moz-box-shadow: 0px 0px 15px #83A; -khtml-box-shadow: 0px 0px 15px #83A; border: 1px solid #A6D ! important; display: inline-block; position: absolute}
+.MathJax_Menu_Button .MathJax_Hover_Arrow {position: absolute; cursor: pointer; display: inline-block; border: 2px solid #AAA; border-radius: 4px; -webkit-border-radius: 4px; -moz-border-radius: 4px; -khtml-border-radius: 4px; font-family: 'Courier New',Courier; font-size: 9px; color: #F0F0F0}
+.MathJax_Menu_Button .MathJax_Hover_Arrow span {display: block; background-color: #AAA; border: 1px solid; border-radius: 3px; line-height: 0; padding: 4px}
+.MathJax_Hover_Arrow:hover {color: white!important; border: 2px solid #CCC!important}
+.MathJax_Hover_Arrow:hover span {background-color: #CCC!important}
+</style><style type="text/css">#MathJax_About {position: fixed; left: 50%; width: auto; text-align: center; border: 3px outset; padding: 1em 2em; background-color: #DDDDDD; color: black; cursor: default; font-family: message-box; font-size: 120%; font-style: normal; text-indent: 0; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; z-index: 201; border-radius: 15px; -webkit-border-radius: 15px; -moz-border-radius: 15px; -khtml-border-radius: 15px; box-shadow: 0px 10px 20px #808080; -webkit-box-shadow: 0px 10px 20px #808080; -moz-box-shadow: 0px 10px 20px #808080; -khtml-box-shadow: 0px 10px 20px #808080; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')}
+#MathJax_About.MathJax_MousePost {outline: none}
+.MathJax_Menu {position: absolute; background-color: white; color: black; width: auto; padding: 5px 0px; border: 1px solid #CCCCCC; margin: 0; cursor: default; font: menu; text-align: left; text-indent: 0; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; z-index: 201; border-radius: 5px; -webkit-border-radius: 5px; -moz-border-radius: 5px; -khtml-border-radius: 5px; box-shadow: 0px 10px 20px #808080; -webkit-box-shadow: 0px 10px 20px #808080; -moz-box-shadow: 0px 10px 20px #808080; -khtml-box-shadow: 0px 10px 20px #808080; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')}
+.MathJax_MenuItem {padding: 1px 2em; background: transparent}
+.MathJax_MenuArrow {position: absolute; right: .5em; padding-top: .25em; color: #666666; font-size: .75em}
+.MathJax_MenuActive .MathJax_MenuArrow {color: white}
+.MathJax_MenuArrow.RTL {left: .5em; right: auto}
+.MathJax_MenuCheck {position: absolute; left: .7em}
+.MathJax_MenuCheck.RTL {right: .7em; left: auto}
+.MathJax_MenuRadioCheck {position: absolute; left: .7em}
+.MathJax_MenuRadioCheck.RTL {right: .7em; left: auto}
+.MathJax_MenuLabel {padding: 1px 2em 3px 1.33em; font-style: italic}
+.MathJax_MenuRule {border-top: 1px solid #DDDDDD; margin: 4px 3px}
+.MathJax_MenuDisabled {color: GrayText}
+.MathJax_MenuActive {background-color: #606872; color: white}
+.MathJax_MenuDisabled:focus, .MathJax_MenuLabel:focus {background-color: #E8E8E8}
+.MathJax_ContextMenu:focus {outline: none}
+.MathJax_ContextMenu .MathJax_MenuItem:focus {outline: none}
+#MathJax_AboutClose {top: .2em; right: .2em}
+.MathJax_Menu .MathJax_MenuClose {top: -10px; left: -10px}
+.MathJax_MenuClose {position: absolute; cursor: pointer; display: inline-block; border: 2px solid #AAA; border-radius: 18px; -webkit-border-radius: 18px; -moz-border-radius: 18px; -khtml-border-radius: 18px; font-family: 'Courier New',Courier; font-size: 24px; color: #F0F0F0}
+.MathJax_MenuClose span {display: block; background-color: #AAA; border: 1.5px solid; border-radius: 18px; -webkit-border-radius: 18px; -moz-border-radius: 18px; -khtml-border-radius: 18px; line-height: 0; padding: 8px 0 6px}
+.MathJax_MenuClose:hover {color: white!important; border: 2px solid #CCC!important}
+.MathJax_MenuClose:hover span {background-color: #CCC!important}
+.MathJax_MenuClose:hover:focus {outline: none}
+</style><style type="text/css">.MathJax_Preview .MJXf-math {color: inherit!important}
+</style><style type="text/css">.MJX_Assistive_MathML {position: absolute!important; top: 0; left: 0; clip: rect(1px, 1px, 1px, 1px); padding: 1px 0 0 0!important; border: 0!important; height: 1px!important; width: 1px!important; overflow: hidden!important; display: block!important; -webkit-touch-callout: none; -webkit-user-select: none; -khtml-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none}
+.MJX_Assistive_MathML.MJX_Assistive_MathML_Block {width: 100%!important}
+</style><style type="text/css">#MathJax_Zoom {position: absolute; background-color: #F0F0F0; overflow: auto; display: block; z-index: 301; padding: .5em; border: 1px solid black; margin: 0; font-weight: normal; font-style: normal; text-align: left; text-indent: 0; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; -webkit-box-sizing: content-box; -moz-box-sizing: content-box; box-sizing: content-box; box-shadow: 5px 5px 15px #AAAAAA; -webkit-box-shadow: 5px 5px 15px #AAAAAA; -moz-box-shadow: 5px 5px 15px #AAAAAA; -khtml-box-shadow: 5px 5px 15px #AAAAAA; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')}
+#MathJax_ZoomOverlay {position: absolute; left: 0; top: 0; z-index: 300; display: inline-block; width: 100%; height: 100%; border: 0; padding: 0; margin: 0; background-color: white; opacity: 0; filter: alpha(opacity=0)}
+#MathJax_ZoomFrame {position: relative; display: inline-block; height: 0; width: 0}
+#MathJax_ZoomEventTrap {position: absolute; left: 0; top: 0; z-index: 302; display: inline-block; border: 0; padding: 0; margin: 0; background-color: white; opacity: 0; filter: alpha(opacity=0)}
+</style><style type="text/css">.MathJax_Preview {color: #888}
+#MathJax_Message {position: fixed; left: 1em; bottom: 1.5em; background-color: #E6E6E6; border: 1px solid #959595; margin: 0px; padding: 2px 8px; z-index: 102; color: black; font-size: 80%; width: auto; white-space: nowrap}
+#MathJax_MSIE_Frame {position: absolute; top: 0; left: 0; width: 0px; z-index: 101; border: 0px; margin: 0px; padding: 0px}
+.MathJax_Error {color: #CC0000; font-style: italic}
+</style><style type="text/css">.MJXp-script {font-size: .8em}
+.MJXp-right {-webkit-transform-origin: right; -moz-transform-origin: right; -ms-transform-origin: right; -o-transform-origin: right; transform-origin: right}
+.MJXp-bold {font-weight: bold}
+.MJXp-italic {font-style: italic}
+.MJXp-scr {font-family: MathJax_Script,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-frak {font-family: MathJax_Fraktur,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-sf {font-family: MathJax_SansSerif,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-cal {font-family: MathJax_Caligraphic,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-mono {font-family: MathJax_Typewriter,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-largeop {font-size: 150%}
+.MJXp-largeop.MJXp-int {vertical-align: -.2em}
+.MJXp-math {display: inline-block; line-height: 1.2; text-indent: 0; font-family: 'Times New Roman',Times,STIXGeneral,serif; white-space: nowrap; border-collapse: collapse}
+.MJXp-display {display: block; text-align: center; margin: 1em 0}
+.MJXp-math span {display: inline-block}
+.MJXp-box {display: block!important; text-align: center}
+.MJXp-box:after {content: " "}
+.MJXp-rule {display: block!important; margin-top: .1em}
+.MJXp-char {display: block!important}
+.MJXp-mo {margin: 0 .15em}
+.MJXp-mfrac {margin: 0 .125em; vertical-align: .25em}
+.MJXp-denom {display: inline-table!important; width: 100%}
+.MJXp-denom > * {display: table-row!important}
+.MJXp-surd {vertical-align: top}
+.MJXp-surd > * {display: block!important}
+.MJXp-script-box > *  {display: table!important; height: 50%}
+.MJXp-script-box > * > * {display: table-cell!important; vertical-align: top}
+.MJXp-script-box > *:last-child > * {vertical-align: bottom}
+.MJXp-script-box > * > * > * {display: block!important}
+.MJXp-mphantom {visibility: hidden}
+.MJXp-munderover {display: inline-table!important}
+.MJXp-over {display: inline-block!important; text-align: center}
+.MJXp-over > * {display: block!important}
+.MJXp-munderover > * {display: table-row!important}
+.MJXp-mtable {vertical-align: .25em; margin: 0 .125em}
+.MJXp-mtable > * {display: inline-table!important; vertical-align: middle}
+.MJXp-mtr {display: table-row!important}
+.MJXp-mtd {display: table-cell!important; text-align: center; padding: .5em 0 0 .5em}
+.MJXp-mtr > .MJXp-mtd:first-child {padding-left: 0}
+.MJXp-mtr:first-child > .MJXp-mtd {padding-top: 0}
+.MJXp-mlabeledtr {display: table-row!important}
+.MJXp-mlabeledtr > .MJXp-mtd:first-child {padding-left: 0}
+.MJXp-mlabeledtr:first-child > .MJXp-mtd {padding-top: 0}
+.MJXp-merror {background-color: #FFFF88; color: #CC0000; border: 1px solid #CC0000; padding: 1px 3px; font-style: normal; font-size: 90%}
+.MJXp-scale0 {-webkit-transform: scaleX(.0); -moz-transform: scaleX(.0); -ms-transform: scaleX(.0); -o-transform: scaleX(.0); transform: scaleX(.0)}
+.MJXp-scale1 {-webkit-transform: scaleX(.1); -moz-transform: scaleX(.1); -ms-transform: scaleX(.1); -o-transform: scaleX(.1); transform: scaleX(.1)}
+.MJXp-scale2 {-webkit-transform: scaleX(.2); -moz-transform: scaleX(.2); -ms-transform: scaleX(.2); -o-transform: scaleX(.2); transform: scaleX(.2)}
+.MJXp-scale3 {-webkit-transform: scaleX(.3); -moz-transform: scaleX(.3); -ms-transform: scaleX(.3); -o-transform: scaleX(.3); transform: scaleX(.3)}
+.MJXp-scale4 {-webkit-transform: scaleX(.4); -moz-transform: scaleX(.4); -ms-transform: scaleX(.4); -o-transform: scaleX(.4); transform: scaleX(.4)}
+.MJXp-scale5 {-webkit-transform: scaleX(.5); -moz-transform: scaleX(.5); -ms-transform: scaleX(.5); -o-transform: scaleX(.5); transform: scaleX(.5)}
+.MJXp-scale6 {-webkit-transform: scaleX(.6); -moz-transform: scaleX(.6); -ms-transform: scaleX(.6); -o-transform: scaleX(.6); transform: scaleX(.6)}
+.MJXp-scale7 {-webkit-transform: scaleX(.7); -moz-transform: scaleX(.7); -ms-transform: scaleX(.7); -o-transform: scaleX(.7); transform: scaleX(.7)}
+.MJXp-scale8 {-webkit-transform: scaleX(.8); -moz-transform: scaleX(.8); -ms-transform: scaleX(.8); -o-transform: scaleX(.8); transform: scaleX(.8)}
+.MJXp-scale9 {-webkit-transform: scaleX(.9); -moz-transform: scaleX(.9); -ms-transform: scaleX(.9); -o-transform: scaleX(.9); transform: scaleX(.9)}
+.MathJax_PHTML .noError {vertical-align: ; font-size: 90%; text-align: left; color: black; padding: 1px 3px; border: 1px solid}
+</style></head>
+<body><div id="MathJax_Message" style="display: none;"></div>
   <div tabindex="-1" id="notebook" class="border-box-sizing">
     <div class="container" id="notebook-container">
 
@@ -183,7 +278,7 @@ div#notebook {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Preliminaries">Preliminaries<a class="anchor-link" href="#Preliminaries">&#182;</a></h2><p>What you are looking at is called a jupyter notebook. It is pretty cool. It allows you to read text like this and also to execute/run Python code. To actual run the code in this notebook, you will need to have a notebook server running. The previous module provides instructions on how to set up a notebook server. I always like to verify that my server is running by typing a simple arithmetic expression and verifying that the answer appears when I run the cell.</p>
+<h2 id="Preliminaries">Preliminaries<a class="anchor-link" href="https://www.pythonanywhere.com/user/smccumsey/files/home/smccumsey/waggle-classroom/waggle/media/notebooks/data_intro.htm#Preliminaries">¶</a></h2><p>What you are looking at is called a jupyter notebook. It is pretty cool. It allows you to read text like this and also to execute/run Python code. To actual run the code in this notebook, you will need to have a notebook server running. The previous module provides instructions on how to set up a notebook server. I always like to verify that my server is running by typing a simple arithmetic expression and verifying that the answer appears when I run the cell.</p>
 <p>What does "run the cell" mean? All the boxes with an <code>In</code> on the left are called code cells in the notebook. You can run the code in them by (a) clicking on the cell and then (b) typing shift-enter. Sometimes you will see a new label called <code>Out</code>. Sometimes you will see nothing. But in the cell below you should definitely see <code>Out[...]: 7</code>. If you see nothing, your server is not running.</p>
 <p>Go ahead and click the cell below and type shift-enter. If you see nothing, review the previous module.</p>
 
@@ -224,8 +319,8 @@ div#notebook {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Big-concept---labeled-boxes">Big concept - labeled boxes<a class="anchor-link" href="#Big-concept---labeled-boxes">&#182;</a></h2><p>Python stores data in what I call a labeled-box. The image below is meant to convey the large number of boxes you have at your disposal, each one coming with a blank label ready for you to fill in.</p>
-<p><img src="https://www.dropbox.com/s/0wuv0pe3w2njg9c/boxes2.png?raw=1" width="40%"></p>
+<h2 id="Big-concept---labeled-boxes">Big concept - labeled boxes<a class="anchor-link" href="https://www.pythonanywhere.com/user/smccumsey/files/home/smccumsey/waggle-classroom/waggle/media/notebooks/data_intro.htm#Big-concept---labeled-boxes">¶</a></h2><p>Python stores data in what I call a labeled-box. The image below is meant to convey the large number of boxes you have at your disposal, each one coming with a blank label ready for you to fill in.</p>
+<p><img src="./data_intro_files/boxes2.png" width="40%"></p>
 <p>Python will hand you a box whenever you want one and allow you to put your own unique label on the box. How do you tell Python you want a new box? You use an equals-sign. Why an equals-sign? Good question. Many think it is a very bad idea to mix arithmetic syntax with box management. But most languages do it so that's what we are stuck with.</p>
 <p>On the left of the equals-sign you place your box label. On the right of the equals-sign you place the data you want to store in the box. Let's give it a shot. Click code cell below and then execute. Python is silent when creating boxes so you will see no visible output.</p>
 
@@ -252,7 +347,7 @@ div#notebook {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Rules-for-labels">Rules for labels<a class="anchor-link" href="#Rules-for-labels">&#182;</a></h2><p>Each separate box you create requires a unique label. Probably the biggest drawback to coming up with a label for a box is that you cannot use a hyphen. So I cannot do the following:</p>
+<h2 id="Rules-for-labels">Rules for labels<a class="anchor-link" href="https://www.pythonanywhere.com/user/smccumsey/files/home/smccumsey/waggle-classroom/waggle/media/notebooks/data_intro.htm#Rules-for-labels">¶</a></h2><p>Each separate box you create requires a unique label. Probably the biggest drawback to coming up with a label for a box is that you cannot use a hyphen. So I cannot do the following:</p>
 
 <pre><code>box1-label = 45  # produces an error</code></pre>
 <p>The general rule I follow is to use an underscore character whenever I would normally use a hyphen.</p>
@@ -267,7 +362,7 @@ div#notebook {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="You-can-look-into-boxes">You can look into boxes<a class="anchor-link" href="#You-can-look-into-boxes">&#182;</a></h2><p>Now that you have values in a couple boxes, let's make use of them. The way you retrieve the value in a box is simply to type the box label. Let's take this problem on: I want to add the values in boxes 1 and 2 and place the result in a new box 3. Select the cell below and then type shift-enter to execute the code. Now you should see some output!</p>
+<h2 id="You-can-look-into-boxes">You can look into boxes<a class="anchor-link" href="https://www.pythonanywhere.com/user/smccumsey/files/home/smccumsey/waggle-classroom/waggle/media/notebooks/data_intro.htm#You-can-look-into-boxes">¶</a></h2><p>Now that you have values in a couple boxes, let's make use of them. The way you retrieve the value in a box is simply to type the box label. Let's take this problem on: I want to add the values in boxes 1 and 2 and place the result in a new box 3. Select the cell below and then type shift-enter to execute the code. Now you should see some output!</p>
 
 </div>
 </div>
@@ -325,7 +420,7 @@ div#notebook {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Big-concept---updating-a-box">Big concept - updating a box<a class="anchor-link" href="#Big-concept---updating-a-box">&#182;</a></h2><p>So far we have created new boxes, placed values in them, and then just looked at the values time to time. What if I want to change the value in a box? It looks the same as box creation as seen below.</p>
+<h2 id="Big-concept---updating-a-box">Big concept - updating a box<a class="anchor-link" href="https://www.pythonanywhere.com/user/smccumsey/files/home/smccumsey/waggle-classroom/waggle/media/notebooks/data_intro.htm#Big-concept---updating-a-box">¶</a></h2><p>So far we have created new boxes, placed values in them, and then just looked at the values time to time. What if I want to change the value in a box? It looks the same as box creation as seen below.</p>
 
 </div>
 </div>
@@ -428,7 +523,7 @@ div#notebook {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="New-data-type---strings">New data type - strings<a class="anchor-link" href="#New-data-type---strings">&#182;</a></h2><p>I said that Python boxes can hold any type of data. We have been using integers. Let's look at a new type called strings. To use strings in Python is a bit like quoting someone speaking in a novel. You need to place quotes around both. I'll use an example from my days at San Diego High School playing our rivals at Lincoln High School.</p>
+<h2 id="New-data-type---strings">New data type - strings<a class="anchor-link" href="https://www.pythonanywhere.com/user/smccumsey/files/home/smccumsey/waggle-classroom/waggle/media/notebooks/data_intro.htm#New-data-type---strings">¶</a></h2><p>I said that Python boxes can hold any type of data. We have been using integers. Let's look at a new type called strings. To use strings in Python is a bit like quoting someone speaking in a novel. You need to place quotes around both. I'll use an example from my days at San Diego High School playing our rivals at Lincoln High School.</p>
 
 </div>
 </div>
@@ -438,8 +533,8 @@ div#notebook {
 <div class="prompt input_prompt">In&nbsp;[7]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span class="n">my_mascot</span> <span class="o">=</span> <span class="s">&quot;SDHS Cavers&quot;</span>  <span class="c"># I am using double quotes on either side of the string</span>
-<span class="n">my_rival_mascot</span> <span class="o">=</span> <span class="s">&#39;LHS Hornets&#39;</span>  <span class="c"># I am using single quotes on either side of the string.</span>
+<div class=" highlight hl-ipython3"><pre><span class="n">my_mascot</span> <span class="o">=</span> <span class="s">"SDHS Cavers"</span>  <span class="c"># I am using double quotes on either side of the string</span>
+<span class="n">my_rival_mascot</span> <span class="o">=</span> <span class="s">'LHS Hornets'</span>  <span class="c"># I am using single quotes on either side of the string.</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="n">my_mascot</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">my_rival_mascot</span><span class="p">)</span>
@@ -480,7 +575,7 @@ LHS Hornets
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Big-concept---structured-data">Big concept - structured data<a class="anchor-link" href="#Big-concept---structured-data">&#182;</a></h2><p>Strings have a structure. They are actually compound data made up of characters. Given this, we should be able to ask how many characters are in a string. Python gives us the <code>len</code> function to do this.</p>
+<h2 id="Big-concept---structured-data">Big concept - structured data<a class="anchor-link" href="https://www.pythonanywhere.com/user/smccumsey/files/home/smccumsey/waggle-classroom/waggle/media/notebooks/data_intro.htm#Big-concept---structured-data">¶</a></h2><p>Strings have a structure. They are actually compound data made up of characters. Given this, we should be able to ask how many characters are in a string. Python gives us the <code>len</code> function to do this.</p>
 
 </div>
 </div>
@@ -519,7 +614,7 @@ LHS Hornets
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="New-data-type---lists">New data type - lists<a class="anchor-link" href="#New-data-type---lists">&#182;</a></h2><p>Another structured data type, with some similarities to strings, is a list. While strings are a sequence of characters, a list is a sequence of anything. For lists, instead of quotes we use square-brackets to delimit the items in the list. And we use a comma to separate items. Below is a list to hold all my rivals. And a demonstration that the <code>len</code> function works with lists as well as strings.</p>
+<h2 id="New-data-type---lists">New data type - lists<a class="anchor-link" href="https://www.pythonanywhere.com/user/smccumsey/files/home/smccumsey/waggle-classroom/waggle/media/notebooks/data_intro.htm#New-data-type---lists">¶</a></h2><p>Another structured data type, with some similarities to strings, is a list. While strings are a sequence of characters, a list is a sequence of anything. For lists, instead of quotes we use square-brackets to delimit the items in the list. And we use a comma to separate items. Below is a list to hold all my rivals. And a demonstration that the <code>len</code> function works with lists as well as strings.</p>
 
 </div>
 </div>
@@ -531,7 +626,7 @@ LHS Hornets
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span class="c"># next look at lists</span>
 
-<span class="n">all_my_rivals</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;LHS Hornets&#39;</span><span class="p">,</span> <span class="s">&#39;PLHS Pointers&#39;</span><span class="p">]</span>  <span class="c"># a list of strings</span>
+<span class="n">all_my_rivals</span> <span class="o">=</span> <span class="p">[</span><span class="s">'LHS Hornets'</span><span class="p">,</span> <span class="s">'PLHS Pointers'</span><span class="p">]</span>  <span class="c"># a list of strings</span>
 <span class="n">number_of_rivals</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">all_my_rivals</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">number_of_rivals</span><span class="p">)</span>
 </pre></div>
@@ -598,7 +693,7 @@ LHS Hornets
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="New-data-type---dictionaries">New data type - dictionaries<a class="anchor-link" href="#New-data-type---dictionaries">&#182;</a></h2><p>The final structured data type we will look at is called a dictionary. A dictionary is built around key-value pairs. The key is a string and the value is anything. Let's look at a dictionary then discuss it.</p>
+<h2 id="New-data-type---dictionaries">New data type - dictionaries<a class="anchor-link" href="https://www.pythonanywhere.com/user/smccumsey/files/home/smccumsey/waggle-classroom/waggle/media/notebooks/data_intro.htm#New-data-type---dictionaries">¶</a></h2><p>The final structured data type we will look at is called a dictionary. A dictionary is built around key-value pairs. The key is a string and the value is anything. Let's look at a dictionary then discuss it.</p>
 
 </div>
 </div>
@@ -608,7 +703,7 @@ LHS Hornets
 <div class="prompt input_prompt">In&nbsp;[11]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span class="n">temp_by_day</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;M&#39;</span><span class="p">:</span> <span class="mi">73</span><span class="p">,</span> <span class="s">&#39;Tu&#39;</span><span class="p">:</span> <span class="mi">75</span><span class="p">,</span> <span class="s">&#39;W&#39;</span><span class="p">:</span> <span class="mi">82</span><span class="p">,</span> <span class="s">&#39;Th&#39;</span><span class="p">:</span> <span class="mi">80</span><span class="p">,</span> <span class="s">&#39;F&#39;</span><span class="p">:</span> <span class="mi">90</span><span class="p">}</span> <span class="c">#  not ordered as we will see</span>
+<div class=" highlight hl-ipython3"><pre><span class="n">temp_by_day</span> <span class="o">=</span> <span class="p">{</span><span class="s">'M'</span><span class="p">:</span> <span class="mi">73</span><span class="p">,</span> <span class="s">'Tu'</span><span class="p">:</span> <span class="mi">75</span><span class="p">,</span> <span class="s">'W'</span><span class="p">:</span> <span class="mi">82</span><span class="p">,</span> <span class="s">'Th'</span><span class="p">:</span> <span class="mi">80</span><span class="p">,</span> <span class="s">'F'</span><span class="p">:</span> <span class="mi">90</span><span class="p">}</span> <span class="c">#  not ordered as we will see</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">temp_by_day</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">temp_by_day</span><span class="p">))</span>
 </pre></div>
@@ -623,7 +718,7 @@ LHS Hornets
 
 <div class="output_area"><div class="prompt"></div>
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>{&apos;Th&apos;: 80, &apos;Tu&apos;: 75, &apos;W&apos;: 82, &apos;F&apos;: 90, &apos;M&apos;: 73}
+<pre>{'Th': 80, 'Tu': 75, 'W': 82, 'F': 90, 'M': 73}
 5
 </pre>
 </div>
@@ -653,7 +748,7 @@ LHS Hornets
 <div class="prompt input_prompt">In&nbsp;[12]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span class="c"># Let&#39;s put it together</span>
+<div class=" highlight hl-ipython3"><pre><span class="c"># Let's put it together</span>
 
 <span class="n">m_temp</span> <span class="o">=</span> <span class="mi">73</span>
 <span class="n">tu_temp</span> <span class="o">=</span> <span class="mi">75</span>
@@ -661,7 +756,7 @@ LHS Hornets
 <span class="n">th_temp</span> <span class="o">=</span> <span class="mi">80</span>
 <span class="n">f_temp</span> <span class="o">=</span> <span class="mi">90</span>
 
-<span class="n">week1_data</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;M&#39;</span><span class="p">:</span> <span class="n">m_temp</span><span class="p">,</span> <span class="s">&#39;Tu&#39;</span><span class="p">:</span> <span class="n">tu_temp</span><span class="p">,</span> <span class="s">&#39;W&#39;</span><span class="p">:</span> <span class="n">w_temp</span><span class="p">,</span> <span class="s">&#39;Th&#39;</span><span class="p">:</span> <span class="n">th_temp</span><span class="p">,</span> <span class="s">&#39;F&#39;</span><span class="p">:</span> <span class="n">f_temp</span><span class="p">,</span> <span class="s">&#39;All temps&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">73</span><span class="p">,</span><span class="mi">75</span><span class="p">,</span><span class="mi">82</span><span class="p">,</span><span class="mi">80</span><span class="p">,</span><span class="mi">90</span><span class="p">]}</span>
+<span class="n">week1_data</span> <span class="o">=</span> <span class="p">{</span><span class="s">'M'</span><span class="p">:</span> <span class="n">m_temp</span><span class="p">,</span> <span class="s">'Tu'</span><span class="p">:</span> <span class="n">tu_temp</span><span class="p">,</span> <span class="s">'W'</span><span class="p">:</span> <span class="n">w_temp</span><span class="p">,</span> <span class="s">'Th'</span><span class="p">:</span> <span class="n">th_temp</span><span class="p">,</span> <span class="s">'F'</span><span class="p">:</span> <span class="n">f_temp</span><span class="p">,</span> <span class="s">'All temps'</span><span class="p">:</span> <span class="p">[</span><span class="mi">73</span><span class="p">,</span><span class="mi">75</span><span class="p">,</span><span class="mi">82</span><span class="p">,</span><span class="mi">80</span><span class="p">,</span><span class="mi">90</span><span class="p">]}</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">week1_data</span><span class="p">)</span>
 </pre></div>
 
@@ -675,7 +770,7 @@ LHS Hornets
 
 <div class="output_area"><div class="prompt"></div>
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>{&apos;Tu&apos;: 75, &apos;W&apos;: 82, &apos;F&apos;: 90, &apos;M&apos;: 73, &apos;Th&apos;: 80, &apos;All temps&apos;: [73, 75, 82, 80, 90]}
+<pre>{'Tu': 75, 'W': 82, 'F': 90, 'M': 73, 'Th': 80, 'All temps': [73, 75, 82, 80, 90]}
 </pre>
 </div>
 </div>
@@ -689,8 +784,8 @@ LHS Hornets
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Lists-in-dictionaries?">Lists in dictionaries?<a class="anchor-link" href="#Lists-in-dictionaries?">&#182;</a></h2><p>You may have noticed I snuck in a new key <code>'All temps'</code>. And I gave it a value of a list of numbers. No problem. Values can be anything in a dictionary.</p>
-<h2 id="How-about-dictionaries-in-lists?">How about dictionaries in lists?<a class="anchor-link" href="#How-about-dictionaries-in-lists?">&#182;</a></h2><p>Good question. You probably are guessing that this is ok in Python - I can have lists of dictionaries. And you are right. In fact, this is the basic way we will represent spreadsheets in Python - as lists of dictionaries. To demonstrate, let's build a small spreadsheet of weekly weather data. We already have week1 data. Now let's define week2 data.</p>
+<h2 id="Lists-in-dictionaries?">Lists in dictionaries?<a class="anchor-link" href="https://www.pythonanywhere.com/user/smccumsey/files/home/smccumsey/waggle-classroom/waggle/media/notebooks/data_intro.htm#Lists-in-dictionaries?">¶</a></h2><p>You may have noticed I snuck in a new key <code>'All temps'</code>. And I gave it a value of a list of numbers. No problem. Values can be anything in a dictionary.</p>
+<h2 id="How-about-dictionaries-in-lists?">How about dictionaries in lists?<a class="anchor-link" href="https://www.pythonanywhere.com/user/smccumsey/files/home/smccumsey/waggle-classroom/waggle/media/notebooks/data_intro.htm#How-about-dictionaries-in-lists?">¶</a></h2><p>Good question. You probably are guessing that this is ok in Python - I can have lists of dictionaries. And you are right. In fact, this is the basic way we will represent spreadsheets in Python - as lists of dictionaries. To demonstrate, let's build a small spreadsheet of weekly weather data. We already have week1 data. Now let's define week2 data.</p>
 
 </div>
 </div>
@@ -700,7 +795,7 @@ LHS Hornets
 <div class="prompt input_prompt">In&nbsp;[13]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span class="n">week2_data</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;M&#39;</span><span class="p">:</span> <span class="mi">77</span><span class="p">,</span> <span class="s">&#39;Tu&#39;</span><span class="p">:</span> <span class="mi">78</span><span class="p">,</span> <span class="s">&#39;W&#39;</span><span class="p">:</span> <span class="mi">75</span><span class="p">,</span> <span class="s">&#39;Th&#39;</span><span class="p">:</span> <span class="mi">80</span><span class="p">,</span> <span class="s">&#39;F&#39;</span><span class="p">:</span> <span class="mi">81</span><span class="p">,</span> <span class="s">&#39;All temps&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">77</span><span class="p">,</span><span class="mi">78</span><span class="p">,</span><span class="mi">75</span><span class="p">,</span><span class="mi">80</span><span class="p">,</span><span class="mi">81</span><span class="p">]}</span>
+<div class=" highlight hl-ipython3"><pre><span class="n">week2_data</span> <span class="o">=</span> <span class="p">{</span><span class="s">'M'</span><span class="p">:</span> <span class="mi">77</span><span class="p">,</span> <span class="s">'Tu'</span><span class="p">:</span> <span class="mi">78</span><span class="p">,</span> <span class="s">'W'</span><span class="p">:</span> <span class="mi">75</span><span class="p">,</span> <span class="s">'Th'</span><span class="p">:</span> <span class="mi">80</span><span class="p">,</span> <span class="s">'F'</span><span class="p">:</span> <span class="mi">81</span><span class="p">,</span> <span class="s">'All temps'</span><span class="p">:</span> <span class="p">[</span><span class="mi">77</span><span class="p">,</span><span class="mi">78</span><span class="p">,</span><span class="mi">75</span><span class="p">,</span><span class="mi">80</span><span class="p">,</span><span class="mi">81</span><span class="p">]}</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">week2_data</span><span class="p">)</span>
 </pre></div>
 
@@ -714,7 +809,7 @@ LHS Hornets
 
 <div class="output_area"><div class="prompt"></div>
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>{&apos;Tu&apos;: 78, &apos;W&apos;: 75, &apos;F&apos;: 81, &apos;M&apos;: 77, &apos;Th&apos;: 80, &apos;All temps&apos;: [77, 78, 75, 80, 81]}
+<pre>{'Tu': 78, 'W': 75, 'F': 81, 'M': 77, 'Th': 80, 'All temps': [77, 78, 75, 80, 81]}
 </pre>
 </div>
 </div>
@@ -728,7 +823,7 @@ LHS Hornets
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Our-first-table">Our first table<a class="anchor-link" href="#Our-first-table">&#182;</a></h2><p>I claim we now have 2 rows of data. We are just missing a place to store the two rows. Let's use a list!</p>
+<h2 id="Our-first-table">Our first table<a class="anchor-link" href="https://www.pythonanywhere.com/user/smccumsey/files/home/smccumsey/waggle-classroom/waggle/media/notebooks/data_intro.htm#Our-first-table">¶</a></h2><p>I claim we now have 2 rows of data. We are just missing a place to store the two rows. Let's use a list!</p>
 <p>BTW: I will use the terms <em>table</em> and <em>spreadsheet</em> interchangeably from now on.</p>
 
 </div>
@@ -753,7 +848,7 @@ LHS Hornets
 
 <div class="output_area"><div class="prompt"></div>
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>[{&apos;Tu&apos;: 75, &apos;W&apos;: 82, &apos;F&apos;: 90, &apos;M&apos;: 73, &apos;Th&apos;: 80, &apos;All temps&apos;: [73, 75, 82, 80, 90]}, {&apos;Tu&apos;: 78, &apos;W&apos;: 75, &apos;F&apos;: 81, &apos;M&apos;: 77, &apos;Th&apos;: 80, &apos;All temps&apos;: [77, 78, 75, 80, 81]}]
+<pre>[{'Tu': 75, 'W': 82, 'F': 90, 'M': 73, 'Th': 80, 'All temps': [73, 75, 82, 80, 90]}, {'Tu': 78, 'W': 75, 'F': 81, 'M': 77, 'Th': 80, 'All temps': [77, 78, 75, 80, 81]}]
 </pre>
 </div>
 </div>
@@ -768,7 +863,7 @@ LHS Hornets
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>We will later see it is easy to add new rows to the table, e.g., week3 data, week4 data, etc. We can allow it to grow as we get more data. So what we have visually is this:</p>
-<p><img src="https://www.dropbox.com/s/b0fvwwf3hdhfmju/Screen%20Shot%202016-07-27%20at%204.19.20%20PM.png?raw=1"></p>
+<p><img src="./data_intro_files/Screen Shot 2016-07-27 at 4.19.20 PM.png"></p>
 
 </div>
 </div>
@@ -778,7 +873,7 @@ LHS Hornets
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Wrap-up">Wrap up<a class="anchor-link" href="#Wrap-up">&#182;</a></h2><p>Staying in this module, you have a couple places you can go from here. First, you can do live-coding with the Debugging video. Second, you can review the material we covered in this notebook. You can create new notebook cells with the + operator in the menu bar. Type your own code in to see how it works. Finally, you can test your skills by taking the assessment.</p>
+<h2 id="Wrap-up">Wrap up<a class="anchor-link" href="https://www.pythonanywhere.com/user/smccumsey/files/home/smccumsey/waggle-classroom/waggle/media/notebooks/data_intro.htm#Wrap-up">¶</a></h2><p>Staying in this module, you have a couple places you can go from here. First, you can do live-coding with the Debugging video. Second, you can review the material we covered in this notebook. You can create new notebook cells with the + operator in the menu bar. Type your own code in to see how it works. Finally, you can test your skills by taking the assessment.</p>
 <p>The next module up looks at a concept called looping. It will be particularly useful for manipulating a table.</p>
 
 </div>
@@ -789,7 +884,7 @@ LHS Hornets
 <div class="prompt input_prompt">In&nbsp;[15]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span class="nb">print</span><span class="p">(</span><span class="s">&#39;See you in the next module.&#39;</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span class="nb">print</span><span class="p">(</span><span class="s">'See you in the next module.'</span><span class="p">)</span>
 </pre></div>
 
 </div>
@@ -826,5 +921,6 @@ LHS Hornets
 </div>
     </div>
   </div>
-</body>
-</html>
+
+
+</body></html>

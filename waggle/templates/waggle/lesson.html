@@ -464,13 +464,12 @@ $('#form').submit(function(e){
                         {% for content in contents%}
                         <center>
                         </br>
-                        {% load static %}
-                        <p>  <a href={% static "notebooks/data_intro.ipynb" %} >Download the IPython Notebook</a> </p>
+                        
                         <p>Note in order to run code in the notebook displayed below you'll need to download the .ipynb file </p>
+                        <p><a href="/media/notebooks/data_intro.ipynb">Download the IPython Notebook</a> </p>
                         <hr>
                         </center>
-                        {% load static %}
-                        <iframe id="frame" src={% static "notebooks/data_intro.htm"%} style="border:1px;" height=100% width=100%></iframe>
+                        <iframe id="frame" src="/media/notebooks/data_intro.htm" style="border:1px;" height=100% width=100%></iframe>
                         {% endfor %}
                     </div>
 
