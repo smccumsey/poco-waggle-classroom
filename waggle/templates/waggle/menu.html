@@ -12,79 +12,10 @@
 
 
 	<script type="text/javascript">
-	<!--
-
-
-		var clients = [];
-
-
-		function submitOnEnter(myfield, e){
-			var keycode;
-			if(window.event)
-				keycode = window.event.keyCode;
-			else if(e)
-				keycode = e.which;
-			else
-				return true;
-
-			if (keycode == 13){
-		   		myfield.form.submit();
-		   		return false;
-		   	}else
-		   		return true;
-		}
-
-		function getParameterByName(name) {
-			name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
-			var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
-				results = regex.exec(location.search);
-			return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
-		}
-
 
 		function init(){
 
-			//This gets the session token from the url.
-			var token = getParameterByName('session');
-			console.log("Token: "+ token);
-
-			if( token != null && token.length > 0 )
-				sessionStorage.setItem('token', token);
-			else
-				token = sessionStorage.getItem('token');
-
-
             success('{{object.email}}');
-
-			/*
-			//This asks the validate servlet for our username (based on the session token).
-			var http = new XMLHttpRequest();
-			var params = "token="+token;
-			http.open("POST", "../validate", true);
-
-			//Send the proper header information along with the request
-			http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-
-			http.onreadystatechange = function() {
-				if(http.readyState == 4 && http.status == 200) {
-					console.log("Response: "+http.responseText);
-
-					if( http.responseText != null && http.responseText.length > 0 && http.responseText.trim() != "fail" ){
-
-						success(http.responseText.trim());
-
-					//if fail to validate redirect to login page
-					}else{
-
-						window.location.href = "login.html";
-					}
-
-
-				}
-			}
-			http.send(params);
-			*/
-
 
 		}
 
@@ -96,144 +27,8 @@
 			$("#username").text(username);
 
 
-			var clientSelect = document.getElementById("clientSelect");
-
-			if( username == "priyak@uoregon.edu" ){
-/*
-				var option = document.createElement("option");
-				option.text = "Participant 1";
-				option.value = "1";
-				clientSelect.add(option);
-
-				option = document.createElement("option");
-				option.text = "Participant 2";
-				option.value = "2";
-				clientSelect.add(option);
-*/
-
-
-
-				var http = new XMLHttpRequest();
-				var token = sessionStorage.getItem('token');
-				var params = "token="+token;
-				http.open("POST", "../getclient", true);
-
-				//Send the proper header information along with the request
-				http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-
-				http.onreadystatechange = function() {
-					if(http.readyState == 4 && http.status == 200) {
-						console.log("Response: "+http.responseText);
-
-						if( http.responseText != null && http.responseText.length > 0 && http.responseText.trim() != "fail" ){
-
-							//console.log(http.responseText.trim());
-							if( http.responseText.trim().length > 2 ){
-
-								clients = JSON.parse(http.responseText.trim());
-
-								for(var i=0; i<clients.length; i++){
-
-									option = document.createElement("option");
-									option.text = clients[i].name;
-									option.value = clients[i].id;
-									clientSelect.add(option);
-								}
-							}
-
-						}
-
-
-					}
-				}
-				http.send(params);
-
-			}else{
-				var option = document.createElement("option");
-				option.text = "Student 1";
-				option.value = "1234";
-				clientSelect.add(option);
-
-				option = document.createElement("option");
-				option.text = "Student 2";
-				option.value = "5678";
-				clientSelect.add(option);
-			}
 		}
 
-
-		function newClient(){
-
-			var clientname = document.getElementById("clientname").value;
-			clientname = clientname.replace("'","");
-
-			var found = false;
-			for(var i=0; i<clients.length; i++){
-				if( clients[i].name == clientname )
-					found = true;
-			}
-
-			if( !found ){
-
-				sessionStorage.setItem('clientname', clientname);
-
-				console.log("NEW: "+clientname);
-
-				sessionStorage.setItem('clientid', '1');
-				window.location.href = "menu1.html"
-
-/*
-				var http = new XMLHttpRequest();
-				var token = sessionStorage.getItem('token');
-				var params = "token="+token+"&clientname="+clientname;
-				http.open("POST", "../newclient", true);
-
-				//Send the proper header information along with the request
-				http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-
-				http.onreadystatechange = function() {
-					if(http.readyState == 4 && http.status == 200) {
-						console.log("Response: "+http.responseText);
-
-						if( http.responseText != null && http.responseText.length > 0 && http.responseText.trim() != "fail" ){
-
-							console.log(http.responseText);
-
-							sessionStorage.setItem('clientid', http.responseText.trim());
-
-							window.location.href = "menu1.html";
-
-						}
-
-					}
-				}
-				http.send(params);
-*/
-
-			}else{
-				alert("Sorry. That client name is already taken.");
-			}
-
-		}
-
-
-		function selectClient(){
-
-			var clientSelect = document.getElementById("clientSelect");
-			var clientname = clientSelect.options[clientSelect.selectedIndex].text;
-			var clientid = clientSelect.options[clientSelect.selectedIndex].value;
-
-			sessionStorage.setItem('clientname', clientname);
-			sessionStorage.setItem('clientid', clientid);
-
-			console.log("SELECT: "+clientname);
-
-			window.location.href = "menu1.html";
-		}
-
-
-
-	-->
 	</script>
 
 </head>
@@ -280,6 +75,7 @@
       	<br/>
         <h2>Welcome to Waggle</h2>
         <p>This would be a good place to say a little something about Waggle.  Below are your modules.  Each module is a set of challenges that will help you build your programming and data science skills.  Click a module below to get started</p>
+        {{request.session.course_name}}
         <!--p><a class="btn btn-primary btn-lg" role="button">Learn more &raquo;</a></p-->
       </div>
     </div>
@@ -292,7 +88,7 @@
 
             <!-- begin for -->
 
-            {% for entry in object.student.moduleprogress_set.all %}
+            {% for module in modules %}
 			<tr>
 				<td>
 					<nav class="navbar navbar-default">
@@ -309,13 +105,13 @@
 									Progress: 1/4
 									<br/>
 									<br/>
-									<a class="btn btn-primary" href="challenge2.html" role="button">Start this Module</a>
+                                    <a class="btn btn-primary" href="{% url 'waggle:lesson' pk=object.pk course=request.session.course_name module=module.id %}" role="button">Start this Module</a>
 								</div>
-                                <b>{{entry.module.name}}</b>
+                                <b>{{module.name}}</b>
 							  	<br/>
-							  	Here is a brief description of what this group consists of.
+                                <p> {{module.description}} </p>
+                                <p> {{module.id}} </p>
 							  	<br/>
-							  	Saying anything else here?
 							</div>
 						 </div>
 					 </nav>
@@ -328,9 +124,6 @@
       </center>
 
    	</div>
-
-
-
 
 </body>
 

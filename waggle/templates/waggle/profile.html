@@ -65,7 +65,7 @@
 				token = sessionStorage.getItem('token');
 
 
-			success('{{object.email}}');
+            success('{{object.email}}');
 
 			/*
 			//This asks the validate servlet for our username (based on the session token).
@@ -302,7 +302,7 @@
 		  <table style="width:80%;">
 
             <!-- begin for -->
-            {% for entry in object.student.courseprogress_set.all %}
+            {% for course in courses %}
 			<tr>
 				<td>
 					<nav class="navbar navbar-default">
@@ -312,12 +312,12 @@
 									Completed<br/>Modules: 0/4
 									<br/>
 									<br/>
-                                    <a class="btn btn-primary" href="{% url 'waggle:menu' pk=object.pk course=entry.course.name|slugify %}" role="button">Explore this Course</a>
+                                  <a class="btn btn-primary" href="{% url 'waggle:menu' pk=object.pk course=course.name|slugify %}" role="button">Explore this Course</a>
 								</div>
-                                <b>{{entry.course.name}}</b>
+                                <p> {{course.name}} </p>
+                                <p> {{course.description}} </p>
 							  	<br/>
 							  	<br/>
-                                {{entry.course.description}}
 							</div>
 						 </div>
 					 </nav>

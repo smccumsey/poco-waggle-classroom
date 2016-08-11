@@ -25,7 +25,7 @@ SECRET_KEY = '@21e!kx-)0-c(dago2o99euah8yppxs(a-ci=m(*yor!@5wn$5'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["smccumsey.pythonanywhere.com"]
 
 # Application definition
 
@@ -133,6 +133,7 @@ USE_TZ = True
 
 CODEMIRROR_PATH = "/static/codemirror"
 
+STATIC_ROOT = '/home/smccumsey/waggle-classroom/waggle/static/'
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
             os.path.join(BASE_DIR, "static"),

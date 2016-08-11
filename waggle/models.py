@@ -19,21 +19,15 @@ class Assessment(models.Model):
     module = models.ForeignKey(Module, on_delete=models.CASCADE, related_name='assessments')
     description = models.TextField()
     soln = models.FileField(upload_to="/home/smccumsey/waggle-classroom//waggle/solnFiles/", null=True)
-    def __str__(self):
-        return self.id
 
 class Content(models.Model):
     module = models.ForeignKey(Module, on_delete=models.CASCADE, related_name='contents')
-    ipython_notebooks = models.FilePathField(path='/waggle/assesment/content/notebooks/')
-    videos = models.FilePathField(path='/waggle/assessment/content/videos/')
-    def __str__(self):
-        return self.id
+    ipython_notebook = models.FilePathField(path='waggle/static/notebooks/', null=True)
+    video = models.FilePathField(path='waggle/static/video/', null=True)
 
 class Related(models.Model):
     module = models.ForeignKey(Module, on_delete=models.CASCADE, related_name='relateds')
     links = models.TextField()
-    def __str__(self):
-        return "Related from %s" % self.module
 
 class Student(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='students')

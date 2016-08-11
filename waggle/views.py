@@ -5,7 +5,7 @@ from django.views import generic
 from django.views.generic.edit import FormView, CreateView
 from waggle.forms import CodeForm
 from django.contrib.auth.models import User
-from .models import Assessment, Module, Course
+from .models import Related, Content, Assessment, Module, Course
 
 from django.utils import timezone
 import subprocess
@@ -27,26 +27,47 @@ import logging
 import httplib2
 from django.contrib.auth import login, authenticate
 
-
-
-class GoogleView(generic.TemplateView):
-    template_name = 'waggle/google8a43fbed4f8a62b6.html'
+class LessonView(generic.DetailView):
+    template_name = 'waggle/lesson.html'
+    model = User
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        context = super(LessonView, self).get_context_data(**kwargs)
+        module_id = self.kwargs.get('module')
+        context['assessments'] =Assessment.objects.filter(module_id=module_id)
+        context['contents'] =Content.objects.filter(module_id=module_id)
+        context['relateds'] =Related.objects.filter(module_id=module_id)
+        print(context.items())
+        return context
 
 class MenuView(generic.DetailView):
     template_name = 'waggle/menu.html'
     model=User
+    def get(self, request, *args, **kwargs):
+        request.session['course_name'] = self.kwargs['course']
+        self.object = self.get_object()
+        context = self.get_context_data(object=self.object)
+        return self.render_to_response(context)
+
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        context = super(MenuView, self).get_context_data(**kwargs)
+        course_name = self.kwargs.get('course').replace('-', ' ')
+        course_query = Course.objects.filter(name__icontains=course_name)
+        context['modules'] = Module.objects.filter(course_id=course_query.get().id)
+        return context
 
 class ProfileView(generic.DetailView):
     template_name = 'waggle/profile.html'
     model = User
     def get_context_data(self, **kwargs):
         # Call the base implementation first to get a context
-        c = super(ProfileView, self).get_context_data(**kwargs)
-        user = self.request.user
-        #print('session: ',self.request.session.items())
-        #if User.objects.get(pk=int(self.request.session['_auth_user_id'])) != user:
-        #    print('ERROR WRONG USER')
-        return c
+        context = super(ProfileView, self).get_context_data(**kwargs)
+        context['courses'] = Course.objects.all()
+        return context
+
+class GoogleView(generic.TemplateView):
+    template_name = 'waggle/google8a43fbed4f8a62b6.html'
 
 class LoginView(generic.TemplateView):
     template_name = 'waggle/login.html'
@@ -59,7 +80,7 @@ class LoginView(generic.TemplateView):
             if user.is_active:
                 login(request, user)
                 print('foo')
-                return render(request, 'waggle/profile.html', {'user': user})
+                return render(request, 'waggle/profile.html')#`, {'user': user})
                 # Redirect to a success page.
             else:
                 print('bar')
@@ -67,6 +88,8 @@ class LoginView(generic.TemplateView):
         else:
             print('baz')
             # Return an 'invalid login' error message.
+
+'''
 
 class AssessmentView(generic.ListView):
     # ListView
@@ -136,7 +159,5 @@ class AssessmentView(generic.ListView):
         context['long_desc'] = self.long_desc
         context['codefill'] = self.user_code
         return context
-
-
-
+'''
 
