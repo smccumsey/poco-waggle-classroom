@@ -135,7 +135,6 @@ CODEMIRROR_PATH = "/static/codemirror"
 
 STATIC_ROOT = '/home/smccumsey/waggle-classroom/waggle/static/'
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [
-            os.path.join(BASE_DIR, "static"),
-                '/var/www/static/',
-                ]
+
+MEDIA_ROOT='/home/smccumsey/waggle-classroom/waggle/media/'
+MEDIA_URL='/media/'
