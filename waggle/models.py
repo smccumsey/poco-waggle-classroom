@@ -23,6 +23,8 @@ class Assessment(models.Model):
     module = models.ForeignKey(Module, on_delete=models.CASCADE, related_name='assessments')
     description = models.TextField()
     assess_file = models.FileField(upload_to=assessment_directory_path, null=True)
+    def __str__(self):
+        return 'assessment_%s' % self.id
 
 def notebook_directory_path(instance, filename):
     # file will be uploaded to MEDIA_ROOT/course_<id>/module_<id>/notebooks/<filename>
@@ -37,6 +39,8 @@ class Content(models.Model):
     ipython_notebook = models.FileField(upload_to=notebook_directory_path, null=True)
     html_notebook = models.FileField(upload_to=notebook_directory_path, null=True)
     video = models.FileField(upload_to=video_directory_path, null=True)
+    def __str__(self):
+        return 'content_%s' % self.id
 
 class Related(models.Model):
     module = models.ForeignKey(Module, on_delete=models.CASCADE, related_name='relateds')
@@ -53,7 +57,7 @@ class Student(models.Model):
 
 class CourseProgress(models.Model):
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
-    course = models.ForeignKey(Course, on_delete=models.CASCADE, null=True)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, null=True,unique=True)
     registered = models.BooleanField(default=False)
     date_enrolled = models.DateTimeField()
     def __str__(self):
@@ -61,26 +65,28 @@ class CourseProgress(models.Model):
 
 class ModuleProgress(models.Model):
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
-    module = models.ForeignKey(Module, on_delete=models.CASCADE, null=True)
+    module = models.ForeignKey(Module, on_delete=models.CASCADE, null=True,unique=True)
     def __str__(self):
         return "%s progress for %s module" % (self.student, self.module)
 
 class AssessmentProgress(models.Model):
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
-    assessment = models.ForeignKey(Assessment, on_delete=models.CASCADE, null=True)
-    code_submission = models.TextField()
-    submission_feedback = models.TextField()
+    assessment = models.ForeignKey(Assessment, on_delete=models.CASCADE, null=True,unique=True)
+    code_submission = models.TextField(default='#Type python code here')
+    error_name = models.TextField(default='')
+    short_description = models.TextField(default='')
+    long_description = models.TextField(default='')
     def __str__(self):
-        return "Student: %s progress for Assessment: %s" % (self.student, self.assessment)
+        return "Student %s progress for %s" % (self.student, self.assessment)
 
 class ContentProgress(models.Model):
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
-    content = models.ForeignKey(Content, on_delete=models.CASCADE, null=True)
-    video_notes = models.TextField()
-    video_timepoint = models.DecimalField(max_digits=5, decimal_places=2)
-    notebook_download_count = models.PositiveSmallIntegerField()
+    content = models.ForeignKey(Content, on_delete=models.CASCADE, null=True, unique=True)
+    video_notes = models.TextField(null=True)
+    video_timepoint = models.DecimalField(max_digits=5, decimal_places=2, null=True)
+    notebook_download_count = models.PositiveSmallIntegerField(default=0)
     def __str__(self):
-        return "Student: %s progress for Content: %s" % (self.student, self.content)
+        return "Student %s progress for %s" % (self.student, self.content)
 
     
 

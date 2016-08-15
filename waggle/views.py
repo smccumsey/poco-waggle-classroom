@@ -5,7 +5,7 @@ from django.views import generic
 from django.views.generic.edit import FormView, CreateView
 from waggle.forms import CodeForm
 from django.contrib.auth.models import User
-from .models import Related, Content, Assessment, Module, Course
+from .models import Related, Content, Assessment, Module, Course, AssessmentProgress, ContentProgress
 
 from django.utils import timezone
 import subprocess
@@ -30,19 +30,90 @@ from django.contrib.auth import login, authenticate
 class LessonView(generic.DetailView):
     template_name = 'waggle/lesson.html'
     model = User
+
+    """
+    Constructor. Called in the URLconf; can contain helpful extra
+    keyword arguments, and other things.
+    """
+    #module_id = self.kwargs.get('module')
+    #assessments = Assessment.objects.filter(module_id=module_id)
+    #contents = Content.objects.filter(module_id=module_id)
+    #relateds = Related.objects.filter(module_id=module_id)
+
     def get_context_data(self, **kwargs):
         # Call the base implementation first to get a context
         context = super(LessonView, self).get_context_data(**kwargs)
         module_id = self.kwargs.get('module')
+        print('MODULE_ID ', module_id)
         context['assessments'] =Assessment.objects.filter(module_id=module_id)
         context['contents'] =Content.objects.filter(module_id=module_id)
         context['relateds'] =Related.objects.filter(module_id=module_id)
         print(context.items())
+        # set up progress data for student if it doesnt exist
+        student_instance = context['object'].students
+        for assessment_instance in context['assessments']:
+            assessment_obj,created = student_instance.assessmentprogress_set.get_or_create(assessment=assessment_instance)
+            print(assessment_obj,created)
+        for content_instance in context['contents']:
+            content_obj,created = student_instance.contentprogress_set.get_or_create(content=content_instance)
+            print(content_obj,created)
         return context
+
+    '''
+    def handleResult(self, pipeVals):
+        stdout, stderr = pipeVals
+        if not stderr:
+            if ('CORRECT' in stdout.decode('ASCII')):
+                self.name = 'CORRECT'
+                self.short_desc = 'answer == solution -> True' 
+                self.long_desc = stdout.decode('ASCII') 
+                return 
+            self.name = 'INCORRECT'
+            self.short_desc = 'answer == solution -> False' 
+            self.long_desc = stdout.decode('ASCII') 
+            return 
+        self.name = 'ERROR'
+        self.short_desc = ([word[:-1] for word in str(stderr.decode('ASCII')).split() if 'Error' in word])
+        self.long_desc = "STDERR "+str(stderr.decode('ASCII'))
+        return 
+    '''
+
+    def setupEnv(self, code, envFile):
+        test_filename = os.path.dirname(os.path.abspath(envFile))+'/test.py'
+        print(test_filename)
+        with open(test_filename, "w") as outfile, open(envFile, 'r', encoding='utf-8') as infile:
+            text = infile.read()
+            text_with_code = re.sub('&&&', code, text)
+            outfile.write(text_with_code)
+        return test_filename
+
+    def runCode(self, fname):
+        try:
+            p = subprocess.Popen('python '+fname, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+            return p.communicate()  # this gets you pipe values
+        except Exception as e:
+            return 'error'+e
+        else:
+            return "else"
+
+    def post(self, request, *args, **kwargs):
+        postdata = request.POST.dict()
+        code_id = ([re.sub('code_id','',key) for key in postdata.keys() if 'code_id' in key])[0]
+        if(request.POST.get('code_btn')):
+            self.user_code = request.POST.get('code_id'+code_id)
+            # lookup challenge environment
+            envFile = Assessment.objects.get(id=int(code_id)).assess_file.name
+            testFile = self.setupEnv(self.user_code, envFile)
+            result = self.runCode(testFile)
+            self.handleResult(result)
+        return self.get(request, *args, **kwargs)
 
 class MenuView(generic.DetailView):
     template_name = 'waggle/menu.html'
     model=User
+
+    # student_instance = user_instance.students
+    # module_prog = ModuleProgress.create(student=student_instance)
     def get(self, request, *args, **kwargs):
         request.session['course_name'] = self.kwargs['course']
         self.object = self.get_object()
@@ -60,6 +131,9 @@ class MenuView(generic.DetailView):
 class ProfileView(generic.DetailView):
     template_name = 'waggle/profile.html'
     model = User
+
+    # student_instance = user_instance.students
+    # course_prog = CourseProgress.create(student=student_instance)
     def get_context_data(self, **kwargs):
         # Call the base implementation first to get a context
         context = super(ProfileView, self).get_context_data(**kwargs)
@@ -90,7 +164,6 @@ class LoginView(generic.TemplateView):
             # Return an 'invalid login' error message.
 
 '''
-
 class AssessmentView(generic.ListView):
     # ListView
     model = Assessment

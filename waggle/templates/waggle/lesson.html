@@ -8,9 +8,9 @@
         <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
         <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
         <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
-        <link rel="stylesheet" href="../../static/codemirror/lib/codemirror.css">
-        <link rel="stylesheet" href="../../static/codemirror/addon/hint/show-hint.css">
-
+        <link rel="stylesheet" href="{{STATIC_URL}}/codemirror/lib/codemirror.css">
+        <link rel="stylesheet" href="{{STATIC_URL}}/codemirror/addon/hint/show-hint.css">
+        <link rel="stylesheet" href="{{STATIC_URL}}/codemirror/addon/hint/show-hint.css">
 
         <style>
             /* The Modal (background) */
@@ -107,19 +107,20 @@
 
         </style>
 
-        <script src="../../static/codemirror/lib/codemirror.js"></script>
-        <script src="../../static/codemirror/addon/hint/show-hint.js"></script>
-        <script src="../../static/codemirror/addon/hint/javascript-hint.js"></script>
-        <script src="../../static/codemirror/mode/javascript/javascript.js"></script>
-        <script src="../../static/codemirror/mode/python/python.js"></script>
-        <script src="../../static/codemirror/mode/markdown/markdown.js"></script>
+        <script src="{{STATIC_URL}}/codemirror/lib/codemirror.js"></script>
+        <script src="{{STATIC_URL}}/codemirror/addon/hint/show-hint.js"></script>
+        <script src="{{STATIC_URL}}/codemirror/addon/hint/javascript-hint.js"></script>
+        <script src="{{STATIC_URL}}/codemirror/addon/display/autorefresh.js"></script>
+        <script src="{{STATIC_URL}}/codemirror/mode/javascript/javascript.js"></script>
+        <script src="{{STATIC_URL}}/codemirror/mode/python/python.js"></script>
+        <script src="{{STATIC_URL}}/codemirror/mode/markdown/markdown.js"></script>
 
-        <script src="../../static/bootstrap/js/bootstrap.js"></script>
+        <script src="{{STATIC_URL}}/bootstrap/js/bootstrap.js"></script>
         <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
-        <script src="/../../static/js-cookie/src/js.cookie.js"></script>
+        <script src="{{STATIC_URL}}/js-cookie/src/js.cookie.js"></script>
 
-        <script src="../../static/jquery/dist/jquery.js"></script>
-        <script src="../../static/bootstrap/js/bootstrap.js"></script>
+        <script src="{{STATIC_URL}}/jquery/dist/jquery.js"></script>
+        <script src="{{STATIC_URL}}/bootstrap/js/bootstrap.js"></script>
 
         <!--script src="../../../js/DecimalFormat.js"></script-->
 
@@ -430,7 +431,7 @@ $('#form').submit(function(e){
     <div class="jumbotron" style="padding-bottom:15px;">
         <div class="container">
             <br/>
-            <img src="../../static/images/i15.png" width="48px" height="48px" style="float:left; margin-right:10px; margin-top:12px;"/>
+            <img src="{{STATIC_URL}}/images/i15.png" width="48px" height="48px" style="float:left; margin-right:10px; margin-top:12px;"/>
 
             <h2>Module</h2>
             <div id="less">
@@ -439,7 +440,7 @@ $('#form').submit(function(e){
             </div>
             <div id="more" style="display:none;">
                 <p>And you can swap only <b>N*(N-1)/2</b> times, where N - is a quantity of rods.
-                <img src="../../static/images/actions.png" width="600px"/>
+                <img src="{{STATIC_URL}}/images/actions.png" width="600px"/>
                 <br/>
                 <a href="#" style="margin-left:600px;" onclick="showLess();">Less</a></p>
             </div>
@@ -466,10 +467,10 @@ $('#form').submit(function(e){
                         </br>
                         
                         <p>Note in order to run code in the notebook displayed below you'll need to download the .ipynb file </p>
-                        <p><a href="/media/notebooks/data_intro.ipynb">Download the IPython Notebook</a> </p>
+                        <p><a href="{{content.ipython_notebook.url}}">Download the IPython Notebook</a> </p>
                         <hr>
                         </center>
-                        <iframe id="frame" src="/media/notebooks/data_intro.htm" style="border:1px;" height=100% width=100%></iframe>
+                        <iframe id="frame" src="{{content.html_notebook.url}}" style="border:1px;" height=100% width=100%></iframe>
                         {% endfor %}
                     </div>
 
@@ -477,7 +478,7 @@ $('#form').submit(function(e){
 
                         <br/>
                         <video id="video1" width="490" height="280" controls>
-                        <source src="../../static/video/name_error.mp4" type="video/mp4">
+                            <source src="{{content.video.url}}" type="video/mp4">
                         Your browser does not support the video tag.
                         </video>
                         <br/>
@@ -516,7 +517,7 @@ $('#form').submit(function(e){
                                     <form action="" method="post" style="border:1px solid grey; width:100%; height:200px;">
                                         {% csrf_token %}
 <textarea id="code-{{assessment.id }}" name="code_id{{assessment.id}}" style="height:200px;">
-{{codefill}}
+#Type python code
 </textarea>
                                         <br/>
                                         <input class="btn btn-default btn-xs" style="float:right;" type="submit" value="Submit Code" name="code_btn"/>
@@ -569,8 +570,8 @@ $('#form').submit(function(e){
                     </div>
 
                     <div role="tabpanel" class="tab-pane" id="other">
-                        ...
                         {% for realted_item in relateds %}
+                        ...
                         {% endfor %}
                     </div>
 
@@ -624,7 +625,7 @@ $('#form').submit(function(e){
     </div>
 
     <div class="spinnerbox">
-        <center><img src="../../static/images/spinner.gif"/></center>
+        <center><img src="{{STATIC_URL}}/images/spinner.gif"/></center>
     </div>
     <!-- The error Modal -->
     <div id="myModal" class="modal">
@@ -655,10 +656,7 @@ $('#form').submit(function(e){
                     <h4 class="modal-title">assessment Hint</h4>
                 </div>
                 <div class="modal-body">
-                    <!--p> </p-->
-
-                    <iframe width="560" height="315" src="https://www.youtube.com/embed/cWhUxw8v404" frameborder="0"></iframe>
-
+                    <p>put video here?</p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -676,13 +674,7 @@ $('#form').submit(function(e){
                     <h4 class="modal-title">assessment Hint</h4>
                 </div>
                 <div class="modal-body">
-                    <!--p> </p-->
-
-                    <video width="560" height="380" controls>
-                    <source src="../../static/video/name_error.mp4" type="video/mp4">
-                    Your browser does not support the video tag.
-                    </video>
-
+                    <p> insert video? </p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -702,6 +694,7 @@ $('#form').submit(function(e){
             lineNumbers: true,
             indentUnit: 4,
             matchBrackets: true,
+            autoRefresh: true,
         });
         setTimeout(function() {
             editors[{{forloop.counter0}}].refresh()
