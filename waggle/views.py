@@ -79,11 +79,14 @@ class LessonView(generic.DetailView):
     '''
 
     def setupEnv(self, code, envFile):
-        test_filename = os.path.dirname(os.path.abspath(envFile))+'/test.py'
-        print(test_filename)
+        test_filename = '/home/smccumsey/waggle-classroom/waggle/media/tmp/test.py'
+        code_lines = code.splitlines()
+        new_code = code_lines[0].strip()+'\n'
+        new_code = new_code+'\n'.join([('\t'+s.strip()).expandtabs(4) for s in code_lines[1:]])
+        print(new_code)
         with open(test_filename, "w") as outfile, open(envFile, 'r', encoding='utf-8') as infile:
             text = infile.read()
-            text_with_code = re.sub('&&&', code, text)
+            text_with_code = re.sub('&&&', new_code, text,flags=re.M)
             outfile.write(text_with_code)
         return test_filename
 
@@ -102,10 +105,14 @@ class LessonView(generic.DetailView):
         if(request.POST.get('code_btn')):
             self.user_code = request.POST.get('code_id'+code_id)
             # lookup challenge environment
-            envFile = Assessment.objects.get(id=int(code_id)).assess_file.name
+            envFile = Assessment.objects.get(id=int(code_id)).assess_file.path
+            print(envFile)
             testFile = self.setupEnv(self.user_code, envFile)
             result = self.runCode(testFile)
-            self.handleResult(result)
+            print('RESULT')
+            for output in result:
+                print(output.decode('ASCII'))
+            #self.handleResult(result)
         return self.get(request, *args, **kwargs)
 
 class MenuView(generic.DetailView):

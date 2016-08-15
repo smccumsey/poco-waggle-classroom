@@ -77,7 +77,7 @@ class AssessmentProgress(models.Model):
     short_description = models.TextField(default='')
     long_description = models.TextField(default='')
     def __str__(self):
-        return "Student %s progress for %s" % (self.student, self.assessment)
+        return "%s progress for %s" % (self.student, self.assessment)
 
 class ContentProgress(models.Model):
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
@@ -86,7 +86,7 @@ class ContentProgress(models.Model):
     video_timepoint = models.DecimalField(max_digits=5, decimal_places=2, null=True)
     notebook_download_count = models.PositiveSmallIntegerField(default=0)
     def __str__(self):
-        return "Student %s progress for %s" % (self.student, self.content)
+        return "%s progress for %s" % (self.student, self.content)
 
     
 
