@@ -74,8 +74,9 @@
       <div class="container">
       	<br/>
         <h2>Welcome to Waggle</h2>
-        <p>This would be a good place to say a little something about Waggle.  Below are your modules.  Each module is a set of challenges that will help you build your programming and data science skills.  Click a module below to get started</p>
-        {{request.session.course_name}}
+      	<br/>
+        <p>{{request.session.course_name|capfirst}}</p>
+        <p>Below are your modules.  Each module is a set of challenges that will help you build your programming and data science skills.  Click a module below to get started.</p>
         <!--p><a class="btn btn-primary btn-lg" role="button">Learn more &raquo;</a></p-->
       </div>
     </div>
@@ -100,9 +101,7 @@
 									<span class="glyphicon glyphicon-star-empty" aria-hidden="true"></span>
 									<span class="glyphicon glyphicon-star-empty" aria-hidden="true"></span>
 									<span class="glyphicon glyphicon-star-empty" aria-hidden="true"></span>-->
-									Length: 20 minutes
 									<br/>
-									Progress: 1/4
 									<br/>
 									<br/>
                                     <a class="btn btn-primary" href="{% url 'waggle:lesson' pk=object.pk course=request.session.course_name module=module.id %}" role="button">Start this Module</a>
@@ -110,7 +109,6 @@
                                 <b>{{module.name}}</b>
 							  	<br/>
                                 <p> {{module.description}} </p>
-                                <p> {{module.id}} </p>
 							  	<br/>
 							</div>
 						 </div>

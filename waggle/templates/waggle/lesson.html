@@ -1,89 +1,89 @@
 <html>
 
-    <head>
+<head>
 
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        <title>Waggle</title>
-        <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
-        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
-        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
-        <link rel="stylesheet" href="{{STATIC_URL}}/codemirror/lib/codemirror.css">
-        <link rel="stylesheet" href="{{STATIC_URL}}/codemirror/addon/hint/show-hint.css">
-        <link rel="stylesheet" href="{{STATIC_URL}}/codemirror/addon/hint/show-hint.css">
+<title>Waggle</title>
+<script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+<link rel="stylesheet" href="{{STATIC_URL}}/codemirror/lib/codemirror.css">
+<link rel="stylesheet" href="{{STATIC_URL}}/codemirror/addon/hint/show-hint.css">
+<link rel="stylesheet" href="{{STATIC_URL}}/codemirror/addon/hint/show-hint.css">
 
-        <style>
-            .table-border tbody tr td, .table-border tbody tr th, .table-border thead tr th {
-                    border-bottom: 5px solid black;
-                    border-color: inherit;
-            }
+<style>
+.table-border tbody tr td, .table-border tbody tr th, .table-border thead tr th {
+    border-bottom: 5px solid black;
+    border-color: inherit;
+}
 
-            .CodeMirror {
-                height: auto;
-            }
+.CodeMirror {
+    height: auto;
+}
 
-            .spinnerbox {
-                display:none; /* Hide the DIV */
-                position:fixed;
-                height:20%;
-                width:100%;
-                align:center;
-                left: 0px;
-                top: 278px;
-                z-index:100;
-                margin-left: 15px;
-                padding:15px;
-            }
+.spinnerbox {
+    display:none; /* Hide the DIV */
+    position:fixed;
+    height:20%;
+    width:100%;
+    align:center;
+    left: 0px;
+    top: 278px;
+    z-index:100;
+    margin-left: 15px;
+    padding:15px;
+}
 
-            .modal-dialog {
-                padding-top: 10%;
-            }
+.modal-dialog {
+    padding-top: 10%;
+}
 
-        </style>
+</style>
 
-        <script src="{{STATIC_URL}}/codemirror/lib/codemirror.js"></script>
-        <script src="{{STATIC_URL}}/codemirror/addon/hint/show-hint.js"></script>
-        <script src="{{STATIC_URL}}/codemirror/addon/hint/javascript-hint.js"></script>
-        <script src="{{STATIC_URL}}/codemirror/addon/display/autorefresh.js"></script>
-        <script src="{{STATIC_URL}}/codemirror/mode/javascript/javascript.js"></script>
-        <script src="{{STATIC_URL}}/codemirror/mode/python/python.js"></script>
-        <script src="{{STATIC_URL}}/codemirror/mode/markdown/markdown.js"></script>
+<script src="{{STATIC_URL}}/codemirror/lib/codemirror.js"></script>
+<script src="{{STATIC_URL}}/codemirror/addon/hint/show-hint.js"></script>
+<script src="{{STATIC_URL}}/codemirror/addon/hint/javascript-hint.js"></script>
+<script src="{{STATIC_URL}}/codemirror/addon/display/autorefresh.js"></script>
+<script src="{{STATIC_URL}}/codemirror/mode/javascript/javascript.js"></script>
+<script src="{{STATIC_URL}}/codemirror/mode/python/python.js"></script>
+<script src="{{STATIC_URL}}/codemirror/mode/markdown/markdown.js"></script>
 
-        <script src="{{STATIC_URL}}/bootstrap/js/bootstrap.js"></script>
-        <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
-        <script src="{{STATIC_URL}}/js-cookie/src/js.cookie.js"></script>
+<script src="{{STATIC_URL}}/bootstrap/js/bootstrap.js"></script>
+<script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+<script src="{{STATIC_URL}}/js-cookie/src/js.cookie.js"></script>
 
-        <script src="{{STATIC_URL}}/jquery/dist/jquery.js"></script>
-        <script src="{{STATIC_URL}}/bootstrap/js/bootstrap.js"></script>
+<script src="{{STATIC_URL}}/jquery/dist/jquery.js"></script>
+<script src="{{STATIC_URL}}/bootstrap/js/bootstrap.js"></script>
 
-        <!--script src="../../../js/DecimalFormat.js"></script-->
-
-
-        <!--script src="js/jquery.mobile-1.1.0-rc.1.js"></script-->
-        <!--script src="js/jgestures.min.js"></script-->
-        <!--<script src="js/jquery.js"></script-->
+<!--script src="../../../js/DecimalFormat.js"></script-->
 
 
-            <script type="text/javascript">
-                <!--
+<!--script src="js/jquery.mobile-1.1.0-rc.1.js"></script-->
+<!--script src="js/jgestures.min.js"></script-->
+<!--<script src="js/jquery.js"></script-->
 
-                var notes = [];
 
-                function submitOnEnter(myfield, e){
-                    var keycode;
-                    if(window.event)
-                        keycode = window.event.keyCode;
-                    else if(e)
-                        keycode = e.which;
-                    else
-                        return true;
+<script type="text/javascript">
+<!--
 
-                    if (keycode == 13){
-                        myfield.form.submit();
-                        return false;
-                    }else
-                        return true;
-                }
+var notes = [];
+
+function submitOnEnter(myfield, e){
+    var keycode;
+    if(window.event)
+        keycode = window.event.keyCode;
+    else if(e)
+        keycode = e.which;
+    else
+        return true;
+
+    if (keycode == 13){
+        myfield.form.submit();
+        return false;
+    }else
+        return true;
+}
 
 
 
@@ -221,30 +221,26 @@ function switchToDebug(){
 
     //if Disqus exists, call it's reset method with new parameters
     DISQUS.reset({
-reload: true,
-config: function () {
-this.page.url = "http://0.0.0.0:8050/waggle/assessment.html";
-this.page.identifier = "abc";
-}
-});
+        reload: true,
+        config: function () {
+        this.page.url = "http://0.0.0.0:8050/waggle/assessment.html";
+        this.page.identifier = "abc";
+        }
+    });
 
 }
 
 function switchToAssessment(){
     //if Disqus exists, call it's reset method with new parameters
     DISQUS.reset({
-reload: true,
-config: function () {
-this.page.url = "http://0.0.0.0:8050/waggle/assessment.html#!assessment";
-this.page.identifier = "123";
-}
-});
+        reload: true,
+        config: function () {
+        this.page.url = "http://0.0.0.0:8050/waggle/assessment.html#!assessment";
+        this.page.identifier = "123";
+        }
+    });
 
 }
-
--->
-</script>
-<script>
 
 function fillTable(lineString,tableID){
     // parse string_list
@@ -313,41 +309,12 @@ function showStatus(short_desc){
     node.setAttribute("class", glyph);
 }
 
-function getinput(id, idx){
-    alert("you clicked editor #".concat(id));
-    var editor_id = "code-".concat(id)
-    var edito_contents = editors[idx].getValue()
-    var csrftoken = Cookies.get('csrftoken');
-
-    /*console.log(document.getElementById(editor_id));
-    console.log(editors[idx].getValue());*/
-
-    function csrfSafeMethod(method) {
-        // these HTTP methods do not require CSRF protection
-        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
-    }
-    $.ajaxSetup({
-        beforeSend: function(xhr, settings) {
-            if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
-                xhr.setRequestHeader("X-CSRFToken", csrftoken);
-            }
-        }
-    });
-    $.ajax({
-        type: 'POST',
-        url: '/waggle/assessment/',
-        data: {csrfmiddlewaretoken: '{{ csrf_token }}'},
-        success: function(data) { alert('YAY data: ' + data); },
-    });
-
-}
-
 $('#form').submit(function(e){
-    $.post('/waggle/assessment/', $(this).serialize(), function(data){ 
-        $('.message').html(data.message);
-    });
-    e.preventDefault();
-});
+        $.post('/waggle/assessment/', $(this).serialize(), function(data){ 
+            $('.message').html(data.message);
+            });
+        e.preventDefault();
+        });
 
 </script>
 
@@ -355,23 +322,23 @@ $('#form').submit(function(e){
 
 
 <body onload="init();">
-    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand" href="profile.html" style="font-size:22px;">Waggle</a>
-            </div>
-            <div class="navbar-collapse collapse">
-                <form class="navbar-form navbar-right" role="form" action="login.html">
+<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="profile.html" style="font-size:22px;">Waggle</a>
+        </div>
+        <div class="navbar-collapse collapse">
+            <form class="navbar-form navbar-right" role="form" action="login.html">
 
-                    <span id="username" style="color:#fff;"></span>&nbsp;&nbsp;
+                <span id="username" style="color:#fff;"></span>&nbsp;&nbsp;
 
-                    <!--div class="form-group">
+                <!--div class="form-group">
                     <input type="text" placeholder="Email" class="form-control">
                 </div>
                 <div class="form-group">
@@ -379,106 +346,102 @@ $('#form').submit(function(e){
                 </div>
                 <button type="submit" class="btn btn-success">Sign in</button-->
 
-                    <button type="submit" class="btn btn-danger">Sign out</button>
+                <button type="submit" class="btn btn-danger">Sign out</button>
 
-                </form>
-            </div><!--/.navbar-collapse -->
-        </div>
+            </form>
+        </div><!--/.navbar-collapse -->
     </div>
+</div>
 
-    <!-- Main jumbotron for a primary marketing message or call to action -->
-    <div class="jumbotron" style="padding-bottom:15px;">
-        <div class="container">
-            <br/>
-            <img src="{{STATIC_URL}}/images/i15.png" width="48px" height="48px" style="float:left; margin-right:10px; margin-top:12px;"/>
-
-            <h2>{{module_obj.name}}</h2>
-            <p>{{module_obj.description}}</p>
-                <br/>
-        </div>
-    </div>
-
+<!-- Main jumbotron for a primary marketing message or call to action -->
+<div class="jumbotron" style="padding-bottom:15px;">
     <div class="container">
-        <div class="row">
-            <div class="col-md-9 col-sm-9">
-                <!-- Nav tabs -->
-                <ul class="nav nav-tabs" role="tablist">
-                    <li role="presentation" class="active"><a href="#content" aria-controls="content" role="tab" data-toggle="tab">Content</a></li>
-                    <li role="presentation"><a href="#debug" aria-controls="debug" role="tab" data-toggle="tab" onclick="switchToDebug();">Debugging with Steve</a></li>
-                    <li role="presentation"><a href="#assessment" aria-controls="assessment" role="tab" data-toggle="tab" onclick="switchToAssessment();">Assessment</a></li>
-                    <li role="presentation"><a href="#other" aria-controls="other" role="tab" data-toggle="tab">Other</a></li>
-                </ul>
+        <br/>
+        <img src="{{STATIC_URL}}/images/i15.png" width="48px" height="48px" style="float:left; margin-right:10px; margin-top:12px;"/>
 
-                <!-- Tab panes -->
-                <div class="tab-content" style="border: 1px #CCC solid; border-top: 0px; height:60%; overflow-y:auto;">
+        <h2>{{module_obj.name}}</h2>
+        <p>{{module_obj.description}}</p>
+        <br/>
+    </div>
+</div>
 
-                    <div role="tabpanel" class="tab-pane active" id="content">
-                        {% for content in contents%}
-                        <center>
-                        </br>
-                        
-                        <p>Note in order to run code in the notebook displayed below you'll need to download the .ipynb file </p>
-                        <p><a href="{{content.ipython_notebook.url}}">Download the IPython Notebook</a> </p>
+<div class="container">
+    <div class="row">
+        <div class="col-md-8 col-sm-8">
+            <!-- Nav tabs -->
+            <ul class="nav nav-tabs" role="tablist">
+                <li role="presentation" class="active"><a href="#content" aria-controls="content" role="tab" data-toggle="tab">Content</a></li>
+                <li role="presentation"><a href="#debug" aria-controls="debug" role="tab" data-toggle="tab" onclick="switchToDebug();">Debugging with Steve</a></li>
+                <li role="presentation"><a href="#assessment" aria-controls="assessment" role="tab" data-toggle="tab" onclick="switchToAssessment();">Assessment</a></li>
+                <li role="presentation"><a href="#other" aria-controls="other" role="tab" data-toggle="tab">Other</a></li>
+            </ul>
+
+            <!-- Tab panes -->
+            <div class="tab-content" style="border: 1px #CCC solid; border-top: 0px; height:60%; overflow-y:auto;">
+
+                <div role="tabpanel" class="tab-pane active" id="content">
+                    {% for content in contents%}
+                    <center>
                         <hr>
-                        </center>
-                        <iframe id="frame" src="{{content.html_notebook.url}}" style="border:1px;" height=100% width=100%></iframe>
-                        {% endfor %}
-                    </div>
+                        <p><a href="{{content.ipython_notebook.url}}">Download the IPython Notebook </a> 
+                        (To run code in the notebook displayed below you'll need the .ipynb file) </p>
+                        <hr>
+                    </center>
+                    <iframe id="frame" src="{{content.html_notebook.url}}" style="border:1px;" height=100% width=100%></iframe>
+                    {% endfor %}
+                </div>
 
-                    <div role="tabpanel" class="tab-pane" id="debug">
-                        {% for content in contents%}
-                        <br/>
-                        <video id="video1" width="490" height="280" controls>
-                            <source src="{{content.video.url}}" type="video/mp4">
+                <div role="tabpanel" class="tab-pane" id="debug">
+                    {% for content in contents%}
+                    <br/>
+                    <video id="video1" width="490" height="280" controls>
+                        <source src="{{content.video.url}}" type="video/mp4">
                         Your browser does not support the video tag.
-                        </video>
-                        <br/>
-                        <table id="noteTable" class="table">
-                            <tr>
-                                <td style="border:none;">
-                                    <textarea id="newNote" rows="2" style="width:100%" onfocus="takeNote(true);" onblur="takeNote(false);"></textarea>
-                                </td>
-                                <td valign="middle" style="border:none; vertical-align:middle;">
-                                    &nbsp;<button type="button" class="btn btn-default" onclick="saveNote();">Save Note</button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td style="border:none;">
-                                    <b>Notes:</b>
-                                </td>
-                                <td style="border:none;">
-                                    &nbsp;
-                                </td>
-                            </tr>
-                        </table>
-                        {% endfor %}
-                    </div>
-                    <div role="tabpanel" class="tab-pane" id="assessment" style="background: white;">
-                        <div id=triple>
+                    </video>
+                    <br/>
+                    <table id="noteTable" class="table">
+                        <tr>
+                            <td style="border:none;">
+                                <textarea id="newNote" rows="2" style="width:100%" onfocus="takeNote(true);" onblur="takeNote(false);"></textarea>
+                            </td>
+                            <td valign="middle" style="border:none; vertical-align:middle;">
+                                &nbsp;<button type="button" class="btn btn-default" onclick="saveNote();">Save Note</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="border:none;">
+                                <b>Notes:</b>
+                            </td>
+                            <td style="border:none;">
+                                &nbsp;
+                            </td>
+                        </tr>
+                    </table>
+                    {% endfor %}
+                </div>
+                <div role="tabpanel" class="tab-pane" id="assessment" style="background: white;">
+                    <div id=triple>
                         <!-- Start Assessment triple -->
                         {% for assessment in assessments %}
                         {% for ap in object.students.assessmentprogress_set.all %}
                         {% if assessment == ap.assessment %} 
-                        <br/>
-                        <div class="panel panel-default" style="border:0.5;">
-                            <div class="panel-heading"><h5>Challenge #{{forloop.counter}}</h5></div>
+                        <div class="panel panel-default" style="border:0;">
                             <div class="panel-body"> {{ assessment.description|safe }}
-                                <br/>
                             </div>
                         </div>
                         <div class="panel panel-default" style="border:0;">
                             <div class="panel-body">
                                 <!-- CODE EDITOR GOES HERE.-->
-                                    <form action="" method="post" style="border:1px solid grey; width:100%; height:200px;">
-                                        {% csrf_token %}
+                                <form action="" method="post" style="border:1px solid grey; width:100%; height:200px;">
+                                    {% csrf_token %}
 <textarea id="code-{{assessment.id }}" name="code_id{{assessment.id}}" style="height:200px;">
 {{ap.code_submission}}
 </textarea>
-                                        <br/>
-                                        <input class="btn btn-default btn-xs" style="float:left;" type="submit" value="Submit Code" name="code_btn"/>
-                                    </form>
-                                </div>
+                                    <br/>
+                                    <input class="btn btn-default btn-xs" style="float:left;" type="submit" value="Submit Code" name="code_btn"/>
+                                </form>
                             </div>
+                        </div>
                         <div class="panel panel-default" style="border:0;">
                             <!-- OUTPUT/TEST RESULTS GO HERE. -->
                             <div class="panel-body">
@@ -500,154 +463,116 @@ $('#form').submit(function(e){
                                     </thead>
                                     <tbody>
                                     <script>
-fillTable( "{{ap.errors_list|escapejs}}", "assessmentTable{{assessment.id}}");
+                                        fillTable( "{{ap.errors_list|escapejs}}", "assessmentTable{{assessment.id}}");
                                     </script>
                                     </tbody>
                                 </table>
                             </div>
-                        {% endif %}
+                            {% endif %}
                         </div>
                         <!-- End triple -->
                         {% endif %}
                         {% endfor %}
                         {% endfor %}
-                        </div>
                     </div>
-
-                    <div role="tabpanel" class="tab-pane" id="other">
-                        {% for realted_item in relateds %}
-                        ...
-                        {% endfor %}
-                    </div>
-
-                </div>
                 </div>
 
+                <div role="tabpanel" class="tab-pane" id="other">
+                    {% for realted_item in relateds %}
+                    ...
+                    {% endfor %}
+                </div>
+
+            {% for assessment in assessments %}
             </div>
+            {% endfor %}
+        <!-- Modal -->
+        <div class="modal fade" id="longdModal" role="dialog">
+            <div class="modal-dialog">
 
-            <div class="col-md-3 col-sm-3">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Modal Header</h4>
+                    </div>
+                    <div class="modal-body">
+                        <span id="longd"> empty </span>
+                    </div>
+                </div>
 
-                <table id="previewTable" style="width:100%;">
-                    <tr>
-                        <td>
-                            <div id="disqus_thread"></div>
-                            <script>
-                                /**
-                                *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
-                                *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables
-                                */
-                                /*
-
-                                TODO: Use this to make various discussion threads unique.
-
-                                var disqus_config = function () {
-                                    this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
-                                    this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
-                                };
-                                */
-
-                                var disqus_config = function () {
-                                    this.page.url ="http://0.0.0.0:8050/waggle/assessment.html";  // Replace PAGE_URL with your page's canonical URL variable
-                                    this.page.identifier = "abc"; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
-                                };
-
-                                (function() {  // DON'T EDIT BELOW THIS LINE
-                                    var d = document, s = d.createElement('script');
-
-                                    s.src = 'https:///waggle2.disqus.com/embed.js';
-
-                                    s.setAttribute('data-timestamp', +new Date());
-                                    (d.head || d.body).appendChild(s);
-                                })();
-                            </script>
-                            <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
-                        </td>
-                    </tr>
-
-                </table>
-                <div id="disqus_container_2"></div>
             </div>
         </div>
-    </div>
-
-    <div class="spinnerbox">
-        <center><img src="{{STATIC_URL}}/images/spinner.gif"/></center>
-    </div>
-
-    <!-- Modal -->
-    <div class="modal fade" id="longdModal" role="dialog">
-        <div class="modal-dialog">
-
-            <!-- Modal content-->
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">Modal Header</h4>
-                </div>
-                <div class="modal-body">
-                    <span id="longd"> empty </span>
-                </div>
-            </div>
-
+        
         </div>
+        </div>
+        <div class="col-md-4 col-sm-4">
+
+            <table id="previewTable" style="width:100%;">
+                <tr>
+                    <td>
+                        <div id="disqus_thread"></div>
+                        <script>
+/**
+ *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+ *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables
+ */
+                        /*
+
+                           TODO: Use this to make various discussion threads unique.
+
+                           var disqus_config = function () {
+                           this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+                           this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+                           };
+                         */
+
+                        var disqus_config = function () {
+                            this.page.url ="http://0.0.0.0:8050/waggle/assessment.html";  // Replace PAGE_URL with your page's canonical URL variable
+                            this.page.identifier = "abc"; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+                        };
+
+(function() {  // DON'T EDIT BELOW THIS LINE
+ var d = document, s = d.createElement('script');
+
+ s.src = 'https:///waggle2.disqus.com/embed.js';
+
+ s.setAttribute('data-timestamp', +new Date());
+ (d.head || d.body).appendChild(s);
+ })();
+                        </script>
+                        <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+                    </td>
+                </tr>
+
+            </table>
+            <div id="disqus_container_2"></div>
+        </div>
+
+        <div class="spinnerbox">
+            <center><img src="{{STATIC_URL}}/images/spinner.gif"/></center>
+        </div>
+
     </div>
-    
-    <div id="myModal1" class="modal fade" tabindex="-1" role="dialog">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">assessment Hint</h4>
-                </div>
-                <div class="modal-body">
-                    <p>put video here?</p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <!--button type="button" class="btn btn-primary">Save changes</button-->
-                </div>
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
 
-    <div id="myModal2" class="modal fade" tabindex="-1" role="dialog">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">assessment Hint</h4>
-                </div>
-                <div class="modal-body">
-                    <p> insert video? </p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <!--button type="button" class="btn btn-primary">Save changes</button-->
-                </div>
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
-
-    <script>
+<script>
         var editors = [];
         {% for assessment in assessments %}
-        editors[{{forloop.counter0}}] = CodeMirror.fromTextArea(document.getElementById("code-{{assessment.id}}"), {
+            editors[{{forloop.counter0}}] = CodeMirror.fromTextArea(document.getElementById("code-{{assessment.id}}"), {
             mode: {name: "python",
-                version: 3,
-                singleLineStringErrors: false},
+            version: 3,
+            singleLineStringErrors: false},
             lineNumbers: true,
             indentUnit: 4,
             matchBrackets: true,
             autoRefresh: true,
-        });
-        setTimeout(function() {
-            editors[{{forloop.counter0}}].refresh()
-        }, 1);
-
-
+            });
+            setTimeout(function() {
+                    editors[{{forloop.counter0}}].refresh()
+                    }, 1);
         {% endfor %}
-    </script>
+        </script>
 
 
-</body>
-</html>
+    </body>
+    </html>
