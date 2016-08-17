@@ -18,8 +18,7 @@ def report( name, shortd, longd):
 #No mock data for this challenge.
 
 try:
-	#submitted:2016-08-17 09:55:09.345856
-    
+	&&&
 
 except Exception as e:
 	report('Generic error', 'On your own', e)

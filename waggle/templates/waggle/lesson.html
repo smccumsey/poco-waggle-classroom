@@ -13,76 +13,10 @@
         <link rel="stylesheet" href="{{STATIC_URL}}/codemirror/addon/hint/show-hint.css">
 
         <style>
-            /* The Modal (background) */
-            .modal {
-                display: none; /* Hidden by default */
-                position: fixed; /* Stay in place */
-                z-index: 1; /* Sit on top */
-                padding-top: 100px; /* Location of the box */
-                left: 0;
-                top: 0;
-                width: 100%; /* Full width */
-                height: 100%; /* Full height */
-                overflow: auto; /* Enable scroll if needed */
-                background-color: rgb(0,0,0); /* Fallback color */
-                background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+            .table-border tbody tr td, .table-border tbody tr th, .table-border thead tr th {
+                    border-bottom: 5px solid black;
+                    border-color: inherit;
             }
-
-            /* Modal Content */
-            .modal-content {
-                position: relative;
-                background-color: #fefefe;
-                margin: auto;
-                padding: 0;
-                border: 1px solid #888;
-                width: 80%;
-                box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
-                -webkit-animation-name: animatetop;
-                -webkit-animation-duration: 0.4s;
-                animation-name: animatetop;
-                animation-duration: 0.4s
-            }
-
-            /* Add Animation */
-            @-webkit-keyframes animatetop {
-                from {top:-300px; opacity:0}
-                to {top:0; opacity:1}
-            }
-
-            @keyframes animatetop {
-                from {top:-300px; opacity:0}
-                to {top:0; opacity:1}
-            }
-
-            /* The Close Button */
-            .close {
-                color: white;
-                float: right;
-                font-size: 28px;
-                font-weight: bold;
-            }
-
-            .close:hover,
-            .close:focus {
-                color: #000;
-                text-decoration: none;
-                cursor: pointer;
-            }
-
-            .modal-header {
-                padding: 2px 16px;
-                background-color: #5cb85c;
-                color: white;
-            }
-
-            .modal-body {padding: 2px 16px;}
-
-            .modal-footer {
-                padding: 2px 16px;
-                background-color: #5cb85c;
-                color: white;
-            }
-
 
             .CodeMirror {
                 height: auto;
@@ -312,26 +246,53 @@ this.page.identifier = "123";
 </script>
 <script>
 
-function tellMeMore(){
-    // Get the modal
-    var modal = document.getElementById('myModal');
-    modal.style.display = "block";
+function fillTable(lineString,tableID){
+    // parse string_list
+    var table = document.getElementById(tableID);
 
-    // Get the <span> element that closes the modal
-    var span = document.getElementsByClassName("close")[0];
+    var arrayOfLines = lineString.match(/[^\r\n]+/g);
+    // what if empty?
+    var n = arrayOfLines.length;
+    var counter=0;
+    var longdArr = [];
+    for (i = 0; i < n; i++) { 
+        obj = JSON.parse(arrayOfLines[i]);
+        for (var key in obj) {
+            if (Object.prototype.hasOwnProperty.call(obj, key)) {
+                var val = obj[key];
+                console.log(key,val);
+                var name = val['Name'];
+                var shortd = val['Short'];
+                longdArr.push(val['Long']);
+                console.log(counter, longdArr[counter]);
 
+                var row = table.insertRow(i+1);
+                var cell1 = row.insertCell(0);
+                var cell2 = row.insertCell(1);
+                var cell3 = row.insertCell(2);
+                var cell4 = row.insertCell(3);
+                cell1.innerHTML = " <center><span class= 'glyphicon glyphicon-thumbs-down'></span></center>";
+                cell2.innerHTML = name;
+                cell3.innerHTML = shortd;
+                cell4.innerHTML = "<button type='button' class='btn btn-default btn-sm btn-block' data-toggle='modal' data-target='#longdModal'>Tell me more</button>"; 
+                cell4.onclick = function() {document.getElementById("longd").innerHTML=longdArr[counter-1]};
+                counter++;
+                //make array for longd
 
-    // When the user clicks on <span> (x), close the modal
-    span.onclick = function() {
-            modal.style.display = "none";
+                row.className = "table-border";
+                cell1.className = "danger";
+                cell2.className = "danger";
+                cell3.className = "danger";
+                cell4.className = "danger";;
+
+                cell1.style = "vertical-align: middle;";;
+                cell2.style = "vertical-align: middle;";
+                cell3.style = "vertical-align: middle;";
+                cell4.style = "vertical-align: middle;";
+            }
         }
+    }
 
-    // When the user clicks anywhere outside of the modal, close it
-    window.onclick = function(event) {
-            if (event.target == modal) {
-                        modal.style.display = "none";
-                            }
-                        }
 }
 
 function showStatus(short_desc){
@@ -433,17 +394,9 @@ $('#form').submit(function(e){
             <br/>
             <img src="{{STATIC_URL}}/images/i15.png" width="48px" height="48px" style="float:left; margin-right:10px; margin-top:12px;"/>
 
-            <h2>Module</h2>
-            <div id="less">
-                <p>And you can swap only <b>N*(N-1)/2</b> times, where N - is a quantity of rods. <a href="#" onclick="showMore();">More</a></p>
-
-            </div>
-            <div id="more" style="display:none;">
-                <p>And you can swap only <b>N*(N-1)/2</b> times, where N - is a quantity of rods.
-                <img src="{{STATIC_URL}}/images/actions.png" width="600px"/>
+            <h2>{{module_obj.name}}</h2>
+            <p>{{module_obj.description}}</p>
                 <br/>
-                <a href="#" style="margin-left:600px;" onclick="showLess();">Less</a></p>
-            </div>
         </div>
     </div>
 
@@ -475,7 +428,7 @@ $('#form').submit(function(e){
                     </div>
 
                     <div role="tabpanel" class="tab-pane" id="debug">
-
+                        {% for content in contents%}
                         <br/>
                         <video id="video1" width="490" height="280" controls>
                             <source src="{{content.video.url}}" type="video/mp4">
@@ -500,34 +453,45 @@ $('#form').submit(function(e){
                                 </td>
                             </tr>
                         </table>
+                        {% endfor %}
                     </div>
-                    <div role="tabpanel" class="tab-pane" id="assessment">
+                    <div role="tabpanel" class="tab-pane" id="assessment" style="background: white;">
                         <div id=triple>
                         <!-- Start Assessment triple -->
                         {% for assessment in assessments %}
-                        <div class="panel panel-default">
-                            <div class="panel-heading"><h4>Assessment #{{forloop.counter}}</h4></div>
+                        {% for ap in object.students.assessmentprogress_set.all %}
+                        {% if assessment == ap.assessment %} 
+                        <br/>
+                        <div class="panel panel-default" style="border:0.5;">
+                            <div class="panel-heading"><h5>Challenge #{{forloop.counter}}</h5></div>
                             <div class="panel-body"> {{ assessment.description|safe }}
                                 <br/>
                             </div>
                         </div>
-                        <div class="panel panel-default">
+                        <div class="panel panel-default" style="border:0;">
                             <div class="panel-body">
                                 <!-- CODE EDITOR GOES HERE.-->
                                     <form action="" method="post" style="border:1px solid grey; width:100%; height:200px;">
                                         {% csrf_token %}
 <textarea id="code-{{assessment.id }}" name="code_id{{assessment.id}}" style="height:200px;">
-#Type python code
+{{ap.code_submission}}
 </textarea>
                                         <br/>
-                                        <input class="btn btn-default btn-xs" style="float:right;" type="submit" value="Submit Code" name="code_btn"/>
+                                        <input class="btn btn-default btn-xs" style="float:left;" type="submit" value="Submit Code" name="code_btn"/>
                                     </form>
                                 </div>
                             </div>
-                        <div class="panel panel-default">
+                        <div class="panel panel-default" style="border:0;">
                             <!-- OUTPUT/TEST RESULTS GO HERE. -->
                             <div class="panel-body">
-                                <table class="table table-bordered">
+                                {% if not ap.errors_list %}
+                                <h4> Run your code to receive feedback. </h4>
+                                {% elif ap.errors_list == "good" %}
+                                <h4> GOOD JOB! No errors were found. </h4>
+                                {% elif ap.errors_list == "bad" %}
+                                <h4> Errors were found however we're unable to provide feedback. Please try a different submission.</h4>
+                                {% else %}
+                                <table class="table table-condensed table-border" id="assessmentTable{{assessment.id}}">
                                     <thead>
                                         <tr>
                                             <th>Status</th>
@@ -537,34 +501,17 @@ $('#form').submit(function(e){
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>
-                                                <!-- also include color for status -->
-                                                <div id="status-glyph"></div>
-                                            </td>
-                                            <td>
-                                                {{name}}
-                                                <!--
-                                                in here goes the name for the type of error or hint
-                                                -->
-                                            </td>
-                                            <td>
-                                                {{short_desc}}
-                                            </td>
-                                            <td>
-                                                <!--
-                                                place button here which calls javascript fxn 
-                                                to open popup that diplays output of users code 
-                                                submission
-                                                -->
-                                                <button id="myBtn" class="btn btn-default btn-xs btn-block" onclick="tellMeMore();">Tell me more</button>
-                                            </td>
-                                        </tr>
+                                    <script>
+fillTable( "{{ap.errors_list|escapejs}}", "assessmentTable{{assessment.id}}");
+                                    </script>
                                     </tbody>
                                 </table>
                             </div>
+                        {% endif %}
                         </div>
                         <!-- End triple -->
+                        {% endif %}
+                        {% endfor %}
                         {% endfor %}
                         </div>
                     </div>
@@ -627,27 +574,24 @@ $('#form').submit(function(e){
     <div class="spinnerbox">
         <center><img src="{{STATIC_URL}}/images/spinner.gif"/></center>
     </div>
-    <!-- The error Modal -->
-    <div id="myModal" class="modal">
+    <!-- Modal -->
+    <div class="modal fade" id="longdModal" role="dialog">
+        <div class="modal-dialog">
 
-        <!-- Modal content -->
-        <div class="modal-content">
-            <div class="modal-header">
-                <span class="close">×</span>
-                <h2>CODE RESULT</h2>
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Modal Header</h4>
+                </div>
+                <div class="modal-body">
+                    <span id="longd"> empty </span>
+                </div>
             </div>
-            <div class="modal-body">
-                <p>{{long_desc}}</p>
-            </div>
-            <!--
-            <div class="modal-footer">
-                <h3>Modal Footer</h3>
-            </div>
-            -->
+
         </div>
-
     </div>
-
+    
     <div id="myModal1" class="modal fade" tabindex="-1" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">

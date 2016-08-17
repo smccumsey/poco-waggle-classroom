@@ -5,11 +5,13 @@ from django.views import generic
 from django.views.generic.edit import FormView, CreateView
 from waggle.forms import CodeForm
 from django.contrib.auth.models import User
-from .models import Related, Content, Assessment, Module, Course, AssessmentProgress, ContentProgress
+from .models import Related, Content, Assessment, Module, Course, AssessmentProgress, ContentProgress,Student
 
 from django.utils import timezone
+from datetime import datetime
 import subprocess
 import re
+import json
 import imp
 import ntpath
 from importlib.machinery import SourceFileLoader
@@ -45,6 +47,7 @@ class LessonView(generic.DetailView):
         context = super(LessonView, self).get_context_data(**kwargs)
         module_id = self.kwargs.get('module')
         print('MODULE_ID ', module_id)
+        context['module_obj'] = Module.objects.get(id=module_id)
         context['assessments'] =Assessment.objects.filter(module_id=module_id)
         context['contents'] =Content.objects.filter(module_id=module_id)
         context['relateds'] =Related.objects.filter(module_id=module_id)
@@ -52,37 +55,18 @@ class LessonView(generic.DetailView):
         # set up progress data for student if it doesnt exist
         student_instance = context['object'].students
         for assessment_instance in context['assessments']:
-            assessment_obj,created = student_instance.assessmentprogress_set.get_or_create(assessment=assessment_instance)
-            print(assessment_obj,created)
+            assessment_prog,created = student_instance.assessmentprogress_set.get_or_create(assessment=assessment_instance)
+            print(assessment_prog,created)
+            print(assessment_prog.errors_list)
         for content_instance in context['contents']:
-            content_obj,created = student_instance.contentprogress_set.get_or_create(content=content_instance)
-            print(content_obj,created)
+            content_prog,created = student_instance.contentprogress_set.get_or_create(content=content_instance)
+            print(content_prog,created)
         return context
-
-    '''
-    def handleResult(self, pipeVals):
-        stdout, stderr = pipeVals
-        if not stderr:
-            if ('CORRECT' in stdout.decode('ASCII')):
-                self.name = 'CORRECT'
-                self.short_desc = 'answer == solution -> True' 
-                self.long_desc = stdout.decode('ASCII') 
-                return 
-            self.name = 'INCORRECT'
-            self.short_desc = 'answer == solution -> False' 
-            self.long_desc = stdout.decode('ASCII') 
-            return 
-        self.name = 'ERROR'
-        self.short_desc = ([word[:-1] for word in str(stderr.decode('ASCII')).split() if 'Error' in word])
-        self.long_desc = "STDERR "+str(stderr.decode('ASCII'))
-        return 
-    '''
 
     def setupEnv(self, code, envFile):
         test_filename = '/home/smccumsey/waggle-classroom/waggle/media/tmp/test.py'
         code_lines = code.splitlines()
-        new_code = code_lines[0].strip()+'\n'
-        new_code = new_code+'\n'.join([('\t'+s.strip()).expandtabs(4) for s in code_lines[1:]])
+        new_code = ('\t#submitted:{}\n'.format(datetime.now())).expandtabs(0)+'\n'.join([('\t'+s.strip()).expandtabs(4) for s in code_lines]) #lines after first must be indented
         print(new_code)
         with open(test_filename, "w") as outfile, open(envFile, 'r', encoding='utf-8') as infile:
             text = infile.read()
@@ -102,17 +86,26 @@ class LessonView(generic.DetailView):
     def post(self, request, *args, **kwargs):
         postdata = request.POST.dict()
         code_id = ([re.sub('code_id','',key) for key in postdata.keys() if 'code_id' in key])[0]
+        print('POST DATA')
+        print(postdata,code_id)
         if(request.POST.get('code_btn')):
             self.user_code = request.POST.get('code_id'+code_id)
-            # lookup challenge environment
+            # grab file to assess user code
             envFile = Assessment.objects.get(id=int(code_id)).assess_file.path
-            print(envFile)
             testFile = self.setupEnv(self.user_code, envFile)
-            result = self.runCode(testFile)
-            print('RESULT')
-            for output in result:
-                print(output.decode('ASCII'))
-            #self.handleResult(result)
+            result_feedback = self.runCode(testFile)
+            print('RESULT0',result_feedback)
+            if result_feedback[0].decode('ASCII'):
+                result_feedback  = json.dumps([ {k:str(v) for k,v in (eval(err)).items()} for err in result_feedback[0].decode('ASCII').splitlines()])
+            elif result_feedback[1].decode('ASCII'):
+                result_feedback = "bad"
+            else:
+                result_feedback = "good"
+            print('RESULT1',result_feedback)
+            assessment_progress = AssessmentProgress.objects.get(student=Student.objects.get(user=request.user), assessment=Assessment.objects.get(id=int(code_id)))
+            assessment_progress.code_submission = self.user_code
+            assessment_progress.errors_list = result_feedback
+            assessment_progress.save()
         return self.get(request, *args, **kwargs)
 
 class MenuView(generic.DetailView):

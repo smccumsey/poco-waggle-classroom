@@ -73,9 +73,7 @@ class AssessmentProgress(models.Model):
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
     assessment = models.ForeignKey(Assessment, on_delete=models.CASCADE, null=True,unique=True)
     code_submission = models.TextField(default='#Type python code here')
-    error_name = models.TextField(default='')
-    short_description = models.TextField(default='')
-    long_description = models.TextField(default='')
+    errors_list = models.TextField(default='')
     def __str__(self):
         return "%s progress for %s" % (self.student, self.assessment)
 
