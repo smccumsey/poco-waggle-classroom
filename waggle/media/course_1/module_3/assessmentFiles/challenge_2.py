@@ -37,4 +37,4 @@ except Exception as e:
 	report('Generic error', "On your own", 'Look for typos')
 else:
 	if not check:
-		report('Value bug', "'Did you type '23' with quotes?" + str(miss_s), 'Look for typos')
+		report('Value bug', "'Did you type '23' with quotes?", 'Look for typos')
