@@ -1,11 +1,9 @@
-#Module 1
+#Module 0
 
-#Challenge 1
+#Challenge 2
 
 '''
-one = 1
-two = 2
-three = 3
+x = '23'
 '''
 import sys
 
@@ -15,45 +13,30 @@ def report( name, shortd, longd):
 
 #Mock data goes first
 
-#No mock data for this challenge.
 
 try:
-	#submitted:2016-08-17 14:55:55.240179
-    one = 1
-    two = 2
-    three = 3
-    
+	
+    #user submission
+    pass  
 
 except Exception as e:
-	report('Generic error', 'On your own', e)
+	report('Generic error', 'On your own', 'Look for typos')
 	sys.exit(1)
 
 try:
-	check = (one == 1)
+	y		# does var exist?
 except NameError as e:
-	report('Name error', 'Typically a typo', e)
-except Exception as e:
-	report('Generic error', 'On your own', e)
-else:
-	if not check:
-		report('Value bug', 'Wrong value in box', 'Box labeled one has incorrect value ' + str(one))
+	report('Name error', "Don't see y on left", 'Look for typos')
+	sys.exit(1)
+
+if not isinstance(y, str):
+	report('Data type bug', "Did you type the '23' correctly?", 'It should have quotes around it')
+	sys.exit(1)
 
 try:
-	check = (two == 2)
-except NameError as e:
-	report('Name error', 'Typically a typo', e)
+	check = (y == '23')
 except Exception as e:
-	report('Generic error', 'On your own', e)
+	report('Generic error', "On your own", 'Look for typos')
 else:
 	if not check:
-		report('Value bug', 'Wrong value in box', 'Box labeled two has incorrect value ' + str(two))
-
-try:
-	check = (three == 3)
-except NameError as e:
-	report('Name error', 'Typically a typo', e)
-except Exception as e:
-	report('Generic error', 'On your own', e)
-else:
-	if not check:
-		report('Value bug', 'Wrong value in box', 'Box labeled three has incorrect value ' + str(three))
+		report('Value bug', "'Did you type '23' with quotes?" + str(miss_s), 'Look for typos')

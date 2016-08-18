@@ -12,6 +12,7 @@ class Module(models.Model):
     name = models.CharField(max_length = 128)
     description = models.TextField(null=True)
     course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='modules')
+    order = models.PositiveSmallIntegerField(null=True)
     def __str__(self):
         return self.name
 
@@ -23,8 +24,9 @@ class Assessment(models.Model):
     module = models.ForeignKey(Module, on_delete=models.CASCADE, related_name='assessments')
     description = models.TextField()
     assess_file = models.FileField(upload_to=assessment_directory_path, null=True)
+    order = models.PositiveSmallIntegerField(null=True)
     def __str__(self):
-        return 'assessment_%s' % self.id
+        return 'assessment_%s from %s' % (self.order, self.module.name)
 
 def notebook_directory_path(instance, filename):
     # file will be uploaded to MEDIA_ROOT/course_<id>/module_<id>/notebooks/<filename>
@@ -36,11 +38,10 @@ def video_directory_path(instance, filename):
 
 class Content(models.Model):
     module = models.ForeignKey(Module, on_delete=models.CASCADE, related_name='contents')
-    ipython_notebook = models.FileField(upload_to=notebook_directory_path, null=True)
     html_notebook = models.FileField(upload_to=notebook_directory_path, null=True)
-    video = models.FileField(upload_to=video_directory_path, null=True)
+    video = models.FileField(upload_to=video_directory_path, null=True,blank=True)
     def __str__(self):
-        return 'content_%s' % self.id
+        return 'content_%s from %s' % (self.id, self.module.name)
 
 class Related(models.Model):
     module = models.ForeignKey(Module, on_delete=models.CASCADE, related_name='relateds')

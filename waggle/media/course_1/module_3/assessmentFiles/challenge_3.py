@@ -8,7 +8,7 @@ z = {'x': x, 'y': y, 'Foo': 'Bar'}
 import sys
 
 def report( name, shortd, longd):
-	d = {'Name': name, 'Short': short, 'Long': longd}
+	d = {'Name': name, 'Short': shortd, 'Long': longd}
 	print(str(d))
 
 #Mock data goes first

@@ -17,7 +17,7 @@ two = 2
 three = 3
 
 def report( name, shortd, longd):
-	d = {'Name': name, 'Short': short, 'Long': longd}
+	d = {'Name': name, 'Short': shortd, 'Long': longd}
 	print(str(d))
 
 try:

@@ -66,11 +66,12 @@ class LessonView(generic.DetailView):
     def setupEnv(self, code, envFile):
         test_filename = '/home/smccumsey/waggle-classroom/waggle/media/tmp/test.py'
         code_lines = code.splitlines()
-        new_code = ('\t#submitted:{}\n'.format(datetime.now())).expandtabs(0)+'\n'.join([('\t'+s.strip()).expandtabs(4) for s in code_lines]) #lines after first must be indented
+        new_code = '\n\t#user submission'.expandtabs(4)+'\n'+'\n'.join(map(lambda s:('\t'+s).expandtabs(4),code_lines)) #lines after first must be indented
         print(new_code)
         with open(test_filename, "w") as outfile, open(envFile, 'r', encoding='utf-8') as infile:
             text = infile.read()
             text_with_code = re.sub('&&&', new_code, text,flags=re.M)
+            text_with_code = re.sub('# paste user code here', '', text_with_code,flags=re.M)
             outfile.write(text_with_code)
         return test_filename
 

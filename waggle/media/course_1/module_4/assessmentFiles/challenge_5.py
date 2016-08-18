@@ -9,7 +9,7 @@ dict_practice = {'One': month_1, 'Two': month_2, 'Three': month_3}
 import sys
 
 def report( name, shortd, longd):
-	d = {'Name': name, 'Short': short, 'Long': longd}
+	d = {'Name': name, 'Short': shortd, 'Long': longd}
 	print(str(d))
 	
 #Mock data goes first
