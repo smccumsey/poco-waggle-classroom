@@ -23,7 +23,6 @@
 
 
 	<script type="text/javascript">
-	<!--
 
 
 		var clients = [];
@@ -67,36 +66,7 @@
 
             success('{{object.email}}');
 
-			/*
-			//This asks the validate servlet for our username (based on the session token).
-			var http = new XMLHttpRequest();
-			var params = "token="+token;
-			http.open("POST", "../validate", true);
-
-			//Send the proper header information along with the request
-			http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-
-			http.onreadystatechange = function() {
-				if(http.readyState == 4 && http.status == 200) {
-					console.log("Response: "+http.responseText);
-
-					if( http.responseText != null && http.responseText.length > 0 && http.responseText.trim() != "fail" ){
-
-						success(http.responseText.trim());
-
-					//if fail to validate redirect to login page
-					}else{
-
-						window.location.href = "login.html";
-					}
-
-
-				}
-			}
-			http.send(params);
-			*/
-
-
+	
 		}
 
 
@@ -109,142 +79,16 @@
 
 			var clientSelect = document.getElementById("clientSelect");
 
-			if( username == "priyak@uoregon.edu" ){
-/*
-				var option = document.createElement("option");
-				option.text = "Participant 1";
-				option.value = "1";
-				clientSelect.add(option);
-
-				option = document.createElement("option");
-				option.text = "Participant 2";
-				option.value = "2";
-				clientSelect.add(option);
-*/
-
-
-
-				var http = new XMLHttpRequest();
-				var token = sessionStorage.getItem('token');
-				var params = "token="+token;
-				http.open("POST", "../getclient", true);
-
-				//Send the proper header information along with the request
-				http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-
-				http.onreadystatechange = function() {
-					if(http.readyState == 4 && http.status == 200) {
-						console.log("Response: "+http.responseText);
-
-						if( http.responseText != null && http.responseText.length > 0 && http.responseText.trim() != "fail" ){
-
-							//console.log(http.responseText.trim());
-							if( http.responseText.trim().length > 2 ){
-
-								clients = JSON.parse(http.responseText.trim());
-
-								for(var i=0; i<clients.length; i++){
-
-									option = document.createElement("option");
-									option.text = clients[i].name;
-									option.value = clients[i].id;
-									clientSelect.add(option);
-								}
-							}
-
-						}
-
-
-					}
-				}
-				http.send(params);
-
-			}else{
-				var option = document.createElement("option");
-				option.text = "Student 1";
-				option.value = "1234";
-				clientSelect.add(option);
-
-				option = document.createElement("option");
-				option.text = "Student 2";
-				option.value = "5678";
-				clientSelect.add(option);
-			}
 		}
 
-
-		function newClient(){
-
-			var clientname = document.getElementById("clientname").value;
-			clientname = clientname.replace("'","");
-
-			var found = false;
-			for(var i=0; i<clients.length; i++){
-				if( clients[i].name == clientname )
-					found = true;
-			}
-
-			if( !found ){
-
-				sessionStorage.setItem('clientname', clientname);
-
-				console.log("NEW: "+clientname);
-
-				sessionStorage.setItem('clientid', '1');
-				window.location.href = "menu1.html"
-
-/*
-				var http = new XMLHttpRequest();
-				var token = sessionStorage.getItem('token');
-				var params = "token="+token+"&clientname="+clientname;
-				http.open("POST", "../newclient", true);
-
-				//Send the proper header information along with the request
-				http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-
-				http.onreadystatechange = function() {
-					if(http.readyState == 4 && http.status == 200) {
-						console.log("Response: "+http.responseText);
-
-						if( http.responseText != null && http.responseText.length > 0 && http.responseText.trim() != "fail" ){
-
-							console.log(http.responseText);
-
-							sessionStorage.setItem('clientid', http.responseText.trim());
-
-							window.location.href = "menu1.html";
-
-						}
-
-					}
-				}
-				http.send(params);
-*/
-
-			}else{
-				alert("Sorry. That client name is already taken.");
-			}
-
-		}
+    function signOut() {
+        var auth2 = gapi.auth2.getAuthInstance();
+        auth2.signOut().then(function () {
+                console.log('User signed out.');
+                });
+    }
 
 
-		function selectClient(){
-
-			var clientSelect = document.getElementById("clientSelect");
-			var clientname = clientSelect.options[clientSelect.selectedIndex].text;
-			var clientid = clientSelect.options[clientSelect.selectedIndex].value;
-
-			sessionStorage.setItem('clientname', clientname);
-			sessionStorage.setItem('clientid', clientid);
-
-			console.log("SELECT: "+clientname);
-
-			window.location.href = "menu1.html";
-		}
-
-
-
-	-->
 	</script>
 
 </head>
@@ -264,7 +108,7 @@
           <span class="navbar-brand" style="font-size:22px;">Waggle</span>
         </div>
         <div class="navbar-collapse collapse">
-          <form class="navbar-form navbar-right" role="form" action="login.html">
+            <form class="navbar-form navbar-right" role="form" action="{% url 'waggle:login' %}">
 
           	<span id="username" style="color:#fff;"></span>&nbsp;&nbsp;
 
@@ -276,7 +120,7 @@
             </div>
             <button type="submit" class="btn btn-success">Sign in</button-->
 
-            <button type="submit" class="btn btn-danger">Sign out</button>
+            <button type="submit" class="btn btn-danger" onclick="signOut()">Sign out</button>
 
           </form>
         </div><!--/.navbar-collapse -->

@@ -48,7 +48,7 @@
           <span class="navbar-brand" style="font-size:22px;">Waggle</span>
         </div>
         <div class="navbar-collapse collapse">
-          <form class="navbar-form navbar-right" role="form" action="login.html">
+            <form class="navbar-form navbar-right" role="form" action="{% url 'waggle:login' %}">
 
           	<span id="username" style="color:#fff;"></span>&nbsp;&nbsp;
 
@@ -60,7 +60,7 @@
             </div>
             <button type="submit" class="btn btn-success">Sign in</button-->
 
-            <button type="submit" class="btn btn-danger">Sign out</button>
+            <button type="submit" class="btn btn-danger" onclick="signOut()">Sign out</button>
 
           </form>
         </div><!--/.navbar-collapse -->

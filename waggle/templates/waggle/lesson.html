@@ -17,6 +17,21 @@
     border-bottom: 5px solid black;
     border-color: inherit;
 }
+.tab-pane{
+    border-left: 1px solid #ddd;
+    border-right: 1px solid #ddd;
+    padding: 10px;
+}
+
+.nav-tabs {
+    margin-bottom: 0;
+}
+
+.affix {
+    position:fixed;
+    top:70px;
+    width:25%;
+}
 
 .CodeMirror {
     height: auto;
@@ -40,6 +55,18 @@
 }
 
 </style>
+<script>
+/*
+$('#myAffix').affix({
+    offset: {
+        top: 100,
+        bottom: function () {
+        return (this.bottom = $('.footer').outerHeight(true))
+    }
+}
+})
+*/
+</script>
 
 <script src="{{STATIC_URL}}/codemirror/lib/codemirror.js"></script>
 <script src="{{STATIC_URL}}/codemirror/addon/hint/show-hint.js"></script>
@@ -56,6 +83,7 @@
 <script src="{{STATIC_URL}}/jquery/dist/jquery.js"></script>
 <script src="{{STATIC_URL}}/bootstrap/js/bootstrap.js"></script>
 
+<script src="https://apis.google.com/js/platform.js" async defer></script>
 <!--script src="../../../js/DecimalFormat.js"></script-->
 
 
@@ -215,8 +243,7 @@ function goToNote(time){
     return false;
 }
 
-
-
+/*
 function switchToDebug(){
 
     //if Disqus exists, call it's reset method with new parameters
@@ -241,6 +268,7 @@ function switchToAssessment(){
     });
 
 }
+*/
 
 function fillTable(lineString,tableID){
     // parse string_list
@@ -291,31 +319,12 @@ function fillTable(lineString,tableID){
 
 }
 
-function showStatus(short_desc){
-    var node;
-    var glyph;
-    if(short_desc == "CORRECT") {
-        node = document.getElementById('status-glyph');
-        glyph =  "glyphicon glyphicon-thumbs-up"
-    }
-    else if(short_desc == "INCORRECT") {
-        node = document.getElementById('status-glyph');
-        glyph = "glyphicon glyphicon-hand-left"
-    }
-    else {
-        node = document.getElementById('status-glyph');
-        glyph = "glyphicon glyphicon-thumbs-down"
-    }
-    node.setAttribute("class", glyph);
-}
-
-$('#form').submit(function(e){
-        $.post('/waggle/assessment/', $(this).serialize(), function(data){ 
-            $('.message').html(data.message);
+function signOut() {
+    var auth2 = gapi.auth2.getAuthInstance();
+    auth2.signOut().then(function () {
+            console.log('User signed out.');
             });
-        e.preventDefault();
-        });
-
+}
 </script>
 
 </head>
@@ -331,10 +340,10 @@ $('#form').submit(function(e){
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="profile.html" style="font-size:22px;">Waggle</a>
+            <a class="navbar-brand" href="{% url 'waggle:profile' object.pk %}" style="font-size:22px;">Waggle</a>
         </div>
         <div class="navbar-collapse collapse">
-            <form class="navbar-form navbar-right" role="form" action="login.html">
+            <form class="navbar-form navbar-right" role="form" action="{% url 'waggle:login' %}">
 
                 <span id="username" style="color:#fff;"></span>&nbsp;&nbsp;
 
@@ -346,7 +355,7 @@ $('#form').submit(function(e){
                 </div>
                 <button type="submit" class="btn btn-success">Sign in</button-->
 
-                <button type="submit" class="btn btn-danger">Sign out</button>
+                <button type="submit" class="btn btn-danger" onclick="signOut()">Sign out</button>
 
             </form>
         </div><!--/.navbar-collapse -->
@@ -369,21 +378,22 @@ $('#form').submit(function(e){
     <div class="row">
         <div class="col-md-8 col-sm-8">
             <!-- Nav tabs -->
-            <ul class="nav nav-tabs" role="tablist">
+            <ul class="nav nav-tabs nav-justified" role="tablist">
                 <li role="presentation" class="active"><a href="#content" aria-controls="content" role="tab" data-toggle="tab">Content</a></li>
                 <li role="presentation"><a href="#debug" aria-controls="debug" role="tab" data-toggle="tab" onclick="switchToDebug();">Debugging with Steve</a></li>
                 <li role="presentation"><a href="#assessment" aria-controls="assessment" role="tab" data-toggle="tab" onclick="switchToAssessment();">Assessment</a></li>
                 <li role="presentation"><a href="#other" aria-controls="other" role="tab" data-toggle="tab">Other</a></li>
             </ul>
-
+            
             <!-- Tab panes -->
-            <div class="tab-content" style="border: 1px #CCC solid; border-top: 0px; height:60%; overflow-y:auto;">
+            <div class="tab-content" style="border: 1px ; border-top: 1px; height:100%; overflow-y:content;">
 
                 <div role="tabpanel" class="tab-pane active" id="content">
                     {% for content in contents%}
                     
-                    <iframe id="frame" src="{{content.html_notebook.url}}" style="border:1px;" height=100% width=100%></iframe>
+                    <iframe id="iframe" src="{{content.html_notebook.url}}" style="border:0px;" height=1000% width=95%></iframe>
                     {% endfor %}
+                        
                 </div>
 
                 <div role="tabpanel" class="tab-pane" id="debug">
@@ -506,41 +516,29 @@ $('#form').submit(function(e){
         </div>
         
         <div class="col-md-4 col-sm-4">
+            <div data-spy="affix" data-offset-top="200">
 
             <table id="previewTable" style="width:100%;">
                 <tr>
                     <td>
                         <div id="disqus_thread"></div>
                         <script>
+
 /**
- *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
- *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables
- */
-                        /*
-
-                           TODO: Use this to make various discussion threads unique.
-
+   *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+    *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables */
                            var disqus_config = function () {
-                           this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
-                           this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
-                           };
-                         */
-
-                        var disqus_config = function () {
-                            this.page.url ="http://0.0.0.0:8050/waggle/assessment.html";  // Replace PAGE_URL with your page's canonical URL variable
-                            this.page.identifier = "abc"; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
-                        };
-
-(function() {  // DON'T EDIT BELOW THIS LINE
- var d = document, s = d.createElement('script');
-
- s.src = 'https:///waggle2.disqus.com/embed.js';
-
- s.setAttribute('data-timestamp', +new Date());
- (d.head || d.body).appendChild(s);
- })();
+                               this.page.url ="http://smccumsey.pythonanywhere.com/waggle/{{request.path}}";  // Replace PAGE_URL with your page's canonical URL variable
+                               this.page.identifier = "/lesson/{{module_obj.name}}/"; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+                                   };
+                        (function() { // DON'T EDIT BELOW THIS LINE
+                             var d = document, s = d.createElement('script');
+                                 s.src = '//http-smccumsey-pythonanywhere-com.disqus.com/embed.js';
+                                     s.setAttribute('data-timestamp', +new Date());
+                                         (d.head || d.body).appendChild(s);
+                                         })();
                         </script>
-                        <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+                        <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
                     </td>
                 </tr>
 
@@ -552,6 +550,7 @@ $('#form').submit(function(e){
             <center><img src="{{STATIC_URL}}/images/spinner.gif"/></center>
         </div>
 
+    </div>
     </div>
 
     <script>
@@ -571,7 +570,6 @@ $('#form').submit(function(e){
                     }, 1);
         {% endfor %}
     </script>
-
 
     </body>
     </html>
