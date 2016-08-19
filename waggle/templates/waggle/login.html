@@ -142,9 +142,13 @@ function onSignIn(googleUser) {
     xhr.onload = function() {
         console.log('Signed in as: ' + xhr.responseText);
         console.log('response: ' + xhr.response);
+        var obj = JSON.parse(xhr.responseText) ;
+        var pk = obj['pk'];
+        var url_mask = "{% url 'waggle:profile' 'tmp' %}".replace('tmp',pk);
+        console.log(url_mask);
+        document.getElementById("message").innerHTML = "Welcome "+profile.getName()+"<br><br><a href="+url_mask+">Go to your profile</a>";
     };
     xhr.send('idtoken=' + id_token + '&csrfmiddlewaretoken=' + '{{csrf_token}}' );
-    document.getElementById("message").innerHTML = "Welcome "+profile.getName()+"<br><br><a href={% url 'waggle:profile' user.pk %}>Go to your profile</a>";
 };
 function signOut() {
     var auth2 = gapi.auth2.getAuthInstance();

@@ -80,6 +80,8 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'mysite.wsgi.application'
 
+LOGIN_REDIRECT_URL = 'waggle/login.html'
+
 # Database
 # https://docs.djangoproject.com/en/1.9/ref/settings/#databases
 

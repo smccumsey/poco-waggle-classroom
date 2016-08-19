@@ -58,7 +58,7 @@ class Student(models.Model):
 
 class CourseProgress(models.Model):
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
-    course = models.ForeignKey(Course, on_delete=models.CASCADE, null=True,unique=True)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, null=True)
     registered = models.BooleanField(default=False)
     date_enrolled = models.DateTimeField()
     def __str__(self):
@@ -66,13 +66,13 @@ class CourseProgress(models.Model):
 
 class ModuleProgress(models.Model):
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
-    module = models.ForeignKey(Module, on_delete=models.CASCADE, null=True,unique=True)
+    module = models.ForeignKey(Module, on_delete=models.CASCADE, null=True)
     def __str__(self):
         return "%s progress for %s module" % (self.student, self.module)
 
 class AssessmentProgress(models.Model):
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
-    assessment = models.ForeignKey(Assessment, on_delete=models.CASCADE, null=True,unique=True)
+    assessment = models.ForeignKey(Assessment, on_delete=models.CASCADE, null=True)
     code_submission = models.TextField(default='#Type python code here')
     errors_list = models.TextField(default='')
     def __str__(self):
@@ -80,7 +80,7 @@ class AssessmentProgress(models.Model):
 
 class ContentProgress(models.Model):
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
-    content = models.ForeignKey(Content, on_delete=models.CASCADE, null=True, unique=True)
+    content = models.ForeignKey(Content, on_delete=models.CASCADE, null=True)
     video_notes = models.TextField(null=True)
     video_timepoint = models.DecimalField(max_digits=5, decimal_places=2, null=True)
     notebook_download_count = models.PositiveSmallIntegerField(default=0)
