@@ -299,7 +299,7 @@ function fillTable(lineString,tableID){
                 cell2.innerHTML = name;
                 cell3.innerHTML = shortd;
                 cell4.innerHTML = "<button type='button' class='btn btn-default btn-sm btn-block' data-toggle='modal' data-target='#longdModal'>Tell me more</button>"; 
-                cell4.onclick = function() {document.getElementById("longd").innerHTML=longdArr[counter-1]};
+                cell4.onclick = function() {document.getElementById("longd").innerHTML=longdArr};
                 counter++;
                 //make array for longd
 
@@ -325,6 +325,7 @@ function signOut() {
             console.log('User signed out.');
             });
 }
+
 </script>
 
 </head>
@@ -377,18 +378,19 @@ function signOut() {
 <div class="container">
     <div class="row">
         <div class="col-md-8 col-sm-8">
+
             <!-- Nav tabs -->
-            <ul class="nav nav-tabs nav-justified" role="tablist">
-                <li role="presentation" class="active"><a href="#content" aria-controls="content" role="tab" data-toggle="tab">Content</a></li>
+            <ul class="nav nav-tabs nav-justified" role="tablist" id="myTab">
+                <li role="presentation" class="active"><a href="#contents" aria-controls="content" role="tab" data-toggle="tab">Content</a></li>
                 <li role="presentation"><a href="#debug" aria-controls="debug" role="tab" data-toggle="tab" onclick="switchToDebug();">Debugging with Steve</a></li>
                 <li role="presentation"><a href="#assessment" aria-controls="assessment" role="tab" data-toggle="tab" onclick="switchToAssessment();">Assessment</a></li>
                 <li role="presentation"><a href="#other" aria-controls="other" role="tab" data-toggle="tab">Other</a></li>
             </ul>
             
             <!-- Tab panes -->
-            <div class="tab-content" style="border: 1px ; border-top: 1px; height:100%; overflow-y:content;">
+            <div class="tab-content" style="border: 1px ; border-top: 1px; height:100%; overflow-y:content;" id="content">
 
-                <div role="tabpanel" class="tab-pane active" id="content">
+                <div role="tabpanel" class="tab-pane active" id="contents">
                     {% for content in contents%}
                     
                     <iframe id="iframe" src="{{content.html_notebook.url}}" style="border:0px;" height=1000% width=95%></iframe>
@@ -569,6 +571,37 @@ function signOut() {
                     editors[{{forloop.counter0}}].refresh()
                     }, 1);
         {% endfor %}
+
+    /*
+    $('#myTab a').click(function(e) {
+    e.preventDefault();
+        $(this).tab('show');
+    });
+
+    // store the currently selected tab in the hash value
+    $("ul.nav-tabs > li > a").on("shown.bs.tab", function(e) {
+        var id = $(e.target).attr("href").substr(1) ;
+        if(history.pushState) {
+            history.pushState(null, null, id);
+        }
+        else {
+            window.location.hash = id;
+        }
+    });
+
+    // on load of the page: switch to the currently selected tab
+    var hash = window.location.hash;
+        $('#myTab a[href="' + hash + '"]').tab('show');
+    */
+    var url = document.location.toString();
+        if (url.match('#')) {
+                $('.nav-tabs a[href="#' + url.split('#')[1] + '"]').tab('show');
+        } 
+
+    // Change hash for page-reload
+    $('.nav-tabs a').on('shown.bs.tab', function (e) {
+                window.location.hash = e.target.hash;
+                })
     </script>
 
     </body>

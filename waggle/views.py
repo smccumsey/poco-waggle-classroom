@@ -5,7 +5,7 @@ from django.views import generic
 from django.views.generic.edit import FormView, CreateView
 from waggle.forms import CodeForm
 from django.contrib.auth.models import User
-from .models import Related, Content, Assessment, Module, Course, AssessmentProgress, ContentProgress,Student
+from .models import Related, Content, Assessment, Module, Course, AssessmentProgress, VideoProgress,Student
 
 from django.utils import timezone
 from datetime import datetime
@@ -50,6 +50,7 @@ class LessonView(generic.DetailView):
         context['module_obj'] = Module.objects.get(id=module_id)
         context['assessments'] =Assessment.objects.filter(module_id=module_id)
         context['contents'] =Content.objects.filter(module_id=module_id)
+        context['videos'] =Video.objects.filter(module_id=module_id)
         context['relateds'] =Related.objects.filter(module_id=module_id)
         print(context.items())
         # set up progress data for student if it doesnt exist
@@ -58,9 +59,9 @@ class LessonView(generic.DetailView):
             assessment_prog,created = student_instance.assessmentprogress_set.get_or_create(assessment=assessment_instance)
             print(assessment_prog,created)
             print(assessment_prog.errors_list)
-        for content_instance in context['contents']:
-            content_prog,created = student_instance.contentprogress_set.get_or_create(content=content_instance)
-            print(content_prog,created)
+        for video_instance in context['videos']:
+            video_prog,created = student_instance.videoprogress_set.get_or_create(video=video_instance)
+            print(video_prog,created)
         return context
 
     def setupEnv(self, code, envFile):

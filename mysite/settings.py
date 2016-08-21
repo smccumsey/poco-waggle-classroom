@@ -77,6 +77,7 @@ TEMPLATES = [
         },
     },
 ]
+APPEND_SLASH=False
 
 WSGI_APPLICATION = 'mysite.wsgi.application'
 
