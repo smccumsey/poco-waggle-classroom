@@ -1,46 +1,59 @@
-#Module 0
+#Module 1
 
 #Challenge 1
 
 '''
-x = 23
+one = 1
+two = 2
+three = 3
 '''
 import sys
 
 def report( name, shortd, longd):
-    d = {'Name': name, 'Short': shortd, 'Long': longd}
-    print(str(d))
+	d = {'Name': name, 'Short': shortd, 'Long': longd}
+	print(str(d))
 
 #Mock data goes first
 
+#No mock data for this challenge.
 
 try:
-    
+	
     #user submission
     #Type python code here
-    pass
-    
-    
-      
+    one = 1  
 
 except Exception as e:
-    report('Generic error', 'On your own', 'Look for typos')
-    sys.exit(1)
+	report('Generic error', 'On your own', e)
+	sys.exit(1)
 
 try:
-    x		# does var exist?
+	check = (one == 1)
 except NameError as e:
-    report('Name error', "Don't see x on left - typo?", 'Look for typos')
-    sys.exit(1)
-
-if not isinstance(x, int):
-    report('Data type bug', 'Did you type the 23 correctly?', 'No further help available')
-    sys.exit(1)
+	report('Name error', 'Typically a typo', e)
+except Exception as e:
+	report('Generic error', 'On your own', e)
+else:
+	if not check:
+		report('Value bug', 'Wrong value in box', 'Box labeled one has incorrect value ' + str(one))
 
 try:
-    check = (x == 23)
+	check = (two == 2)
+except NameError as e:
+	report('Name error', 'Typically a typo', e)
 except Exception as e:
-    report('Generic error', 'On your own', 'Look for typos')
+	report('Generic error', 'On your own', e)
 else:
-    if not check:
-        report('Value bug', 'Did you type the 23 correctly?', 'Look for typos')
+	if not check:
+		report('Value bug', 'Wrong value in box', 'Box labeled two has incorrect value ' + str(two))
+
+try:
+	check = (three == 3)
+except NameError as e:
+	report('Name error', 'Typically a typo', e)
+except Exception as e:
+	report('Generic error', 'On your own', e)
+else:
+	if not check:
+		report('Value bug', 'Wrong value in box', 'Box labeled three has incorrect value ' + str(three))
+	

@@ -104,9 +104,9 @@
 									<br/>
 									<br/>
 									<br/>
-                                    <a class="btn btn-primary" href="{% url 'waggle:lesson' pk=object.pk course=request.session.course_name module=module.id %}" role="button">Start this Module</a>
+                                    <a class="btn btn-primary" href="{% url 'waggle:lesson' pk=object.pk course=request.session.course_title module=module.id %}" role="button">Start this Module</a>
 								</div>
-                                <b>{{module.name}}</b>
+                                <b>{{module.title}}</b>
 							  	<br/>
                                 <p> {{module.description}} </p>
 							  	<br/>

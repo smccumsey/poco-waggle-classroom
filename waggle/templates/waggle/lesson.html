@@ -225,7 +225,7 @@ function saveNote(){
     if( seconds < 10 )
         seconds = "0"+seconds;
 
-    $('#noteTable').append('<tr><td colspan="2">'+$('#newNote').val()+' (<a href="#" onclick="goToNote('+video.currentTime+');">'+minutes+':'+seconds+'</a>)</td></tr>');
+    $('#noteTable').append('<tr><td colspan="1.5">'+$('#newNote').val()+' (<a href="#" onclick="goToNote('+video.currentTime+');">'+minutes+':'+seconds+'</a>)</td></tr>');
 
     $('#newNote').val("");
 
@@ -399,10 +399,52 @@ function signOut() {
                 </div>
 
                 <div role="tabpanel" class="tab-pane" id="debug">
-                    {% for content in contents%}
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-2">
+                                <ul class="nav nav-pills nav-stacked">
+                                    <li class="active"><a href="#">Home</a></li>
+                                    {% for video in videos%}
+                                    <li><a href="#">{{ video.title }}</a></li>
+                                    <!-- {{video.video.url}}-->
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                            <div class="col-md-6">
+                            <br/>
+                            <video id="video1" width="490" height="280" controls>
+                                <source src="https://www.youtube.com/embed/7eeEf_rAJds" type="video/mp4">
+                                Your browser does not support the video tag.
+                            </video>
+                            <br/>
+                            <table id="noteTable" class="table">
+                                <tr>
+                                    <td style="border:none;">
+                                        <textarea id="newNote" rows="2" style="width:50%" onfocus="takeNote(true);" onblur="takeNote(false);"></textarea>
+                                    </td>
+                                    <td valign="middle" style="border:none; vertical-align:middle;">
+                                        &nbsp;<button type="button" class="btn btn-default" onclick="saveNote();">Save Note</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="border:none;">
+                                        <b>Notes:</b>
+                                    </td>
+                                    <td style="border:none;">
+                                        &nbsp;
+                                    </td>
+                                </tr>
+                            </table>
+                            </div>
+                            <div class="clearfix visible-lg"></div>
+                        </div>
+                    </div>
+                    <!--
+                    {% for video in videos%}
+                    <h3> {{ video.title }} </h3>
                     <br/>
                     <video id="video1" width="490" height="280" controls>
-                        <source src="{{content.video.url}}" type="video/mp4">
+                        <source src="{{video.video.url}}" type="video/mp4">
                         Your browser does not support the video tag.
                     </video>
                     <br/>
@@ -425,6 +467,7 @@ function signOut() {
                         </tr>
                     </table>
                     {% endfor %}
+                    -->
                 </div>
                 <div role="tabpanel" class="tab-pane" id="assessment" style="background: white;">
                     <div id=triple>

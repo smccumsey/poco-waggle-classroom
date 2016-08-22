@@ -4,7 +4,7 @@
 
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-	<title>Waggle</title>
+	<title>Poco Courses</title>
     <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
@@ -105,7 +105,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <span class="navbar-brand" style="font-size:22px;">Waggle</span>
+          <span class="navbar-brand" style="font-size:22px;">Poco</span>
         </div>
         <div class="navbar-collapse collapse">
             <form class="navbar-form navbar-right" role="form" action="{% url 'waggle:login' %}">
@@ -133,8 +133,8 @@
     <div class="jumbotron">
       <div class="container">
       	<br/>
-        <h2>Welcome to Waggle</h2>
-        <p>This would be a good place to say a little something about Waggle.  Below are your courses.  Each course has a set of modules that will help you build your programming and data science skills.  Select a course below to get started</p>
+        <h2>Welcome to Poco</h2>
+        <p>This would be a good place to say a little something about Poco.  Below are your courses.  Each course has a set of modules that will help you build your programming and data science skills.  Select a course below to get started</p>
         <!--p><a class="btn btn-primary btn-lg" role="button">Learn more &raquo;</a></p-->
       </div>
     </div>
@@ -154,9 +154,9 @@
 							<div class="navbar-header" style="padding:15px; width:100%; line-height:150%">
 								<div style="float:right;">
 									<br/>
-                                  <a class="btn btn-primary" href="{% url 'waggle:menu' pk=object.pk course=course.name|slugify %}" role="button">Explore this Course</a>
+                                  <a class="btn btn-primary" href="{% url 'waggle:menu' pk=object.pk course=course.title|slugify %}" role="button">Explore this Course</a>
 								</div>
-                                <p> {{course.name}} </p>
+                                <p> {{course.title}} </p>
                                 <p> {{course.description}} </p>
 							  	<br/>
 							  	<br/>

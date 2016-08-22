@@ -3,18 +3,18 @@ from django.contrib.auth.models import User
 
 
 class Course(models.Model):
-    name = models.CharField(max_length=128)
+    title = models.CharField(max_length=128)
     description = models.TextField(null=True)
     def __str__(self):
-        return self.name
+        return self.title
 
 class Module(models.Model):
-    name = models.CharField(max_length = 128)
+    title = models.CharField(max_length = 128)
     description = models.TextField(null=True)
     course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='modules')
     order = models.PositiveSmallIntegerField(null=True)
     def __str__(self):
-        return self.name
+        return self.title
 
 def assessment_directory_path(instance, filename):
     # file will be uploaded to MEDIA_ROOT/course_<id>/module_<id>/assessmentFiles/<filename>
@@ -26,7 +26,7 @@ class Assessment(models.Model):
     assess_file = models.FileField(upload_to=assessment_directory_path, null=True)
     order = models.PositiveSmallIntegerField(null=True)
     def __str__(self):
-        return 'assessment_%s from %s' % (self.order, self.module.name)
+        return 'assessment_%s from %s' % (self.order, self.module.title)
 
 def notebook_directory_path(instance, filename):
     # file will be uploaded to MEDIA_ROOT/course_<id>/module_<id>/notebooks/<filename>
@@ -41,21 +41,21 @@ class Content(models.Model):
     title = models.TextField(null=True)
     html_notebook = models.FileField(upload_to=notebook_directory_path, null=True)
     def __str__(self):
-        return 'content_%s from %s' % (self.id, self.module.name)
+        return '%s (content for %s)' % (self.title, self.module.title)
 
 class Video(models.Model):
     module = models.ForeignKey(Module, on_delete=models.CASCADE, related_name='videos')
     title = models.TextField(null=True)
     video = models.FileField(upload_to=video_directory_path, null=True,blank=True)
     def __str__(self):
-        return 'video_%s from %s' % (self.id, self.module.name)
+        return '%s (video for %s)' % (self.title, self.module.title)
 
 class Related(models.Model):
     module = models.ForeignKey(Module, on_delete=models.CASCADE, related_name='relateds')
     title = models.TextField(null=True)
     links = models.TextField()
     def __str__(self):
-        return 'related_%s from %s' % (self.id, self.module.name)
+        return 'related_%s from %s' % (self.id, self.module.title)
 
 class Student(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='students')
@@ -94,7 +94,7 @@ class VideoProgress(models.Model):
     video_notes = models.TextField(null=True)
     video_timepoint = models.DecimalField(max_digits=5, decimal_places=2, null=True)
     def __str__(self):
-        return "%s progress for %s" % (self.student, self.content)
+        return "%s progress for %s" % (self.student, self.video)
 
     
 

@@ -4,12 +4,70 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Waggle</title>
+<title>Poco</title>
 
-<link rel="stylesheet" href="../../static/bootstrap//dist/css/bootstrap.css" />
-<!--link rel="stylesheet" href="../../../bootstrap/css/bootstrap-responsive.css"/-->
+<link rel="stylesheet" href="{{STATIC_URL}}/bootstrap//dist/css/bootstrap.css" />
 
-<!--link rel="stylesheet" href="../css/tablet.css"/-->
+<style>
+body {
+    background-color:#222;
+}
+.left {
+    text-align:center; 
+    vertical-align: middle;
+    padding-top: 155px;
+    background-color:#222;
+    color:white;
+    height:100%;
+    width:100%;
+    margin-left: 0;
+    margin-right: 0;
+    padding-right: 0;
+    padding-left: 0;
+
+}
+
+.right {
+    text-align:center; 
+    justify-content: center;
+    background-color:#222;
+    vertical-align: middle;
+    height:100%;
+    width:100%;
+    padding: 150px 25px;
+    margin-left: 0;
+    margin-right: 0;
+    padding-right: 0;
+  padding-left: 0;
+
+}
+.info{
+    font-size:16px;
+    text-align:center;
+}
+
+.crop {
+    width: 300px;
+    height: 410px;
+    overflow: hidden;
+    display: block;
+    margin: 0 auto;
+}
+
+.crop img {
+    width: 300px;
+    height: 450px;
+    display: block;
+    margin: 0 auto;
+}
+
+.title {
+    font-family:"futura";
+    font-size: 80px;
+    padding-top:10px;
+    padding-bottom:30px;
+}
+</style>
 
 <script src="../../static//jquery/dist/jquery.js"></script>
 <script src="../../static/bootstrap//dist/js/bootstrap.js"></script>
@@ -87,7 +145,6 @@ function init(){
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <span class="navbar-brand" style="font-size:22px;">Waggle</span>
         </div>
 
     </div>
@@ -96,28 +153,20 @@ function init(){
 
 
 <!-- Main jumbotron for a primary marketing message or call to action -->
-<div class="jumbotron">
-    <div class="container">
-        <br/>
-        <h1>Waggle</h1>
-        <p>This would be a good place to say a little something about Waggle.  Maybe just a sentance
-        or two description.</p>
-        <!--p><a class="btn btn-primary btn-lg" role="button">Learn more &raquo;</a></p-->
-    </div>
-</div>
+<div class="container-fluid">
+    <div class="row-fluid">
+        <div class="col-md-6 col-sm-6" >
+            <div class="left">
+                <div class="title">Poco<hr/></div>
+                <div class="container-fluid" style="width:100%">
+                    <div class="info">
+                        <div class="g-signin2" data-onsuccess="onSignIn" data-theme="dark" style="display:inline-block;padding-bottom: 20px;padding-top: 20px;"></div>
+                        <div id="message" class="message"></div>
+                        </br>
+                        <a href="" onclick="signOut();">Sign out</a>
+                    </div>
 
-
-
-<div class="container" style="width:100%">
-    <center>
-        <div class="g-signin2" data-onsuccess="onSignIn" data-theme="dark"></div>
-        </br>
-        <div id="message"></div>
-        </br>
-        <a href="" onclick="signOut();">Sign out</a>
-    </center>
-
-    <script>
+                    <script>
 function onSignIn(googleUser) {
     // Useful data for your client-side scripts:
     var profile = googleUser.getBasicProfile();
@@ -157,15 +206,22 @@ function signOut() {
             });
     document.getElementById("message").innerHTML = "";
 }
-    </script>
-</div> <!-- /container -->
+                    </script>
+                </div> <!-- /container -->
+            </div>
+
+        </div>
+        <div class="col-md-6 col-sm-6">
+            <div class="right">
+                <div class="crop">
+                    <img src="{{STATIC_URL}}/images/poco_logo.jpg" width="240px" height="360px"> 
+                </div>
 
 
-
-
-
-
-
+            </div>
+        </div>
+    </div>
+</div>
 
 </body>
 

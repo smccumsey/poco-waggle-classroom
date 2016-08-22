@@ -5,7 +5,7 @@ from django.views import generic
 from django.views.generic.edit import FormView, CreateView
 from waggle.forms import CodeForm
 from django.contrib.auth.models import User
-from .models import Related, Content, Assessment, Module, Course, AssessmentProgress, VideoProgress,Student
+from .models import Related, Content, Assessment, Module, Course, AssessmentProgress, Video,Student
 
 from django.utils import timezone
 from datetime import datetime
@@ -28,8 +28,10 @@ import os
 import logging
 import httplib2
 from django.contrib.auth import login, authenticate
+from django.template.defaultfilters import slugify
 
 class LessonView(generic.DetailView):
+    from django.template.defaultfilters import slugify
     template_name = 'waggle/lesson.html'
     model = User
 
@@ -117,7 +119,7 @@ class MenuView(generic.DetailView):
     # student_instance = user_instance.students
     # module_prog = ModuleProgress.create(student=student_instance)
     def get(self, request, *args, **kwargs):
-        request.session['course_name'] = self.kwargs['course']
+        request.session['course_title'] = self.kwargs['course']
         self.object = self.get_object()
         context = self.get_context_data(object=self.object)
         return self.render_to_response(context)
@@ -125,9 +127,10 @@ class MenuView(generic.DetailView):
     def get_context_data(self, **kwargs):
         # Call the base implementation first to get a context
         context = super(MenuView, self).get_context_data(**kwargs)
-        course_name = self.kwargs.get('course').replace('-', ' ')
-        course_query = Course.objects.filter(name__icontains=course_name)
-        context['modules'] = Module.objects.filter(course_id=course_query.get().id)
+        courses = [(slugify(c.title),c) for c in Course.objects.all()]
+        course_title= self.kwargs.get('course')
+        course_lookup = [c[1] for c in courses if c[0]==course_title].pop() #sloppy
+        context['modules'] = Module.objects.filter(course_id=course_lookup.id)
         return context
 
 class ProfileView(generic.DetailView):
