@@ -89,27 +89,28 @@ class LessonView(generic.DetailView):
 
     def post(self, request, *args, **kwargs):
         postdata = request.POST.dict()
-        code_id = ([re.sub('code_id','',key) for key in postdata.keys() if 'code_id' in key])[0]
         print('POST DATA')
-        print(postdata,code_id)
-        if(request.POST.get('code_btn')):
-            self.user_code = request.POST.get('code_id'+code_id)
-            # grab file to assess user code
-            envFile = Assessment.objects.get(id=int(code_id)).assess_file.path
-            testFile = self.setupEnv(self.user_code, envFile)
-            result_feedback = self.runCode(testFile)
-            print('RESULT0',result_feedback)
-            if result_feedback[0].decode('ASCII'):
-                result_feedback  = json.dumps([ {k:str(v) for k,v in (eval(err)).items()} for err in result_feedback[0].decode('ASCII').splitlines()])
-            elif result_feedback[1].decode('ASCII'):
-                result_feedback = "bad"
+        print(postdata)
+        if(request.POST.get('submittedcode')):
+            usr_code = request.POST.get('submittedcode')
+            assessmentID = request.POST.get('assessmentID')
+            print('USRCODE: %s \nassessID: %s' % (usr_code, assessmentID))
+            envFile = Assessment.objects.get(id=int(assessmentID)).assess_file.path
+            testFile = self.setupEnv(usr_code, envFile)
+            result_feedback = list(map(lambda x: x.decode('ASCII'), self.runCode(testFile)))
+            print('RAW RESULT',result_feedback)
+            if result_feedback[0]:
+                parsed_result_feedback  = json.dumps([ {k:str(v) for k,v in (eval(err)).items()} for err in result_feedback[0].splitlines()])
+            elif result_feedback[1]:
+                parsed_result_feedback = "bad"
             else:
-                result_feedback = "good"
-            print('RESULT1',result_feedback)
-            assessment_progress = AssessmentProgress.objects.get(student=Student.objects.get(user=request.user), assessment=Assessment.objects.get(id=int(code_id)))
-            assessment_progress.code_submission = self.user_code
-            assessment_progress.errors_list = result_feedback
+                parsed_result_feedback = "good"
+            print('PARSED RESULT',parsed_result_feedback)
+            assessment_progress = AssessmentProgress.objects.get(student=Student.objects.get(user=request.user), assessment=Assessment.objects.get(id=int(assessmentID)))
+            assessment_progress.code_submission = usr_code
+            assessment_progress.errors_list = parsed_result_feedback
             assessment_progress.save()
+            return HttpResponse(parsed_result_feedback)
         return self.get(request, *args, **kwargs)
 
 class MenuView(generic.DetailView):

@@ -14,8 +14,11 @@
 
 <style>
 .table-border tbody tr td, .table-border tbody tr th, .table-border thead tr th {
-    border-bottom: 5px solid black;
-    border-color: inherit;
+    border-bottom: 2px solid white;
+    border-color: white;
+    vertical-align: middle;
+    text-align: left;
+    font-family:"Lucida Sans Unicode", "Lucida Grande", sans-serif;
 }
 .tab-pane{
     border-left: 1px solid #ddd;
@@ -34,7 +37,9 @@
 }
 
 .CodeMirror {
-    height: auto;
+    border:1px solid grey; 
+    width:100%; 
+    height:200px;
 }
 
 .spinnerbox {
@@ -54,18 +59,37 @@
     padding-top: 10%;
 }
 
+.spinner {
+    display: inline-block;
+    opacity: 0;
+    width: 0;
+
+    -webkit-transition: opacity 0.25s, width 0.25s;
+    -moz-transition: opacity 0.25s, width 0.25s;
+    -o-transition: opacity 0.25s, width 0.25s;
+    transition: opacity 0.25s, width 0.25s;
+}
+
+.has-spinner.active {
+    cursor:progress;
+}
+
+.has-spinner.active .spinner {
+    opacity: 1;
+    width: auto; /* This doesn't work, just fix for unkown width elements */
+}
 </style>
 <script>
 /*
-$('#myAffix').affix({
-    offset: {
-        top: 100,
-        bottom: function () {
-        return (this.bottom = $('.footer').outerHeight(true))
-    }
-}
-})
-*/
+   $('#myAffix').affix({
+   offset: {
+   top: 100,
+   bottom: function () {
+   return (this.bottom = $('.footer').outerHeight(true))
+   }
+   }
+   })
+ */
 </script>
 
 <script src="{{STATIC_URL}}/codemirror/lib/codemirror.js"></script>
@@ -187,13 +211,9 @@ function loadResults(){
             },3000);
 }
 
-
 function showHint(num){
-
     $('#myModal'+num).modal('show')
-
 }
-
 
 function showMore(){
     $('#less').hide();
@@ -270,53 +290,59 @@ function switchToAssessment(){
 }
 */
 
-function fillTable(lineString,tableID){
-    // parse string_list
-    var table = document.getElementById(tableID);
+function fillModal(msg){
+    document.getElementById("longd").innerHTML=msg;
+}
 
-    var arrayOfLines = lineString.match(/[^\r\n]+/g);
-    // what if empty?
-    var n = arrayOfLines.length;
-    var counter=0;
-    var longdArr = [];
-    for (i = 0; i < n; i++) { 
-        obj = JSON.parse(arrayOfLines[i]);
-        for (var key in obj) {
-            if (Object.prototype.hasOwnProperty.call(obj, key)) {
-                var val = obj[key];
-                console.log(key,val);
-                var name = val['Name'];
-                var shortd = val['Short'];
-                longdArr.push(val['Long']);
-                console.log(counter, longdArr[counter]);
+function writeFeedback( feedbackString, ID) {
+    var output;
+    //check if feedbackString == 'good' or 'bad' or empty
+    if( feedbackString == 'good') {
+        output= "<h4> <span style='color:green;' class= 'glyphicon glyphicon-thumbs-up'></span> GOOD JOB! No errors were found. </h4>";
+    }
+    else if ( feedbackString == 'bad'){
+        output= "<h4> Errors were found however we're unable to provide feedback. Please try a different submission.</h4>";
+    }
+    else if ( feedbackString == ''){
+        output= "<h4> Run your code to receive feedback. </h4>";
+    }
+    else {
+        //else, setup table
+        var arrayOfLines = feedbackString.match(/[^\r\n]+/g);
+        var n = arrayOfLines.length;
+        var counter=0;
 
-                var row = table.insertRow(i+1);
-                var cell1 = row.insertCell(0);
-                var cell2 = row.insertCell(1);
-                var cell3 = row.insertCell(2);
-                var cell4 = row.insertCell(3);
-                cell1.innerHTML = " <center><span style='color:red;' class= 'glyphicon glyphicon-thumbs-down'></span></center>";
-                cell2.innerHTML = name;
-                cell3.innerHTML = shortd;
-                cell4.innerHTML = "<button type='button' class='btn btn-default btn-sm btn-block' data-toggle='modal' data-target='#longdModal'>Tell me more</button>"; 
-                cell4.onclick = function() {document.getElementById("longd").innerHTML=longdArr};
-                counter++;
-                //make array for longd
+        var outputTable = "<table class='table table-condensed table-border'>";
+        outputTable += "<thead><tr>";
+        outputTable += "<th><center>Status</center></th><th>Name</th><th>Short Description</th><th>Long Description</th>";
+        outputTable += "</tr></thead>";
+        outputTable += "<tbody>";
+        for (i = 0; i < n; i++) { 
+            obj = JSON.parse(arrayOfLines[i]);
+            for (var key in obj) {
+                if (Object.prototype.hasOwnProperty.call(obj, key)) {
+                    var val = obj[key];
+                    console.log(key,val);
+                    var name = val['Name'];
+                    var shortd = val['Short'];
+                    var longd = val['Long'];
+                    longd = longd.replace(/'/g, "*");
 
-                row.className = "table-border";
-                cell1.className = "danger";
-                cell2.className = "danger";
-                cell3.className = "danger";
-                cell4.className = "danger";;
+                    var cell1 = "<td><center><span style='color:red;' class= 'glyphicon glyphicon-thumbs-down'></span></center></td>";
+                    var cell2 = "<td>"+name+"</td>";
+                    var cell3 = "<td>"+shortd+"</td>";
+                    var cell4 = "<td><button type='button' class='btn btn-default btn-md btn-block' data-toggle='modal' data-target='#longdModal'";
+                    cell4 += " onclick=\"fillModal('"+longd+"')\""
+                    cell4 += ">Tell me more</button></td>";
 
-                cell1.style = "vertical-align: middle;";;
-                cell2.style = "vertical-align: middle;";
-                cell3.style = "vertical-align: middle;";
-                cell4.style = "vertical-align: middle;";
+                    outputTable += "<tr class='table-border danger'>".concat(cell1).concat(cell2).concat(cell3).concat(cell4).concat("</tr>");
+                }
             }
         }
+        outputTable += "</tbody></table>";
+        output = outputTable;
     }
-
+    return output;
 }
 
 function signOut() {
@@ -371,6 +397,7 @@ function signOut() {
 
         <h2>{{module_obj.name}}</h2>
         <p>{{module_obj.description}}</p>
+
         <br/>
     </div>
 </div>
@@ -482,44 +509,25 @@ function signOut() {
                         <div class="panel panel-default" style="border:0;">
                             <div class="panel-body">
                                 <!-- CODE EDITOR GOES HERE.-->
-                                <form action="" method="post" style="border:1px solid grey; width:100%; height:200px;">
-                                    {% csrf_token %}
-<textarea id="code-{{assessment.id }}" name="code_id{{assessment.id}}" style="height:200px;">
-{{ap.code_submission}}
-</textarea>
+<textarea id="code-{{assessment.id}}" name="code_id{{assessment.id}}" >{{ap.code_submission}}</textarea>
                                     <br/>
-                                    <input class="btn btn-default btn-xs" style="float:left;" type="submit" value="Submit Code" name="code_btn"/>
-                                </form>
+                                    <button id="spinnerbtn_{{assessment.id}}" type="button" class="btn btn-default has-spinner" onclick="submitCode('code-{{assessment.id}}',{{forloop.parentloop.counter0}})">
+                                        <span class="spinner"><i class="icon-spin icon-refresh"></i></span>
+                                        Submit Code
+                                    </button>
                             </div>
                         </div>
                         <div class="panel panel-default" style="border:0;">
                             <!-- OUTPUT/TEST RESULTS GO HERE. -->
                             <div class="panel-body">
-                                {% if not ap.errors_list %}
-                                <h4> Run your code to receive feedback. </h4>
-                                {% elif ap.errors_list == "good" %}
-
-                                <h4> <span style='color:green;' class= 'glyphicon glyphicon-thumbs-up'></span> GOOD JOB! No errors were found. </h4>
-                
-                                {% elif ap.errors_list == "bad" %}
-                                <h4> Errors were found however we're unable to provide feedback. Please try a different submission.</h4>
-                                {% else %}
-                                <table class="table table-condensed table-border" id="assessmentTable{{assessment.id}}">
-                                    <thead>
-                                        <tr>
-                                            <th>Status</th>
-                                            <th>Name</th>
-                                            <th>Short Description</th>
-                                            <th>Long Description</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                    <script>
-                                        fillTable( "{{ap.errors_list|escapejs}}", "assessmentTable{{assessment.id}}");
-                                    </script>
-                                    </tbody>
-                                </table>
-                            {% endif %}
+                                
+                                <p id="result_{{assessment.id}}"></p> 
+                                <script>
+                                    var feedback = writeFeedback('{{ap.errors_list|escapejs}}', '{{assessment.id}}');
+                                    console.log(feedback);
+                                    document.getElementById('result_{{assessment.id}}').innerHTML = feedback;
+                                </script>
+                                
                             </div>
                         </div>
                         <!-- End triple -->
@@ -528,6 +536,23 @@ function signOut() {
                         {% endfor %}
                     </div>
                 </div>
+                            <!-- Modal -->
+                            <div class="modal fade" id="longdModal" role="dialog">
+                                <div class="modal-dialog">
+
+                                    <!-- Modal content-->
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                            <h4 class="modal-title">Long Description</h4>
+                                        </div>
+                                        <div class="modal-body">
+                                            <span id="longd"> empty </span>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
 
                 <div role="tabpanel" class="tab-pane" id="other">
                     {% for realted_item in relateds %}
@@ -540,24 +565,8 @@ function signOut() {
                     </center>
                 </div>
 
-        <!-- Modal -->
-        <div class="modal fade" id="longdModal" role="dialog">
-            <div class="modal-dialog">
-
-                <!-- Modal content-->
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title">Modal Header</h4>
-                    </div>
-                    <div class="modal-body">
-                        <span id="longd"> empty </span>
-                    </div>
-                </div>
-
+                
             </div>
-        </div>
-        </div>
         </div>
         
         <div class="col-md-4 col-sm-4">
@@ -573,7 +582,7 @@ function signOut() {
    *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
     *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables */
                            var disqus_config = function () {
-                               this.page.url ="http://smccumsey.pythonanywhere.com/waggle/{{request.path}}";  // Replace PAGE_URL with your page's canonical URL variable
+                               this.page.url ="http://smccumsey.pythonanywhere.com/{{request.path}}";  // Replace PAGE_URL with your page's canonical URL variable
                                this.page.identifier = "/lesson/{{module_obj.name}}/"; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
                                    };
                         (function() { // DON'T EDIT BELOW THIS LINE
@@ -646,6 +655,37 @@ function signOut() {
                 window.location.hash = e.target.hash;
                 })
     </script>
+    <script>
 
+    function submitCode(codemirrorID, idx) {
+        //begin spinner
+        console.log(codemirrorID);
+        console.log(idx);
+        var code = editors[idx].getValue();
+        console.log(code);
+
+        var csrftoken = Cookies.get('csrftoken');
+        var code_assessmentID = codemirrorID.split("-").pop();
+        $('#spinnerbtn_'+code_assessmentID).toggleClass('active');
+
+        $.ajax({
+            method: "POST",
+            url: "{{request.path}}",
+            beforeSend: function( xhr ) {
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            },
+        data: { assessmentID: code_assessmentID , submittedcode: code} 
+
+        })
+        .done(function( response) {
+            //end spinner
+            $('#spinnerbtn_'+code_assessmentID).toggleClass('active');
+            console.log( "Data Saved: " + response);
+            var feedback = writeFeedback( response, code_assessmentID);
+            console.log(feedback);
+            document.getElementById('result_'+code_assessmentID).innerHTML = feedback;
+        });
+    }
+    </script>
     </body>
     </html>
