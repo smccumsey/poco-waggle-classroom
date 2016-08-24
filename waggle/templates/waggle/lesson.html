@@ -100,12 +100,12 @@
 <script src="{{STATIC_URL}}/codemirror/mode/python/python.js"></script>
 <script src="{{STATIC_URL}}/codemirror/mode/markdown/markdown.js"></script>
 
-<script src="{{STATIC_URL}}/bootstrap/js/bootstrap.js"></script>
 <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
 <script src="{{STATIC_URL}}/js-cookie/src/js.cookie.js"></script>
 
 <script src="{{STATIC_URL}}/jquery/dist/jquery.js"></script>
 <script src="{{STATIC_URL}}/bootstrap/js/bootstrap.js"></script>
+<script src="{{STATIC_URL}}/bootstrap/js/bootstrap.min.js"></script>
 
 <script src="https://apis.google.com/js/platform.js" async defer></script>
 <!--script src="../../../js/DecimalFormat.js"></script-->
@@ -419,7 +419,6 @@ function signOut() {
 
                 <div role="tabpanel" class="tab-pane active" id="contents">
                     {% for content in contents%}
-                    
                     <iframe id="iframe" src="{{content.html_notebook.url}}" style="border:0px;" height=1000% width=95%></iframe>
                     {% endfor %}
                         
@@ -427,47 +426,74 @@ function signOut() {
 
                 <div role="tabpanel" class="tab-pane" id="debug">
 
-                    <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
-                        {%for video in videos%}
-                        <div class="panel panel-default">
-                            <div class="panel-heading" role="tab" id="heading{{forloop.counter}}">
-                                <h4 class="panel-title">
-                                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse{{forloop.counter}}" aria-expanded="false" aria-controls="collapse{{forloop.counter}}">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-2 col-sm-2">
+                                <!--
+                                {%for video in videos%}
+                                <button type="button" class="btn btn-success btn{{video.id}}" data-toggle="collapse" data-target="#demo{{video.id}}">
+                                    <span class="glyphicon glyphicon-collapse-down"></span> 
+                                    {{video.title}}
+                                </button>
+                                {%endfor%}
+                                -->
+
+                                <ul class="nav nav-pills nav-stacked">
+                                    {%for video in videos%}
+                                    <li><a class="btn btn-primary btn{{video.id}} btn-xs col-lg-12" style="margin-bottom:4px;white-space: normal;" role="button" data-toggle="collapse" href="#demo{{video.id}}" aria-expanded="false" aria-controls="demo{{video.id}}">
+                                        <span class="glyphicon glyphicon-collapse-down"></span> 
                                         {{video.title}}
-                                    </a>
-                                </h4>
+                                    </a></li>
+                                    {%endfor%}
+                                </ul>
                             </div>
-                            <div id="collapse{{forloop.counter}}" class="panel-collapse collapse " role="tabpanel" aria-labelledby="heading{{forloop.counter}}">
-                                <div class="panel-body">
-                                    <div class="embed-responsive embed-responsive-16by9">
+
+
+                            <div class="col-md-6 col-sm-6">
+                            {%for video in videos%}
+                            <div id="demo{{video.id}}" class="collapse">
+                                <div class="embed-responsive embed-responsive-16by9">
                                     <video class="embed-responsive-item" id="video1_{{video.id}}" controls>
-                                        <source src="{{video.video_URL}}" type="video/mp4">
+                                        <source src='{{video.video_URL}}' type='video/mp4'>
                                         Your browser does not support the video tag.
                                     </video>
                                 </div>
-                                    <br/>
-                                    <table id="noteTable" class="table">
-                                        <tr>
-                                            <td style="border:none;">
-                                                <textarea autofocus id="newNote" rows="2" style="width:90%" onfocus="takeNote(true);" onblur="takeNote(false);"></textarea>
-                                            </td>
-                                            <td valign="middle" style="border:none; vertical-align:middle;">
-                                                &nbsp;<button type="button" class="btn btn-default" onclick="saveNote();">Save Note</button>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td style="border:none;">
-                                                <b>Notes:</b>
-                                            </td>
-                                            <td style="border:none;">
-                                                &nbsp;
-                                            </td>
-                                        </tr>
-                                    </table>
-                                </div>
+                                <br/>
+                                <table id="noteTable" class="table">
+                                    <tr>
+                                        <td style="border:none;">
+                                            <textarea autofocus id="newNote" rows="2" style="width:90%" onfocus="takeNote(true);" onblur="takeNote(false);"></textarea>
+                                        </td>
+                                        <td valign="middle" style="border:none; vertical-align:middle;">
+                                            &nbsp;<button type="button" class="btn btn-default" onclick="saveNote();">Save Note</button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="border:none;">
+                                            <b>Notes:</b>
+                                        </td>
+                                        <td style="border:none;">
+                                            &nbsp;
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                            {%endfor%}
+
+                            {%for video in videos%}
+                            <script>
+                            $(document).ready(function(){
+                                    $("#demo{{video.id}}").on("hide.bs.collapse", function(){
+                                        $(".btn{{video.id}}").html('<span class="glyphicon glyphicon-collapse-down"></span> {{video.title}}');
+                                  });
+                                  $("#demo{{video.id}}").on("show.bs.collapse", function(){
+                                      $(".btn{{video.id}}").html('<span class="glyphicon glyphicon-collapse-up"></span>  {{video.title}}');
+                                  });
+                            });
+                            </script>
+                            {%endfor%}
                             </div>
                         </div>
-                        {%endfor%}
                     </div>
                 </div>
 
@@ -600,36 +626,6 @@ function signOut() {
                     }, 1);
         {% endfor %}
 
-    /*
-    $('#myTab a').click(function(e) {
-    e.preventDefault();
-        $(this).tab('show');
-    });
-
-    // store the currently selected tab in the hash value
-    $("ul.nav-tabs > li > a").on("shown.bs.tab", function(e) {
-        var id = $(e.target).attr("href").substr(1) ;
-        if(history.pushState) {
-            history.pushState(null, null, id);
-        }
-        else {
-            window.location.hash = id;
-        }
-    });
-
-    // on load of the page: switch to the currently selected tab
-    var hash = window.location.hash;
-        $('#myTab a[href="' + hash + '"]').tab('show');
-    */
-    var url = document.location.toString();
-        if (url.match('#')) {
-                $('.nav-tabs a[href="#' + url.split('#')[1] + '"]').tab('show');
-        } 
-
-    // Change hash for page-reload
-    $('.nav-tabs a').on('shown.bs.tab', function (e) {
-                window.location.hash = e.target.hash;
-                })
     </script>
     <script>
 
