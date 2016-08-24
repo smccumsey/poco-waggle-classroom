@@ -12,10 +12,19 @@
 body {
     background-color:#222;
 }
+
+hr {
+    margin-left: auto;
+    margin-right: auto;
+    border-width: 2px;
+    border-radius: 0px;
+    width:50%;
+}
+
 .left {
     text-align:center; 
     vertical-align: middle;
-    padding-top: 155px;
+    padding-top: 75px;
     background-color:#222;
     color:white;
     height:100%;
@@ -38,7 +47,7 @@ body {
     margin-left: 0;
     margin-right: 0;
     padding-right: 0;
-  padding-left: 0;
+    padding-left: 0;
 
 }
 .info{
@@ -47,26 +56,27 @@ body {
 }
 
 .crop {
-    width: 465px;
-    height: 300px;
+    padding-top:10px;
+    width: 385px;
+    height: 250px;
     overflow: hidden;
     display: block;
     margin: 0 auto;
 }
 
 .crop img {
-    width: 465px;
-    height: 300px;
+    width: 385px;
+    height: 250px;
     display: block;
     margin: 0 auto;
-    border-radius: 35px;
+    border-radius: 0px;
 }
 
 .title {
-    font-family:"futura";
+    font-family:"Palatino Linotype", "Book Antiqua", Palatino, serif;
     font-size: 80px;
     padding-top:10px;
-    padding-bottom:30px;
+    padding-bottom:5px;
 }
 </style>
 
@@ -156,9 +166,13 @@ function init(){
 <!-- Main jumbotron for a primary marketing message or call to action -->
 <div class="container-fluid">
     <div class="row-fluid">
-        <div class="col-md-6 col-sm-6" >
+        <div class="col-md-12 col-sm-12" >
             <div class="left">
-                <div class="title">Poco<hr/></div>
+                <div class="title">Poco</div>
+                <div class="crop">
+                    <img src="{{STATIC_URL}}/images/logo.png" > 
+                </div>
+                <hr/>
                 <div class="container-fluid" style="width:100%">
                     <div class="info">
                         <div class="g-signin2" data-onsuccess="onSignIn" data-theme="dark" style="display:inline-block;padding-bottom: 20px;padding-top: 20px;"></div>
@@ -212,11 +226,8 @@ function signOut() {
             </div>
 
         </div>
-        <div class="col-md-6 col-sm-6">
+        <div class="col-md-0 col-sm-0">
             <div class="right">
-                <div class="crop">
-                    <img src="{{STATIC_URL}}/images/logo.png" > 
-                </div>
 
 
             </div>

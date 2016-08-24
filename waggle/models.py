@@ -24,6 +24,7 @@ class Assessment(models.Model):
     module = models.ForeignKey(Module, on_delete=models.CASCADE, related_name='assessments')
     description = models.TextField()
     assess_file = models.FileField(upload_to=assessment_directory_path, null=True)
+    code_editor_filler = models.TextField(null=True)
     order = models.PositiveSmallIntegerField(null=True)
     def __str__(self):
         return 'assessment_%s from %s' % (self.order, self.module.title)
@@ -46,14 +47,16 @@ class Content(models.Model):
 class Video(models.Model):
     module = models.ForeignKey(Module, on_delete=models.CASCADE, related_name='videos')
     title = models.TextField(null=True)
-    video = models.FileField(upload_to=video_directory_path, null=True,blank=True)
+    video_URL = models.URLField(null=True);
     def __str__(self):
         return '%s (video for %s)' % (self.title, self.module.title)
 
 class Related(models.Model):
     module = models.ForeignKey(Module, on_delete=models.CASCADE, related_name='relateds')
-    title = models.TextField(null=True)
-    links = models.TextField()
+    title = models.TextField(null=True,blank=True)
+    text = models.TextField(null=True,blank=True)
+    link = models.URLField(null=True,blank=True);
+    notebook = models.FileField(upload_to=notebook_directory_path, null=True, blank=True)
     def __str__(self):
         return 'related_%s from %s' % (self.id, self.module.title)
 
@@ -83,7 +86,7 @@ class ModuleProgress(models.Model):
 class AssessmentProgress(models.Model):
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
     assessment = models.ForeignKey(Assessment, on_delete=models.CASCADE, null=True)
-    code_submission = models.TextField(default='#Type python code here')
+    code_submission = models.TextField(default="#Type python code here")
     errors_list = models.TextField(default='')
     def __str__(self):
         return "%s progress for %s" % (self.student, self.assessment)

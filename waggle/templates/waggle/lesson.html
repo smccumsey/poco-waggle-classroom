@@ -314,7 +314,7 @@ function writeFeedback( feedbackString, ID) {
 
         var outputTable = "<table class='table table-condensed table-border'>";
         outputTable += "<thead><tr>";
-        outputTable += "<th><center>Status</center></th><th>Name</th><th>Short Description</th><th>Long Description</th>";
+        outputTable += "<th><center></center></th><th>Name</th><th>Short Description</th><th>Long Description</th>";
         outputTable += "</tr></thead>";
         outputTable += "<tbody>";
         for (i = 0; i < n; i++) { 
@@ -426,76 +426,51 @@ function signOut() {
                 </div>
 
                 <div role="tabpanel" class="tab-pane" id="debug">
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-md-2">
-                                <ul class="nav nav-pills nav-stacked">
-                                    <li class="active"><a href="#">Home</a></li>
-                                    {% for video in videos%}
-                                    <li><a href="#">{{ video.title }}</a></li>
-                                    <!-- {{video.video.url}}-->
-                                    {% endfor %}
-                                </ul>
+
+                    <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                        {%for video in videos%}
+                        <div class="panel panel-default">
+                            <div class="panel-heading" role="tab" id="heading{{forloop.counter}}">
+                                <h4 class="panel-title">
+                                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse{{forloop.counter}}" aria-expanded="false" aria-controls="collapse{{forloop.counter}}">
+                                        {{video.title}}
+                                    </a>
+                                </h4>
                             </div>
-                            <div class="col-md-6">
-                            <br/>
-                            <video id="video1" width="490" height="280" controls>
-                                <source src="https://www.youtube.com/embed/7eeEf_rAJds" type="video/mp4">
-                                Your browser does not support the video tag.
-                            </video>
-                            <br/>
-                            <table id="noteTable" class="table">
-                                <tr>
-                                    <td style="border:none;">
-                                        <textarea id="newNote" rows="2" style="width:50%" onfocus="takeNote(true);" onblur="takeNote(false);"></textarea>
-                                    </td>
-                                    <td valign="middle" style="border:none; vertical-align:middle;">
-                                        &nbsp;<button type="button" class="btn btn-default" onclick="saveNote();">Save Note</button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="border:none;">
-                                        <b>Notes:</b>
-                                    </td>
-                                    <td style="border:none;">
-                                        &nbsp;
-                                    </td>
-                                </tr>
-                            </table>
+                            <div id="collapse{{forloop.counter}}" class="panel-collapse collapse " role="tabpanel" aria-labelledby="heading{{forloop.counter}}">
+                                <div class="panel-body">
+                                    <div class="embed-responsive embed-responsive-16by9">
+                                    <video class="embed-responsive-item" id="video1_{{video.id}}" controls>
+                                        <source src="{{video.video_URL}}" type="video/mp4">
+                                        Your browser does not support the video tag.
+                                    </video>
+                                </div>
+                                    <br/>
+                                    <table id="noteTable" class="table">
+                                        <tr>
+                                            <td style="border:none;">
+                                                <textarea autofocus id="newNote" rows="2" style="width:90%" onfocus="takeNote(true);" onblur="takeNote(false);"></textarea>
+                                            </td>
+                                            <td valign="middle" style="border:none; vertical-align:middle;">
+                                                &nbsp;<button type="button" class="btn btn-default" onclick="saveNote();">Save Note</button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="border:none;">
+                                                <b>Notes:</b>
+                                            </td>
+                                            <td style="border:none;">
+                                                &nbsp;
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
                             </div>
-                            <div class="clearfix visible-lg"></div>
                         </div>
+                        {%endfor%}
                     </div>
-                    <!--
-                    {% for video in videos%}
-                    <h3> {{ video.title }} </h3>
-                    <br/>
-                    <video id="video1" width="490" height="280" controls>
-                        <source src="{{video.video.url}}" type="video/mp4">
-                        Your browser does not support the video tag.
-                    </video>
-                    <br/>
-                    <table id="noteTable" class="table">
-                        <tr>
-                            <td style="border:none;">
-                                <textarea id="newNote" rows="2" style="width:100%" onfocus="takeNote(true);" onblur="takeNote(false);"></textarea>
-                            </td>
-                            <td valign="middle" style="border:none; vertical-align:middle;">
-                                &nbsp;<button type="button" class="btn btn-default" onclick="saveNote();">Save Note</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td style="border:none;">
-                                <b>Notes:</b>
-                            </td>
-                            <td style="border:none;">
-                                &nbsp;
-                            </td>
-                        </tr>
-                    </table>
-                    {% endfor %}
-                    -->
                 </div>
+
                 <div role="tabpanel" class="tab-pane" id="assessment" style="background: white;">
                     <div id=triple>
                         <!-- Start Assessment triple -->
@@ -509,7 +484,7 @@ function signOut() {
                         <div class="panel panel-default" style="border:0;">
                             <div class="panel-body">
                                 <!-- CODE EDITOR GOES HERE.-->
-<textarea id="code-{{assessment.id}}" name="code_id{{assessment.id}}" >{{ap.code_submission}}</textarea>
+                                <textarea id="code-{{assessment.id}}" name="code_id{{assessment.id}}" >{% if "#Type" in ap.code_submission %}{{assessment.code_editor_filler}}{%else%}{{ap.code_submission}}{%endif%}</textarea>
                                     <br/>
                                     <button id="spinnerbtn_{{assessment.id}}" type="button" class="btn btn-default has-spinner" onclick="submitCode('code-{{assessment.id}}',{{forloop.parentloop.counter0}})">
                                         <span class="spinner"><i class="icon-spin icon-refresh"></i></span>
@@ -555,14 +530,15 @@ function signOut() {
                             </div>
 
                 <div role="tabpanel" class="tab-pane" id="other">
-                    {% for realted_item in relateds %}
-                    ...
-                    {% endfor %}
                     <center>
                         <hr>
                         <p>To interact with the notebook displayed in the content tab you'll need the .ipynb file in your pythonanywhere folder </p>
                         <hr>
                     </center>
+                    <h4>Available downlads:</h4>
+                    {% for related_item in relateds %}
+                    <p>&emsp;<a href="{{related_item.notebook.url}}" download>{{related_item.title}}</a></p>
+                    {% endfor %}
                 </div>
 
                 
