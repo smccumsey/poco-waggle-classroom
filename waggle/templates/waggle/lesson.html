@@ -4,8 +4,7 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Waggle</title>
-<script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+<title>Poco Lesson</title>
 <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
 <link rel="stylesheet" href="{{STATIC_URL}}/codemirror/lib/codemirror.css">
@@ -32,10 +31,46 @@
     font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
 }
 
+.affix2 {
+    background-color:white;
+    padding-top: 10px;
+    position: fixed;
+    top: 250px;
+    bottom: 0;
+    right: 0;
+    overflow-y: scroll;
+    width:30%;
+    height:auto;
+   
+}
 .affix {
+    overflow-y: scroll;
+    padding-right: 20px;
+    bottom: 0;
+    right: 0;
     position:fixed;
     top:70px;
-    width:25%;
+    width:30%;
+    height:auto;
+}
+@media (min-width: 768px){
+    #left {
+        position: absolute;
+        left: 0;
+        width: 75%;
+        overflow-y: scroll; 
+    }
+
+    #right-disqus{
+        background-color:white;
+        padding-top: 10px;
+        position: fixed;
+        top: 250px;
+        bottom: 0;
+        right: 0;
+        overflow-y: scroll;
+        width: auto%;
+    }
 }
 
 .CodeMirror {
@@ -102,21 +137,12 @@
 <script src="{{STATIC_URL}}/codemirror/mode/python/python.js"></script>
 <script src="{{STATIC_URL}}/codemirror/mode/markdown/markdown.js"></script>
 
-<script src="https://code.jquery.com/jquery-1.10.2.js"></script>
 <script src="{{STATIC_URL}}/js-cookie/src/js.cookie.js"></script>
 
 <script src="{{STATIC_URL}}/jquery/dist/jquery.js"></script>
 <script src="{{STATIC_URL}}/bootstrap/js/bootstrap.js"></script>
-<script src="{{STATIC_URL}}/bootstrap/js/bootstrap.min.js"></script>
 
 <script src="https://apis.google.com/js/platform.js" async defer></script>
-<!--script src="../../../js/DecimalFormat.js"></script-->
-
-
-<!--script src="js/jquery.mobile-1.1.0-rc.1.js"></script-->
-<!--script src="js/jgestures.min.js"></script-->
-<!--<script src="js/jquery.js"></script-->
-
 
 <script type="text/javascript">
 <!--
@@ -418,7 +444,7 @@ function signOut() {
         <br/>
         <img src="{{STATIC_URL}}/images/i15.png" width="48px" height="48px" style="float:left; margin-right:10px; margin-top:12px;"/>
 
-        <h2>{{module_obj.name}}</h2>
+        <h2>{{module_obj.title}}</h2>
         <p>{{module_obj.description}}</p>
 
         <br/>
@@ -544,10 +570,10 @@ function signOut() {
                         <div class="panel panel-default" style="border:0;">
                             <div class="panel-body">
                                 <!-- CODE EDITOR GOES HERE.-->
-                                <textarea id="code-{{assessment.id}}" name="code_id{{assessment.id}}" >{% if "#Type" in ap.code_submission %}{{assessment.code_editor_filler}}{%else%}{{ap.code_submission}}{%endif%}</textarea>
+                                <textarea id="code-{{assessment.id}}" name="code_id{{assessment.id}}" >{{ap.code_submission}}</textarea>
                                     <br/>
                                     <button id="spinnerbtn_{{assessment.id}}" type="button" class="btn btn-default has-spinner" onclick="submitCode('code-{{assessment.id}}',{{forloop.parentloop.counter0}})">
-                                        <span class="spinner"><i class="icon-spin icon-refresh"></i></span>
+                                        <span class="spinner"><i class="icon-spin icon-refresh"><img src="http://assets2.bostonlogic.com/images/spinner.gif" width="10" height="10"></i></span>
                                         Submit Code
                                     </button>
                             </div>
@@ -596,30 +622,41 @@ function signOut() {
                         <hr>
                     </center>
                     <h4>Available downlads:</h4>
+                    &emsp;<table class="table-striped table-condensed table-border table-responsive">
+                    <thead><tr style="background-color:#eee">
+                    <th>Description</th><th>&emsp;Downloadable File</th>
+                    </tr></thead>
+                    <tbody>
                     {% for related_item in relateds %}
-                    <p>&emsp;<a href="{{related_item.notebook.url}}" download>{{related_item.title}}</a></p>
+                    <tr>
+                        <td>{{related_item.description}}</td>
+                        <td>&emsp;<a href="{{related_item.notebook.url}}" download>{{related_item.title}}</a></td>
+                    </tr>
                     {% endfor %}
+                    </tbody>
+                    </table>
                 </div>
 
                 
             </div>
         </div>
         
-        <div class="col-lg-4 col-md-4 col-sm-4">
-            <div data-spy="affix" data-offset-top="200">
+        <div class="col-lg-4 col-md-4 col-sm-4" > 
+            <div data-spy="affix" data-offset-top="250">
 
             <table id="previewTable" style="width:100%;" class="table-responsive">
                 <tr>
                     <td>
                         <div id="disqus_thread"></div>
+                        <div id="right-disqus">
                         <script>
 
 /**
    *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
     *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables */
                            var disqus_config = function () {
-                               this.page.url ="http://smccumsey.pythonanywhere.com/{{request.path}}";  // Replace PAGE_URL with your page's canonical URL variable
-                               this.page.identifier = "/lesson/{{module_obj.name}}/"; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+                               this.page.url ="http://smccumsey.pythonanywhere.com{{request.path}}";  // Replace PAGE_URL with your page's canonical URL variable
+                               this.page.identifier = "/lesson/{{module_obj.id}}/"; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
                                    };
                         (function() { // DON'T EDIT BELOW THIS LINE
                              var d = document, s = d.createElement('script');
@@ -634,13 +671,12 @@ function signOut() {
 
             </table>
             <div id="disqus_container_2"></div>
-        </div>
 
         <div class="spinnerbox">
             <center><img src="{{STATIC_URL}}/images/spinner.gif"/></center>
         </div>
 
-    </div>
+    </div></div>
     </div>
 
     <script>

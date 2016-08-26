@@ -47,7 +47,7 @@ class LessonView(generic.DetailView):
     def get_context_data(self, **kwargs):
         # Call the base implementation first to get a context
         context = super(LessonView, self).get_context_data(**kwargs)
-        module_id = self.kwargs.get('module')
+        module_id = int(self.kwargs.get('module'))
         print('MODULE_ID ', module_id)
         context['module_obj'] = Module.objects.get(id=module_id)
         context['assessments'] =Assessment.objects.filter(module_id=module_id)
@@ -95,16 +95,17 @@ class LessonView(generic.DetailView):
             updated_note_table = request.POST.get('html_notes')
             videoID = request.POST.get('videoID')
             video_timepoint = request.POST.get('time')
+            print("VIDEOID=%s,\t HTML_NOTES: %s" % (videoID, updated_note_table))
 
             video_progress = VideoProgress.objects.get(student=Student.objects.get(user=request.user), video=Video.objects.get(id=int(videoID)))
             video_progress.video_notes = updated_note_table
             video_progress.video_timepoint= video_timepoint
             video_progress.save()
             return HttpResponse('django says the note was saved')
-        if(request.POST.get('submittedcode')):
+        elif(request.POST.get('submittedcode')):
             usr_code = request.POST.get('submittedcode')
             assessmentID = request.POST.get('assessmentID')
-            print('USRCODE: %s \nassessID: %s' % (usr_code, assessmentID))
+            print('USRCODE: %s \nASSESSMENTID: %s' % (usr_code, assessmentID))
             envFile = Assessment.objects.get(id=int(assessmentID)).assess_file.path
             testFile = self.setupEnv(usr_code, envFile)
             result_feedback = list(map(lambda x: x.decode('ASCII'), self.runCode(testFile)))

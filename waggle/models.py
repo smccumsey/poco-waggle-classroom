@@ -54,7 +54,7 @@ class Video(models.Model):
 class Related(models.Model):
     module = models.ForeignKey(Module, on_delete=models.CASCADE, related_name='relateds')
     title = models.TextField(null=True,blank=True)
-    text = models.TextField(null=True,blank=True)
+    description = models.TextField(null=True,blank=True)
     link = models.URLField(null=True,blank=True);
     notebook = models.FileField(upload_to=notebook_directory_path, null=True, blank=True)
     def __str__(self):

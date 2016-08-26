@@ -21,7 +21,7 @@ try:
 	
     #user submission
     #Type python code here
-    one=1  
+    x=30  
 
 except Exception as e:
 	report('Generic error', 'On your own', e)
