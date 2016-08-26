@@ -1,13 +1,12 @@
-#Module 2
+#Module 1
 
-#Challenge 4
+#Challenge 1
 
 '''
-raw_age_column = [person['Age'] for person in titanic_starter_table]
-
-int_all_ages = [int(age) for age in raw_age_column]
+one = 1
+two = 2
+three = 3
 '''
-
 import sys
 
 def report( name, shortd, longd):
@@ -16,100 +15,45 @@ def report( name, shortd, longd):
 
 #Mock data goes first
 
-row1 = {'Age': '22',
-  'Embarked': 'S',
-  'Fare': '7.25',
-  'Name': 'Braund, Mr. Owen Harris',
-  'Pclass': '3',
-  'Sex': 'male',
-  'Survived': '0'
-}
-
-row2 = {'Age': '38',
-  'Embarked': 'C',
-  'Fare': '71.2833',
-  'Name': 'Cuming, Mrs. John Bradley (Florence Briggs Thayer)',
-  'Pclass': '1',
-  'Sex': 'female',
-  'Survived': '1'
-}
-
-row3 = {'Age': '26',
-  'Embarked': 'S',
-  'Fare': '7.925',
-  'Name': 'Heikkinen, Miss. Laina',
-  'Pclass': '3',
-  'Sex': 'female',
-  'Survived': '1'
-}
-
-row4 = {'Age': '2',
-  'Embarked': 'S',
-  'Fare': '21.075',
-  'Name': 'Palsson, Master. Gosta Leonard',
-  'Pclass': '3',
-  'Sex': 'male',
-  'Survived': '0'
-}
-
-row5 = {'Age': '14',
-  'Embarked': 'C',
-  'Fare': '30.0708',
-  'Name': 'Nasser, Mrs. Nicholas (Adele Achem)',
-  'Pclass': '2',
-  'Sex': 'female',
-  'Survived': '1'
-}
-
-row6 = {'Age': '4',
-  'Embarked': 'S',
-  'Fare': '16.7',
-  'Name': 'Sandstrom, Miss. Marguerite Rut',
-  'Pclass': '3',
-  'Sex': 'female',
-  'Survived': '1'
-}
-
-row7 = {'Age': '58',
-  'Embarked': 'S',
-  'Fare': '26.55',
-  'Name': 'Bonnell, Miss. Elizabeth',
-  'Pclass': '1',
-  'Sex': 'female',
-  'Survived': '1'
-}
-
-titanic_starter_table = [row1, row2, row3, row4, row5, row6, row7]
+#No mock data for this challenge.
 
 try:
 	
     #user submission
-    raw_age_column = [person['Age'] for person in titanic_starter_table]
-    
-    int_all_ages = [int(age) for age in raw_age_column]  
+    #Type python code here
+    one=1  
 
-except KeyError as e:
-	report('Key error', 'Remember to quote keys', e)
-except NameError as e:
-	report('Name error', 'Look for typos in variable names', e)
 except Exception as e:
-	report('Generic error', 'On your own - review two-piece set-up of mapping functions', e)
+	report('Generic error', 'On your own', e)
 	sys.exit(1)
 
 try:
-	int_all_ages		# does var exist?
+	check = (one == 1)
 except NameError as e:
 	report('Name error', 'Typically a typo', e)
-	sys.exit(1)
-
-if not isinstance(int_all_ages, list):
-	report('Data type bug', 'int_all_ages is not a list', 'No further help available')
-	sys.exit(1)
-
-try:
-	check = (int_all_ages == [int(row['Age']) for row in titanic_starter_table]))
 except Exception as e:
 	report('Generic error', 'On your own', e)
 else:
 	if not check:
-		report('Value bug', 'Wrong value in int_all_ages of ' + str(int_all_ages), 'No further help available')
+		report('Value bug', 'Wrong value in box', 'Box labeled one has incorrect value ' + str(one))
+
+try:
+	check = (two == 2)
+except NameError as e:
+	report('Name error', 'Typically a typo', e)
+except Exception as e:
+	report('Generic error', 'On your own', e)
+else:
+	if not check:
+		report('Value bug', 'Wrong value in box', 'Box labeled two has incorrect value ' + str(two))
+
+try:
+	check = (three == 3)
+except NameError as e:
+	report('Name error', 'Typically a typo', e)
+except Exception as e:
+	report('Generic error', 'On your own', e)
+else:
+	if not check:
+		report('Value bug', 'Wrong value in box', 'Box labeled three has incorrect value ' + str(three))
+	

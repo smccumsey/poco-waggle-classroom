@@ -28,6 +28,8 @@
 
 .nav-tabs {
     margin-bottom: 0;
+    font-size:16px;
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
 }
 
 .affix {
@@ -225,36 +227,57 @@ function showLess(){
     $('#less').show();
 }
 
-function takeNote(pauseOrPlay){
+function postNote(videoID, updated_notes, currentTime) {
+    //ajax post
+     var csrftoken = Cookies.get('csrftoken');
 
-    var video = document.getElementById("video1");
+    $.ajax({
+        method: "POST",
+        url: "{{request.path}}",
+        beforeSend: function( xhr ) {
+            xhr.setRequestHeader("X-CSRFToken", csrftoken);
+        },
+    data: { videoID: videoID , html_notes: updated_notes, time: currentTime} 
+
+    })
+    .done(function( response) {
+        console.log( "Note saved to DB: " + response);
+        });
+}
+
+function takeNote(pauseOrPlay, ID){
+
+    var video = document.getElementById(ID);
     if( pauseOrPlay )
         video.pause();
     else
         video.play();
 }
 
-function saveNote(){
+function saveNote(ID){
 
-    var video = document.getElementById("video1");
+    var video = document.getElementById(ID);
+    var IDnum = ID.split("_").pop();
 
-    notes.push({text:$('#newNote').val(),time:video.currentTime});
+    notes.push({text:$('#newNote'+IDnum).val(),time:video.currentTime});
 
     var minutes = parseInt( video.currentTime / 60 ) % 60;
     var seconds = Math.round(video.currentTime % 60);
     if( seconds < 10 )
         seconds = "0"+seconds;
 
-    $('#noteTable').append('<tr><td colspan="1.5">'+$('#newNote').val()+' (<a href="#" onclick="goToNote('+video.currentTime+');">'+minutes+':'+seconds+'</a>)</td></tr>');
+    $('#noteTable'+IDnum).append('<tr><td colspan="1.5">'+$('#newNote'+IDnum).val()+' (<a href="#" onclick="goToNote('+video.currentTime+','+ID+');">'+minutes+':'+seconds+'</a>)</td></tr>');
 
-    $('#newNote').val("");
+    $('#newNote'+IDnum).val("");
+
+    postNote(IDnum, document.getElementById('noteTable'+IDnum).innerHTML, video.currentTime);
 
     video.play();
 }
 
-function goToNote(time){
+function goToNote(time,ID){
 
-    var video = document.getElementById("video1");
+    var video = document.getElementById(ID);
 
     video.pause();
     video.currentTime = time;
@@ -312,7 +335,7 @@ function writeFeedback( feedbackString, ID) {
         var n = arrayOfLines.length;
         var counter=0;
 
-        var outputTable = "<table class='table table-condensed table-border'>";
+        var outputTable = "<table class='table table-condensed table-border table-responsive'>";
         outputTable += "<thead><tr>";
         outputTable += "<th><center></center></th><th>Name</th><th>Short Description</th><th>Long Description</th>";
         outputTable += "</tr></thead>";
@@ -359,7 +382,7 @@ function signOut() {
 
 <body onload="init();">
 <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-    <div class="container">
+    <div class="container-fluid">
         <div class="navbar-header">
             <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
                 <span class="sr-only">Toggle navigation</span>
@@ -391,7 +414,7 @@ function signOut() {
 
 <!-- Main jumbotron for a primary marketing message or call to action -->
 <div class="jumbotron" style="padding-bottom:15px;">
-    <div class="container">
+    <div class="container-fluid">
         <br/>
         <img src="{{STATIC_URL}}/images/i15.png" width="48px" height="48px" style="float:left; margin-right:10px; margin-top:12px;"/>
 
@@ -402,9 +425,9 @@ function signOut() {
     </div>
 </div>
 
-<div class="container">
+<div class="container-fluid">
     <div class="row">
-        <div class="col-md-8 col-sm-8">
+        <div class="col-lg-8 col-md-8 col-sm-8">
 
             <!-- Nav tabs -->
             <ul class="nav nav-tabs nav-justified" role="tablist" id="myTab">
@@ -426,9 +449,9 @@ function signOut() {
 
                 <div role="tabpanel" class="tab-pane" id="debug">
 
-                    <div class="container">
+                    <div class="container-fluid">
                         <div class="row">
-                            <div class="col-md-2 col-sm-2">
+                            <div class="col-lg-3 col-md-3 col-sm-3" style="background-color:#C0C0C0;border-radius:10px;height:100%">
                                 <!--
                                 {%for video in videos%}
                                 <button type="button" class="btn btn-success btn{{video.id}}" data-toggle="collapse" data-target="#demo{{video.id}}">
@@ -437,10 +460,11 @@ function signOut() {
                                 </button>
                                 {%endfor%}
                                 -->
-
+                                <br/>
+                                <h4 style="text-align:center;"> Video menu</h4>
                                 <ul class="nav nav-pills nav-stacked">
                                     {%for video in videos%}
-                                    <li><a class="btn btn-primary btn{{video.id}} btn-xs col-lg-12" style="margin-bottom:4px;white-space: normal;" role="button" data-toggle="collapse" href="#demo{{video.id}}" aria-expanded="false" aria-controls="demo{{video.id}}">
+                                    <li><a class="btn btn-primary btn{{video.id}} btn-xs col-lg-12" style="text-align:left;border:#C0C0C0;background:white;color:black;margin-bottom:4px;white-space: normal;" role="button" data-toggle="collapse" href="#demo{{video.id}}" aria-expanded="false" aria-controls="demo{{video.id}}">
                                         <span class="glyphicon glyphicon-collapse-down"></span> 
                                         {{video.title}}
                                     </a></li>
@@ -449,23 +473,29 @@ function signOut() {
                             </div>
 
 
-                            <div class="col-md-6 col-sm-6">
+                            <div class="col-lg-9 col-md-9 col-sm-9" >
                             {%for video in videos%}
+                            {% for vp in object.students.videoprogress_set.all %}
+                            {% if video == vp.video%} 
                             <div id="demo{{video.id}}" class="collapse">
-                                <div class="embed-responsive embed-responsive-16by9">
-                                    <video class="embed-responsive-item" id="video1_{{video.id}}" controls>
+                                <hr/><center><h3 style="font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;"> {{video.title}} </h3></center>
+                                <div class="embed-responsive embed-responsive-4by3">
+                                    <video class="embed-responsive-item" id="video_{{video.id}}" controls width=100%>
                                         <source src='{{video.video_URL}}' type='video/mp4'>
                                         Your browser does not support the video tag.
                                     </video>
                                 </div>
                                 <br/>
-                                <table id="noteTable" class="table">
+                                <table id="noteTable{{video.id}}" class="table table-responsive">
+                                    {% if vp.video_notes %}
+                                    {{vp.video_notes|safe}}
+                                    {% else %}
                                     <tr>
                                         <td style="border:none;">
-                                            <textarea autofocus id="newNote" rows="2" style="width:90%" onfocus="takeNote(true);" onblur="takeNote(false);"></textarea>
+                                            <textarea autofocus id="newNote{{video.id}}" rows="2" style="width:90%" onfocus="takeNote(true, 'video_{{video.id}}');" onblur="takeNote(false, 'video_{{video.id}}');"></textarea>
                                         </td>
                                         <td valign="middle" style="border:none; vertical-align:middle;">
-                                            &nbsp;<button type="button" class="btn btn-default" onclick="saveNote();">Save Note</button>
+                                            &nbsp;<button type="button" class="btn btn-default" onclick="saveNote('video_{{video.id}}');">Save Note</button>
                                         </td>
                                     </tr>
                                     <tr>
@@ -476,8 +506,12 @@ function signOut() {
                                             &nbsp;
                                         </td>
                                     </tr>
-                                </table>
+                                    {% endif %}
+                                </table><hr/>
                             </div>
+
+                            {% endif %}
+                            {%endfor%}
                             {%endfor%}
 
                             {%for video in videos%}
@@ -571,10 +605,10 @@ function signOut() {
             </div>
         </div>
         
-        <div class="col-md-4 col-sm-4">
+        <div class="col-lg-4 col-md-4 col-sm-4">
             <div data-spy="affix" data-offset-top="200">
 
-            <table id="previewTable" style="width:100%;">
+            <table id="previewTable" style="width:100%;" class="table-responsive">
                 <tr>
                     <td>
                         <div id="disqus_thread"></div>

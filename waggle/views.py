@@ -5,7 +5,7 @@ from django.views import generic
 from django.views.generic.edit import FormView, CreateView
 from waggle.forms import CodeForm
 from django.contrib.auth.models import User
-from .models import Related, Content, Assessment, Module, Course, AssessmentProgress, Video,Student
+from .models import Related, Content, Assessment, Module, Course, AssessmentProgress, Video, VideoProgress, Student
 
 from django.utils import timezone
 from datetime import datetime
@@ -91,6 +91,16 @@ class LessonView(generic.DetailView):
         postdata = request.POST.dict()
         print('POST DATA')
         print(postdata)
+        if(request.POST.get('html_notes')):
+            updated_note_table = request.POST.get('html_notes')
+            videoID = request.POST.get('videoID')
+            video_timepoint = request.POST.get('time')
+
+            video_progress = VideoProgress.objects.get(student=Student.objects.get(user=request.user), video=Video.objects.get(id=int(videoID)))
+            video_progress.video_notes = updated_note_table
+            video_progress.video_timepoint= video_timepoint
+            video_progress.save()
+            return HttpResponse('django says the note was saved')
         if(request.POST.get('submittedcode')):
             usr_code = request.POST.get('submittedcode')
             assessmentID = request.POST.get('assessmentID')
