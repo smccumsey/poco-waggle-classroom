@@ -14,14 +14,14 @@ body {
 }
 
 hr {
-    margin-left: auto;
-    margin-right: auto;
-    border-width: 2px;
-    border-radius: 0px;
-    width:50%;
+    margin-top:30px;
+    margin-bottom:30px;
+    width:100%;
+    border-top: 1px solid white;
 }
 
 .left {
+    left:0;
     text-align:center; 
     vertical-align: middle;
     padding-top: 75px;
@@ -37,9 +37,10 @@ hr {
 }
 
 .right {
+    right:0;
     text-align:center; 
     justify-content: center;
-    background-color:#222;
+    background-color:#eee;
     vertical-align: middle;
     height:100%;
     width:100%;
@@ -58,10 +59,11 @@ hr {
 .crop {
     padding-top:10px;
     width: 385px;
-    height: 250px;
+    height: 210px;
     overflow: hidden;
     display: block;
     margin: 0 auto;
+    border-radius: 10px;
 }
 
 .crop img {
@@ -69,14 +71,19 @@ hr {
     height: 250px;
     display: block;
     margin: 0 auto;
-    border-radius: 0px;
+    border-radius: 10px;
 }
 
 .title {
     font-family:"Palatino Linotype", "Book Antiqua", Palatino, serif;
-    font-size: 80px;
+    font-size: 70px;
     padding-top:10px;
     padding-bottom:5px;
+}
+
+#description{
+    font-family:"Palatino Linotype", "Book Antiqua", Palatino, serif;
+    font-size: 18px;
 }
 </style>
 
@@ -148,7 +155,7 @@ function init(){
 <body onload="init();">
 
 <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-    <div class="container">
+    <div class="container-fluid">
         <div class="navbar-header">
             <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
                 <span class="sr-only">Toggle navigation</span>
@@ -166,22 +173,31 @@ function init(){
 <!-- Main jumbotron for a primary marketing message or call to action -->
 <div class="container-fluid">
     <div class="row-fluid">
-        <div class="col-md-12 col-sm-12" >
+        <div class="col-md-7 col-sm-7" >
             <div class="left">
-                <div class="title">Poco</div>
+                <div class="title">Welcome to Poco</div>
                 <div class="crop">
                     <img src="{{STATIC_URL}}/images/logo.png" > 
                 </div>
                 <hr/>
-                <div class="container-fluid" style="width:100%">
-                    <div class="info">
-                        <div class="g-signin2" data-onsuccess="onSignIn" data-theme="dark" style="display:inline-block;padding-bottom: 20px;padding-top: 20px;"></div>
-                        <div id="message" class="message"></div>
-                        </br>
-                        <a href="" onclick="signOut();">Sign out</a>
-                    </div>
+                <div id="description"><p>Poco offers a set of courses that are based on the Python programming language. None of the
+                courses assume you know programming - they start from scratch. Each course is aimed at
+                giving you practical skills that you can use in your work or your personal life. We hope
+                you find something that piques your interest.</p></div>
+            </div>
+            </div>
+            </div>
+            <div class="col-md-5 col-sm-5">
+                <div class="right">
+                    <div class="container-fluid" style="width:100%">
+                        <div class="info">
+                            <div class="g-signin2" data-onsuccess="onSignIn" data-theme="dark" style="display:inline-block;padding-bottom: 20px;padding-top: 20px;"></div>
+                            <div id="message" class="message"></div>
+                            </br>
+                            <a href="" onclick="signOut();">Sign out</a>
+                        </div>
 
-                    <script>
+                        <script>
 function onSignIn(googleUser) {
     // Useful data for your client-side scripts:
     var profile = googleUser.getBasicProfile();
@@ -210,7 +226,7 @@ function onSignIn(googleUser) {
         var pk = obj['pk'];
         var url_mask = "{% url 'waggle:profile' 'tmp' %}".replace('tmp',pk);
         console.log(url_mask);
-        document.getElementById("message").innerHTML = "Welcome "+profile.getName()+"<br><br><a href="+url_mask+">Go to your profile</a>";
+        document.getElementById("message").innerHTML = "Hello "+profile.getGivenName()+"!<br><br><a href="+url_mask+">Go to your profile</a>";
     };
     xhr.send('idtoken=' + id_token + '&csrfmiddlewaretoken=' + '{{csrf_token}}' );
 };
@@ -221,15 +237,9 @@ function signOut() {
             });
     document.getElementById("message").innerHTML = "";
 }
-                    </script>
-                </div> <!-- /container -->
-            </div>
-
-        </div>
-        <div class="col-md-0 col-sm-0">
-            <div class="right">
-
-
+                        </script>
+                    </div> <!-- /container -->
+                </div>
             </div>
         </div>
     </div>

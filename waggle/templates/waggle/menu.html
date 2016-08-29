@@ -35,60 +35,50 @@
 
 
 <body onload="init();">
+    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation" style="padding-left:10px;padding-right:10px;">
+        <div class="container-fluid" style="padding-bottom:0px;">
+            <div class="navbar-header"  style="padding-bottom:0px;">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="{% url 'waggle:profile' object.pk %}" style="font-size:22px;">Poco</a>
+            </div>
 
-	<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-      <div class="container-fluid">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <span class="navbar-brand" style="font-size:22px;">Waggle</span>
+            <div  style="padding-bottom:0px;">
+                <p class="navbar-text navbar-right">Signed in as <a href="{% url 'waggle:login' %}" class="navbar-link">{{request.user.email}}</a></p>
+            </div>
+
         </div>
-        <div class="navbar-collapse collapse">
-            <form class="navbar-form navbar-right" role="form" action="{% url 'waggle:login' %}">
-
-          	<span id="username" style="color:#fff;"></span>&nbsp;&nbsp;
-
-            <!--div class="form-group">
-              <input type="text" placeholder="Email" class="form-control">
-            </div>
-            <div class="form-group">
-              <input type="password" placeholder="Password" class="form-control">
-            </div>
-            <button type="submit" class="btn btn-success">Sign in</button-->
-
-            <button type="submit" class="btn btn-danger" onclick="signOut()">Sign out</button>
-
-          </form>
-        </div><!--/.navbar-collapse -->
-      </div>
+        <div style="padding-left:10px;padding-right:10px;">
+            <ol class="breadcrumb" style="background:#eee;">
+                <li><a href="{% url 'waggle:login' %}">Home</a></li>
+                <li><a href="{% url 'waggle:profile' pk=object.pk %}">Courses</a></li>
+                <li class="active">Course Modules</li>
+            </ol>
+        </div> 
     </div>
 
-
-
     <!-- Main jumbotron for a primary marketing message or call to action -->
-    <div class="jumbotron">
+    <div class="jumbotron"  style="padding-bottom:5px;padding-top:110px;">
       <div class="container-fluid">
       	<br/>
-        <h2>Welcome to Waggle</h2>
-      	<br/>
-        <p>{{request.session.course_name|capfirst}}</p>
-        <p>Below are your modules.  Each module is a set of challenges that will help you build your programming and data science skills.  Click a module below to get started.</p>
-        <!--p><a class="btn btn-primary btn-lg" role="button">Learn more &raquo;</a></p-->
+        <h2>Welcome to <i>{{course_obj.title}}</i></h2>
+        {% if modules %}
+        <p style="width:80%;">Below are your modules.  Each module is a set of challenges that will help you build your programming and data science skills.  Click a module below to get started.</p>
+        {% else %}
+        <br/><p> Under Development <p>
+        {% endif %}
       </div>
     </div>
 
 
     <div class="container-fluid">
-
 	  <center>
 		  <table style="width:80%;">
-
             <!-- begin for -->
-
             {% for module in modules %}
 			<tr>
 				<td>
@@ -102,13 +92,10 @@
 									<span class="glyphicon glyphicon-star-empty" aria-hidden="true"></span>
 									<span class="glyphicon glyphicon-star-empty" aria-hidden="true"></span>-->
 									<br/>
-									<br/>
-									<br/>
                                     <a class="btn btn-primary" href="{% url 'waggle:lesson' pk=object.pk course=request.session.course_title module=module.id %}" role="button">Start this Module</a>
 								</div>
                                 <b>{{module.title}}</b>
-							  	<br/>
-                                <p> {{module.description}} </p>
+                                <p style="padding-top:5px;width:80%;"> {{module.description}} </p>
 							  	<br/>
 							</div>
 						 </div>
@@ -117,7 +104,6 @@
 			</tr>
             {% endfor %}
             <!-- end for -->
-
 		  </table>
       </center>
 

@@ -96,24 +96,41 @@ class LessonView(generic.DetailView):
             videoID = request.POST.get('videoID')
             video_timepoint = request.POST.get('time')
             print("VIDEOID=%s,\t HTML_NOTES: %s" % (videoID, updated_note_table))
+            my_student = Student.objects.get(user=request.user) 
+            my_video = Video.objects.get(id=int(videoID))
 
-            video_progress = VideoProgress.objects.get(student=Student.objects.get(user=request.user), video=Video.objects.get(id=int(videoID)))
+            
+            video_progress = VideoProgress.objects.get(student=my_student, video=my_video)
             video_progress.video_notes = updated_note_table
             video_progress.video_timepoint= video_timepoint
             video_progress.save()
             return HttpResponse('django says the note was saved')
         elif(request.POST.get('submittedcode')):
             usr_code = request.POST.get('submittedcode')
+            if re.search(r'print\(.+\)', usr_code):
+                parsed_result_feedback = "Please do not use print in your assessment submission."
+                return HttpResponse(parsed_result_feedback)
             assessmentID = request.POST.get('assessmentID')
             print('USRCODE: %s \nASSESSMENTID: %s' % (usr_code, assessmentID))
             envFile = Assessment.objects.get(id=int(assessmentID)).assess_file.path
             testFile = self.setupEnv(usr_code, envFile)
             result_feedback = list(map(lambda x: x.decode('ASCII'), self.runCode(testFile)))
             print('RAW RESULT',result_feedback)
-            if result_feedback[0]:
-                parsed_result_feedback  = json.dumps([ {k:str(v) for k,v in (eval(err)).items()} for err in result_feedback[0].splitlines()])
-            elif result_feedback[1]:
-                parsed_result_feedback = "bad"
+            if result_feedback[0]: #stdout
+                print("STDOUT")
+                def convert(x):
+                    if 'Error(' in repr(x):
+                        return repr(x).replace("\"", '').replace("\'",'*')
+                    return str(x)
+                parsed_result_feedback  = json.dumps([ {k:convert(v) for k,v in (eval(err)).items()} for err in result_feedback[0].splitlines()])
+            elif result_feedback[1]: #stderr
+                print("STERR")
+                error_string = result_feedback[1]
+                name = "Error"
+                shortd = [x for x in error_string.split() if 'Error' in x].pop()[:-1]
+                longd =  error_string[(error_string.find(shortd)):-1] #+ error_string[(error_string.find('\n')):(error_string.find(shortd))] 
+                feedback = {"Name":name, "Short":shortd, "Long":longd}
+                parsed_result_feedback = json.dumps([feedback])
             else:
                 parsed_result_feedback = "good"
             print('PARSED RESULT',parsed_result_feedback)
@@ -142,6 +159,8 @@ class MenuView(generic.DetailView):
         courses = [(slugify(c.title),c) for c in Course.objects.all()]
         course_title= self.kwargs.get('course')
         course_lookup = [c[1] for c in courses if c[0]==course_title].pop() #sloppy
+
+        context['course_obj'] = course_lookup
         context['modules'] = Module.objects.filter(course_id=course_lookup.id)
         return context
 

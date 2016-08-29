@@ -12,6 +12,23 @@
 <link rel="stylesheet" href="{{STATIC_URL}}/codemirror/addon/hint/show-hint.css">
 
 <style>
+
+.breadcrumb li a    {
+    background:#eee;
+}
+.breadcrumb {
+    background:#eee;
+}
+.breadcrumb-trail * { color: red!important; }
+
+code { 
+    background: hsl(220, 80%, 90%); 
+}
+
+pre {
+    white-space: pre-wrap;
+    background: hsl(30,80%,90%);
+}
 .table-border tbody tr td, .table-border tbody tr th, .table-border thead tr th {
     border-bottom: 2px solid white;
     border-color: white;
@@ -49,7 +66,7 @@
     bottom: 0;
     right: 0;
     position:fixed;
-    top:70px;
+    top:140px;
     width:30%;
     height:auto;
 }
@@ -349,8 +366,8 @@ function writeFeedback( feedbackString, ID) {
     if( feedbackString == 'good') {
         output= "<h4> <span style='color:green;' class= 'glyphicon glyphicon-thumbs-up'></span> GOOD JOB! No errors were found. </h4>";
     }
-    else if ( feedbackString == 'bad'){
-        output= "<h4> Errors were found however we're unable to provide feedback. Please try a different submission.</h4>";
+    else if ( feedbackString.indexOf("print") !== -1) {
+        output= "<h4>".concat(feedbackString).concat("</h4>");
     }
     else if ( feedbackString == ''){
         output= "<h4> Run your code to receive feedback. </h4>";
@@ -381,6 +398,9 @@ function writeFeedback( feedbackString, ID) {
                     var cell2 = "<td>"+name+"</td>";
                     var cell3 = "<td>"+shortd+"</td>";
                     var cell4 = "<td><button type='button' class='btn btn-default btn-md btn-block' data-toggle='modal' data-target='#longdModal'";
+                    while(longd.indexOf("*") !== -1){
+                        longd = longd.replace('*','<code>').replace('*','</code>');
+                    }
                     cell4 += " onclick=\"fillModal('"+longd+"')\""
                     cell4 += ">Tell me more</button></td>";
 
@@ -407,39 +427,35 @@ function signOut() {
 
 
 <body onload="init();">
-<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-    <div class="container-fluid">
-        <div class="navbar-header">
+<div class="navbar navbar-inverse navbar-fixed-top" role="navigation" style="padding-left:10px;padding-right:10px;">
+    <div class="container-fluid" style="padding-bottom:0px;">
+        <div class="navbar-header"  style="padding-bottom:0px;">
             <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
                 <span class="sr-only">Toggle navigation</span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="{% url 'waggle:profile' object.pk %}" style="font-size:22px;">Waggle</a>
+            <a class="navbar-brand" href="{% url 'waggle:profile' object.pk %}" style="font-size:22px;">Poco</a>
         </div>
-        <div class="navbar-collapse collapse">
-            <form class="navbar-form navbar-right" role="form" action="{% url 'waggle:login' %}">
 
-                <span id="username" style="color:#fff;"></span>&nbsp;&nbsp;
+        <div  style="padding-bottom:0px;">
+            <p class="navbar-text navbar-right">Signed in as <a href="{% url 'waggle:login' %}" class="navbar-link">{{request.user.email}}</a></p>
+        </div>
 
-                <!--div class="form-group">
-                    <input type="text" placeholder="Email" class="form-control">
-                </div>
-                <div class="form-group">
-                    <input type="password" placeholder="Password" class="form-control">
-                </div>
-                <button type="submit" class="btn btn-success">Sign in</button-->
-
-                <button type="submit" class="btn btn-danger" onclick="signOut()">Sign out</button>
-
-            </form>
-        </div><!--/.navbar-collapse -->
     </div>
+    <div style="padding-left:10px;padding-right:10px;">
+        <ol class="breadcrumb" style="background:#eee;">
+            <li><a href="{% url 'waggle:login' %}">Home</a></li>
+            <li><a href="{% url 'waggle:profile' pk=object.pk %}">Courses</a></li>
+            <li><a href="{% url 'waggle:menu' pk=object.pk course=module_obj.course.title|slugify %}">Course Modules</a></li>
+            <li class="active">Module Lesson</li>
+        </ol>
+    </div> 
 </div>
 
 <!-- Main jumbotron for a primary marketing message or call to action -->
-<div class="jumbotron" style="padding-bottom:15px;">
+<div class="jumbotron" style="padding-bottom:5px;padding-top:110px;">
     <div class="container-fluid">
         <br/>
         <img src="{{STATIC_URL}}/images/i15.png" width="48px" height="48px" style="float:left; margin-right:10px; margin-top:12px;"/>
@@ -458,8 +474,8 @@ function signOut() {
             <!-- Nav tabs -->
             <ul class="nav nav-tabs nav-justified" role="tablist" id="myTab">
                 <li role="presentation" class="active"><a href="#contents" aria-controls="content" role="tab" data-toggle="tab">Content</a></li>
-                <li role="presentation"><a href="#debug" aria-controls="debug" role="tab" data-toggle="tab" onclick="switchToDebug();">Debugging with Steve</a></li>
-                <li role="presentation"><a href="#assessment" aria-controls="assessment" role="tab" data-toggle="tab" onclick="switchToAssessment();">Assessment</a></li>
+                <li role="presentation"><a href="#debug" aria-controls="debug" role="tab" data-toggle="tab">Debugging with Steve</a></li>
+                <li role="presentation"><a href="#assessment" aria-controls="assessment" role="tab" data-toggle="tab">Assessment</a></li>
                 <li role="presentation"><a href="#other" aria-controls="other" role="tab" data-toggle="tab">Other</a></li>
             </ul>
             
@@ -477,33 +493,65 @@ function signOut() {
 
                     <div class="container-fluid">
                         <div class="row">
-                            <div class="col-lg-3 col-md-3 col-sm-3" style="background-color:#C0C0C0;border-radius:10px;height:100%">
-                                <!--
-                                {%for video in videos%}
-                                <button type="button" class="btn btn-success btn{{video.id}}" data-toggle="collapse" data-target="#demo{{video.id}}">
-                                    <span class="glyphicon glyphicon-collapse-down"></span> 
-                                    {{video.title}}
-                                </button>
-                                {%endfor%}
-                                -->
+                            <div class="col-lg-4 col-md-4 col-sm-4" style="background-color:#eee;border-radius:10px;height:100%">
                                 <br/>
-                                <h4 style="text-align:center;"> Video menu</h4>
-                                <ul class="nav nav-pills nav-stacked">
-                                    {%for video in videos%}
-                                    <li><a class="btn btn-primary btn{{video.id}} btn-xs col-lg-12" style="text-align:left;border:#C0C0C0;background:white;color:black;margin-bottom:4px;white-space: normal;" role="button" data-toggle="collapse" href="#demo{{video.id}}" aria-expanded="false" aria-controls="demo{{video.id}}">
-                                        <span class="glyphicon glyphicon-collapse-down"></span> 
-                                        {{video.title}}
-                                    </a></li>
-                                    {%endfor%}
-                                </ul>
+                                <div id ="video-menu">
+                                    <h4 style="text-align:center;"> Video menu</h4>
+                                    <ul class="nav nav-pills nav-stacked">
+                                        {%for video in videos%}
+                                        <li><a class="btn btn-primary btn{{video.id}} btn-xs col-lg-12" style="text-align:left;border:#eee;background:white;color:black;margin-bottom:4px;white-space: normal;" role="button" data-toggle="collapse" data-target=".demo{{video.id}}" aria-expanded="false" aria-controls="demo{{video.id}}">
+                                            <span class="glyphicon glyphicon-collapse-down"></span> 
+                                            {{video.title}}
+                                        </a></li>
+                                        {%endfor%}
+                                    </ul>
+                                </div>
+                                <div id="video-notes">
+                                {%for video in videos%}
+                                {% for vp in object.students.videoprogress_set.all %}
+                                {% if video == vp.video%} 
+                                <div id="{{video.id}}" class="collapse demo{{video.id}}">
+                                    <table id="noteTable{{video.id}}" class="table table-responsive">
+                                        {% if vp.video_notes %}
+                                        {{vp.video_notes|safe}}
+                                        {% else %}
+                                        <tr>
+                                            <td style="border:none;">
+                                                <textarea autofocus id="newNote{{video.id}}" rows="2" style="width:100%" onfocus="takeNote(true, 'video_{{video.id}}');" onblur="takeNote(false, 'video_{{video.id}}');"></textarea>
+                                            </td>
+                                            <td valign="middle" style="border:none; vertical-align:middle;">
+                                            </td>
+                                        </tr>
+                                         <tr>
+                                            <td style="border:none;text-align:left;">
+                                                <button type="button" class="btn btn-primary btn-sm" onclick="saveNote('video_{{video.id}}');">Save Note</button>
+                                            </td>
+                                            <td valign="middle" style="border:none; vertical-align:middle;">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="border:none;">
+                                                <b>Notes:</b>
+                                            </td>
+                                            <td style="border:none;">
+                                                &nbsp;
+                                            </td>
+                                        </tr>
+                                        {% endif %}
+                                    </table><hr/>
+                                </div>
+
+                                {% endif %}
+                                {%endfor%}
+                                {%endfor%}
+
+                                </div>
                             </div>
 
 
-                            <div class="col-lg-9 col-md-9 col-sm-9" >
+                            <div class="col-lg-8 col-md-8 col-sm-8" >
                             {%for video in videos%}
-                            {% for vp in object.students.videoprogress_set.all %}
-                            {% if video == vp.video%} 
-                            <div id="demo{{video.id}}" class="collapse">
+                            <div id="demo{{video.id}}" class="collapse demo{{video.id}}">
                                 <hr/><center><h3 style="font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;"> {{video.title}} </h3></center>
                                 <div class="embed-responsive embed-responsive-4by3">
                                     <video class="embed-responsive-item" id="video_{{video.id}}" controls width=100%>
@@ -511,43 +559,17 @@ function signOut() {
                                         Your browser does not support the video tag.
                                     </video>
                                 </div>
-                                <br/>
-                                <table id="noteTable{{video.id}}" class="table table-responsive">
-                                    {% if vp.video_notes %}
-                                    {{vp.video_notes|safe}}
-                                    {% else %}
-                                    <tr>
-                                        <td style="border:none;">
-                                            <textarea autofocus id="newNote{{video.id}}" rows="2" style="width:90%" onfocus="takeNote(true, 'video_{{video.id}}');" onblur="takeNote(false, 'video_{{video.id}}');"></textarea>
-                                        </td>
-                                        <td valign="middle" style="border:none; vertical-align:middle;">
-                                            &nbsp;<button type="button" class="btn btn-default" onclick="saveNote('video_{{video.id}}');">Save Note</button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td style="border:none;">
-                                            <b>Notes:</b>
-                                        </td>
-                                        <td style="border:none;">
-                                            &nbsp;
-                                        </td>
-                                    </tr>
-                                    {% endif %}
-                                </table><hr/>
                             </div>
-
-                            {% endif %}
-                            {%endfor%}
                             {%endfor%}
 
                             {%for video in videos%}
                             <script>
                             $(document).ready(function(){
-                                    $("#demo{{video.id}}").on("hide.bs.collapse", function(){
-                                        $(".btn{{video.id}}").html('<span class="glyphicon glyphicon-collapse-down"></span> {{video.title}}');
+                                    $(".demo{{video.id}}").on("hide.bs.collapse", function(){
+                                        $(".btn{{video.id}}").html('<span class="glyphicon glyphicon-collapse-down" style="color:black"></span> {{video.title}}');
                                   });
-                                  $("#demo{{video.id}}").on("show.bs.collapse", function(){
-                                      $(".btn{{video.id}}").html('<span class="glyphicon glyphicon-collapse-up"></span>  {{video.title}}');
+                                  $(".demo{{video.id}}").on("show.bs.collapse", function(){
+                                      $(".btn{{video.id}}").html('<span class="glyphicon glyphicon-collapse-up" style="color:#428bca"></span>  {{video.title}}');
                                   });
                             });
                             </script>
@@ -570,7 +592,7 @@ function signOut() {
                         <div class="panel panel-default" style="border:0;">
                             <div class="panel-body">
                                 <!-- CODE EDITOR GOES HERE.-->
-                                <textarea id="code-{{assessment.id}}" name="code_id{{assessment.id}}" >{{ap.code_submission}}</textarea>
+                                <textarea id="code-{{assessment.id}}" name="code_id{{assessment.id}}" >{{ap.code_submission}}&#13;&#10;</textarea>
                                     <br/>
                                     <button id="spinnerbtn_{{assessment.id}}" type="button" class="btn btn-default has-spinner" onclick="submitCode('code-{{assessment.id}}',{{forloop.parentloop.counter0}})">
                                         <span class="spinner"><i class="icon-spin icon-refresh"><img src="http://assets2.bostonlogic.com/images/spinner.gif" width="10" height="10"></i></span>
@@ -728,6 +750,19 @@ function signOut() {
             document.getElementById('result_'+code_assessmentID).innerHTML = feedback;
         });
     }
+    $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+        var target = $(e.target).attr("href") // activated tab
+        console.log(target);
+        if ((target).indexOf("debug") == -1){
+            {% for video in videos %}
+                var v = document.getElementById("video_{{video.id}}");
+                v.pause();
+            {% endfor %}
+
+            //alert(target);
+        }
+        });
+
     </script>
     </body>
     </html>

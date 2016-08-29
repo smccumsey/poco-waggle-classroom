@@ -96,46 +96,44 @@
 
 <body onload="init();">
 
-	<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-      <div class="container-fluid">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <span class="navbar-brand" style="font-size:22px;">Poco</span>
+	<div class="navbar navbar-inverse navbar-fixed-top" role="navigation" style="padding-left:10px;padding-right:10px;">
+        <div class="container-fluid" style="padding-bottom:0px;">
+            <div class="navbar-header"  style="padding-bottom:0px;">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="{% url 'waggle:profile' object.pk %}" style="font-size:22px;">Poco</a>
+            </div>
+
+            <div  style="padding-bottom:0px;">
+                <p class="navbar-text navbar-right">Signed in as <a href="{% url 'waggle:login' %}" class="navbar-link">{{request.user.email}}</a></p>
+            </div>
+
         </div>
-        <div class="navbar-collapse collapse">
-            <form class="navbar-form navbar-right" role="form" action="{% url 'waggle:login' %}">
-
-          	<span id="username" style="color:#fff;"></span>&nbsp;&nbsp;
-
-            <!--div class="form-group">
-              <input type="text" placeholder="Email" class="form-control">
-            </div>
-            <div class="form-group">
-              <input type="password" placeholder="Password" class="form-control">
-            </div>
-            <button type="submit" class="btn btn-success">Sign in</button-->
-
-            <button type="submit" class="btn btn-danger" onclick="signOut()">Sign out</button>
-
-          </form>
-        </div><!--/.navbar-collapse -->
-      </div>
+        <div style="padding-left:10px;padding-right:10px;">
+            <ol class="breadcrumb" style="background:#eee;">
+                <li><a href="{% url 'waggle:login' %}">Home</a></li>
+                <li class="active">Courses</li>
+            </ol>
+        </div> 
     </div>
 
 
 
     <!-- Main jumbotron for a primary marketing message or call to action -->
-    <div class="jumbotron">
+    <div class="jumbotron"  style="padding-bottom:5px;padding-top:110px;">
       <div class="container-fluid">
       	<br/>
         <h2>Welcome to Poco</h2>
-        <p>This would be a good place to say a little something about Poco.  Below are your courses.  Each course has a set of modules that will help you build your programming and data science skills.  Select a course below to get started</p>
-        <!--p><a class="btn btn-primary btn-lg" role="button">Learn more &raquo;</a></p-->
+        <br/>
+        <p style="width:95%;font-size:20px;">Poco offers a set of courses that are based on the Python programming language. None of the
+        courses assume you know programming - they start from scratch. Each course is aimed at
+        giving you practical skills that you can use in your work or your personal life. We hope
+        you find something that piques your interest.</p>
+        <p style="width:95%;font-size:20px;">Below are your courses.  Each course has a set of modules that will help you build your programming and data science skills.  Select a course below to get started</p>
       </div>
     </div>
 
@@ -156,8 +154,8 @@
 									<br/>
                                   <a class="btn btn-primary" href="{% url 'waggle:menu' pk=object.pk course=course.title|slugify %}" role="button">Explore this Course</a>
 								</div>
-                                <p> {{course.title}} </p>
-                                <p> {{course.description}} </p>
+                                <h2> {{course.title}} </h2>
+                                <p style="width:80%;"> {{course.description}} </p>
 							  	<br/>
 							  	<br/>
 							</div>
