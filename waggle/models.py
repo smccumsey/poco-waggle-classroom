@@ -72,14 +72,15 @@ class Student(models.Model):
 class CourseProgress(models.Model):
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
     course = models.ForeignKey(Course, on_delete=models.CASCADE, null=True)
-    registered = models.BooleanField(default=False)
-    date_enrolled = models.DateTimeField()
+    approved = models.BooleanField(default=False)
+    date_enrolled = models.DateTimeField(null=True,blank=True)
     def __str__(self):
         return "%s progress for %s course" % (self.student, self.course)
 
 class ModuleProgress(models.Model):
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
     module = models.ForeignKey(Module, on_delete=models.CASCADE, null=True)
+    started = models.BooleanField(default=False)
     def __str__(self):
         return "%s progress for %s module" % (self.student, self.module)
 

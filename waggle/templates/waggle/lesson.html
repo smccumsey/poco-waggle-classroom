@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Poco Lesson</title>
+<link rel="shortcut icon" type="image/png" href="{{STATIC_URL}}/images/favicon.ico"/>
 <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
 <link rel="stylesheet" href="{{STATIC_URL}}/codemirror/lib/codemirror.css">
@@ -552,7 +553,7 @@ function signOut() {
                             <div class="col-lg-8 col-md-8 col-sm-8" >
                             {%for video in videos%}
                             <div id="demo{{video.id}}" class="collapse demo{{video.id}}">
-                                <hr/><center><h3 style="font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;"> {{video.title}} </h3></center>
+                                <center><h3 style="font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;"> {{video.title}} </h3></center>
                                 <div class="embed-responsive embed-responsive-4by3">
                                     <video class="embed-responsive-item" id="video_{{video.id}}" controls width=100%>
                                         <source src='{{video.video_URL}}' type='video/mp4'>
@@ -567,6 +568,7 @@ function signOut() {
                             $(document).ready(function(){
                                     $(".demo{{video.id}}").on("hide.bs.collapse", function(){
                                         $(".btn{{video.id}}").html('<span class="glyphicon glyphicon-collapse-down" style="color:black"></span> {{video.title}}');
+                                        document.getElementById("video_{{video.id}}").pause();
                                   });
                                   $(".demo{{video.id}}").on("show.bs.collapse", function(){
                                       $(".btn{{video.id}}").html('<span class="glyphicon glyphicon-collapse-up" style="color:#428bca"></span>  {{video.title}}');
@@ -758,8 +760,6 @@ function signOut() {
                 var v = document.getElementById("video_{{video.id}}");
                 v.pause();
             {% endfor %}
-
-            //alert(target);
         }
         });
 

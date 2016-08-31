@@ -5,22 +5,13 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 	<title>Poco Courses</title>
-    <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+
+    <link rel="shortcut icon" type="image/png" href="{{STATIC_URL}}/images/favicon.ico"/>
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
 
-
-	<!--link rel="stylesheet" href="../../../bootstrap/css/bootstrap-responsive.css"/-->
-
-	<!--link rel="stylesheet" href="../css/tablet.css"/-->
-
-	<!--script src="../../../js/DecimalFormat.js"></script-->
-
-
-	<!--script src="js/jquery.mobile-1.1.0-rc.1.js"></script-->
-	<!--script src="js/jgestures.min.js"></script-->
-    <!--<script src="js/jquery.js"></script-->
-
+    <script src="{{STATIC_URL}}/jquery/dist/jquery.js"></script>
+    <script src="{{STATIC_URL}}/bootstrap/js/bootstrap.js"></script>
 
 	<script type="text/javascript">
 
@@ -140,11 +131,14 @@
 
     <div class="container-fluid">
 
+
 	  <center>
 		  <table style="width:80%;">
 
             <!-- begin for -->
             {% for course in courses %}
+            {% for cp in object.students.courseprogress_set.all %}
+            {% if course == cp.course %} 
 			<tr>
 				<td>
 					<nav class="navbar navbar-default">
@@ -152,28 +146,61 @@
 							<div class="navbar-header" style="padding:15px; width:100%; line-height:150%">
 								<div style="float:right;">
 									<br/>
+                                  {% if cp.approved %}
                                   <a class="btn btn-primary" href="{% url 'waggle:menu' pk=object.pk course=course.title|slugify %}" role="button">Explore this Course</a>
-								</div>
-                                <h2> {{course.title}} </h2>
+                                  {% else %}
+                                  <a class="btn btn-primary" href="#" onclick="requestRegistration('{{course.title}}')" role="button">Explore this Course</a>
+                                  {% endif %}
+                              </div>
+                              <h2> {{course.title}} </h2>
                                 <p style="width:80%;"> {{course.description}} </p>
-							  	<br/>
-							  	<br/>
 							</div>
 						 </div>
 					 </nav>
 				</td>
 			</tr>
+            {% endif %}
+            {% endfor %}
             {% endfor %}
             <!-- end for -->
-
 		  </table>
       </center>
+  
+  </div>
+    <!-- Modal -->
+      <div class="modal fade" id="myModal" role="dialog">
+          <div class="modal-dialog modal-sm" >
+              <!-- Modal content-->
+              <div class="modal-content">
+                  <div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal">&times;</button>
+                      <h4 class="modal-title">Please register for this course</h4>
+                  </div>
+                  <div class="modal-body">
+                      <p> empty </p>
+                  </div>
+              </div>
 
-   	</div>
+          </div>
+      </div>
 
 
+  <script>
+function sendMessage() {
+    var text = "<p>Your message requesting registration was successfully sent.</p>";
+    $(".modal-body").html(text);
+    $(".modal-title").html("Message sent");
+    alert("The message wasn't actually sent to Steve... that part still needs to be done");
+}
 
-
-</body>
-
-</html>
+function requestRegistration(courseName) {
+    var text = "<p>Currently you are not approved to take the course <i>"+courseName+"</i>.</p>";
+    text += "<p><b> Please send Professor Fickas a message to gain access.</b></p>";
+    text += "<p><center><textarea style='background:#FFFFE0;width:100%;' rows='9'>Hello, &#13;&#10;&#9;I would like to register for '"+courseName+"'.&nbsp;Please let me know when I've been registered.&#13;&#10;&#13;&#10;{{object.first_name}}&nbsp;{{object.last_name}}&#13;&#10;{{object.email}}</textarea></center></p>";
+    text += "<button type='button' id='myButton' class='btn btn-primary' onclick='sendMessage()'>Send Message</button>";
+    $(".modal-body").html(text);
+    $('#myModal').modal('show')
+}
+  </script>
+  </body>
+  </html>

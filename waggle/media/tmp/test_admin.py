@@ -18,7 +18,10 @@ month_2 = 'February'
 month_3 = 'March'
 
 try:
-	&&&  # paste user code here
+	
+    #user submission
+    #Type python code here
+    quarter1 = []  
 
 except Exception as e:
 	report('Generic error', 'On your own', e)

@@ -1,11 +1,12 @@
 from django.shortcuts import get_object_or_404, render, redirect
-from django.http import HttpResponseRedirect, JsonResponse, HttpResponse
+from django.http import HttpResponseRedirect, JsonResponse, HttpResponse,HttpResponseNotFound
 from django.core.urlresolvers import reverse
 from django.views import generic
 from django.views.generic.edit import FormView, CreateView
 from waggle.forms import CodeForm
 from django.contrib.auth.models import User
-from .models import Related, Content, Assessment, Module, Course, AssessmentProgress, Video, VideoProgress, Student
+from .models import Related, Content, Assessment, Module, Course, Video, Student
+from .models import AssessmentProgress, VideoProgress, CourseProgress, ModuleProgress
 
 from django.utils import timezone
 from datetime import datetime
@@ -44,6 +45,15 @@ class LessonView(generic.DetailView):
     #contents = Content.objects.filter(module_id=module_id)
     #relateds = Related.objects.filter(module_id=module_id)
 
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        context = self.get_context_data(object=self.object)
+        print("REQUEST SESSION", request.session.items())
+        print("GET context", context.items())
+        if not request.session.get('approved'):
+            return HttpResponseNotFound("<br/><br/><h1 style='text-align:center;vertical_align:middle;'>Please sign-in to <a href='http://smccumsey.pythonanywhere.com/waggle/login/'>Poco<a> to access this page</h1>")
+        return self.render_to_response(context)
+
     def get_context_data(self, **kwargs):
         # Call the base implementation first to get a context
         context = super(LessonView, self).get_context_data(**kwargs)
@@ -60,14 +70,13 @@ class LessonView(generic.DetailView):
         for assessment_instance in context['assessments']:
             assessment_prog,created = student_instance.assessmentprogress_set.get_or_create(assessment=assessment_instance)
             print(assessment_prog,created)
-            print(assessment_prog.errors_list)
         for video_instance in context['videos']:
             video_prog,created = student_instance.videoprogress_set.get_or_create(video=video_instance)
             print(video_prog,created)
         return context
 
-    def setupEnv(self, code, envFile):
-        test_filename = '/home/smccumsey/waggle-classroom/waggle/media/tmp/test.py'
+    def setupEnv(self, code, envFile, username):
+        test_filename = '/home/smccumsey/waggle-classroom/waggle/media/tmp/test_{}.py'.format(username)
         code_lines = code.splitlines()
         new_code = '\n\t#user submission'.expandtabs(4)+'\n'+'\n'.join(map(lambda s:('\t'+s).expandtabs(4),code_lines)) #lines after first must be indented
         print(new_code)
@@ -99,7 +108,6 @@ class LessonView(generic.DetailView):
             my_student = Student.objects.get(user=request.user) 
             my_video = Video.objects.get(id=int(videoID))
 
-            
             video_progress = VideoProgress.objects.get(student=my_student, video=my_video)
             video_progress.video_notes = updated_note_table
             video_progress.video_timepoint= video_timepoint
@@ -113,7 +121,7 @@ class LessonView(generic.DetailView):
             assessmentID = request.POST.get('assessmentID')
             print('USRCODE: %s \nASSESSMENTID: %s' % (usr_code, assessmentID))
             envFile = Assessment.objects.get(id=int(assessmentID)).assess_file.path
-            testFile = self.setupEnv(usr_code, envFile)
+            testFile = self.setupEnv(usr_code, envFile, request.user)
             result_feedback = list(map(lambda x: x.decode('ASCII'), self.runCode(testFile)))
             print('RAW RESULT',result_feedback)
             if result_feedback[0]: #stdout
@@ -151,6 +159,17 @@ class MenuView(generic.DetailView):
         request.session['course_title'] = self.kwargs['course']
         self.object = self.get_object()
         context = self.get_context_data(object=self.object)
+        studentId = context['user'].students.id
+        courseId = context['course_obj'].id
+        print("REQUEST SESSION", request.session.items())
+        print(studentId, courseId)
+        print(CourseProgress.objects.all().values())
+        print("GET context", context.items())
+        if not (CourseProgress.objects.filter(student_id=studentId, course_id=courseId,approved=True)):
+            request.session['approved'] = False
+            return HttpResponseNotFound("<br/><br/><h1 style='text-align:center;vertical_align:middle;'>Please register for the course to access this page</h1>")
+
+        request.session['approved'] = True
         return self.render_to_response(context)
 
     def get_context_data(self, **kwargs):
@@ -162,19 +181,47 @@ class MenuView(generic.DetailView):
 
         context['course_obj'] = course_lookup
         context['modules'] = Module.objects.filter(course_id=course_lookup.id)
+        # setup module progress for student
+        student_instance = context['object'].students
+        for module_instance in context['modules']:
+            module_prog,created = student_instance.moduleprogress_set.get_or_create(module=module_instance)
+
         return context
+
+    def post(self, request, *args, **kwargs):
+        print("UPDATE MODULE PROGRESS", request.POST.dict())
+        if request.POST.get('changeButton'):
+            moduleID = request.POST.get('moduleID')
+            # update module progress
+            module_progress = ModuleProgress.objects.get(student=Student.objects.get(user=request.user), module=Module.objects.get(id=int(moduleID)))
+            module_progress.started = True
+            module_progress.save()
+            return HttpResponse("module progress has been saved with started=True")
+        return HttpResponse("post received, no action taken by django")
 
 class ProfileView(generic.DetailView):
     template_name = 'waggle/profile.html'
     model = User
 
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        context = self.get_context_data(object=self.object)
+        request.session['approved'] = False
+        print("REQUEST SESSION", request.session.items())
+        print("GET context", context.items())
+        return self.render_to_response(context)
     # student_instance = user_instance.students
     # course_prog = CourseProgress.create(student=student_instance)
     def get_context_data(self, **kwargs):
         # Call the base implementation first to get a context
         context = super(ProfileView, self).get_context_data(**kwargs)
         context['courses'] = Course.objects.all()
+        # setup course progress for student
+        student_instance = context['object'].students
+        for course_instance in context['courses']:
+            course_prog,created = student_instance.courseprogress_set.get_or_create(course=course_instance)
         return context
+
 
 class GoogleView(generic.TemplateView):
     template_name = 'waggle/google8a43fbed4f8a62b6.html'
@@ -182,6 +229,11 @@ class GoogleView(generic.TemplateView):
 class LoginView(generic.TemplateView):
     template_name = 'waggle/login.html'
 
+    def get(self, request, *args, **kwargs):
+        context = self.get_context_data(**kwargs)
+        request.session['approved'] = False
+        return self.render_to_response(context)
+    
     def post(self, request, *args, **kwargs):
         usr_token = request.POST.get('idtoken')
         user = authenticate(token=usr_token)

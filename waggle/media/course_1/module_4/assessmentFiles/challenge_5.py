@@ -20,7 +20,7 @@ month_3 = 'March'
 
 try:
 	&&&  # paste user code here
-	not 'have both opening and closing brace'  # what is here will be reported to calling code as part of syntax error message
+	#not 'have both opening and closing brace'  # what is here will be reported to calling code as part of syntax error message
 except Exception as e:
 	report('Generic error', 'On your own', e)  # won't get to this code for certain types of syntax errors
 	sys.exit(1)

@@ -10,7 +10,7 @@ urlpatterns = [
             url(r'^profile/(?P<pk>[0-9]+)?/$', views.ProfileView.as_view(), name='profile'),
             url(r'^menu/(?P<pk>[0-9]+)/(?P<course>[a-zA-Z\-]+)?/$', views.MenuView.as_view(), name='menu'),
             url(r'^lesson/(?P<pk>[0-9]+)/(?P<course>[a-zA-Z\-]+)?/(?P<module>[0-9]+)?/$', views.LessonView.as_view(), name='lesson'),
+            url(r'^lesson/(?P<pk>[0-9]+)/(?P<course>[a-zA-Z\-]+)?/(?P<module>[0-9]+)?/$', views.LessonView.as_view(), name='lesson'),
             url(r'^lesson/(?P<pk>[0-9]+)/(?P<course>[a-zA-Z\-]+)?/(?P<module>[0-9]+)/.*$', views.LessonView.as_view(), name='lesson'),
-            url(r'^lesson/(?P<pk>[0-9]+)/(?P<course>[a-zA-Z\-]+)?/(?P<module>[0-9]+)?/.*/$', views.LessonView.as_view(), name='lesson'),
             ]
 #url(r'^assessment/$', views.AssessmentView.as_view(), name='assessment'),

@@ -6,10 +6,13 @@
 
 	<title>Poco Modules</title>
 
-    <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+    <link rel="shortcut icon" type="image/png" href="{{STATIC_URL}}/images/favicon.ico"/>
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
 
+    <script src="{{STATIC_URL}}/jquery/dist/jquery.js"></script>
+    <script src="{{STATIC_URL}}/bootstrap/js/bootstrap.js"></script>
+    <script src="{{STATIC_URL}}/js-cookie/src/js.cookie.js"></script>
 
 	<script type="text/javascript">
 
@@ -29,6 +32,23 @@
 
 		}
 
+function notifyStart(moduleID){
+    //post to django that a module has been started s.t. button text can be changed
+
+        var csrftoken = Cookies.get('csrftoken');
+
+        $.ajax({
+            method: "POST",
+            url: "{{request.path}}",
+            beforeSend: function( xhr ) {
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            },
+        data: { changeButton: "True" , moduleID: moduleID } 
+        })
+        .done(function( response) {
+            console.log( "Data Saved: " + response);
+        });
+}
 	</script>
 
 </head>
@@ -80,6 +100,8 @@
 		  <table style="width:80%;">
             <!-- begin for -->
             {% for module in modules %}
+            {% for mp in object.students.moduleprogress_set.all %}
+            {% if module == mp.module %} 
 			<tr>
 				<td>
 					<nav class="navbar navbar-default">
@@ -92,16 +114,21 @@
 									<span class="glyphicon glyphicon-star-empty" aria-hidden="true"></span>
 									<span class="glyphicon glyphicon-star-empty" aria-hidden="true"></span>-->
 									<br/>
-                                    <a class="btn btn-primary" href="{% url 'waggle:lesson' pk=object.pk course=request.session.course_title module=module.id %}" role="button">Start this Module</a>
+                                    {% if not mp.started %}
+                                    <a class="btn btn-primary" href="{% url 'waggle:lesson' pk=object.pk course=request.session.course_title module=module.id %}" role="button" onclick="notifyStart('{{module.id}}')">Start this Module</a>
+                                    {% else %}
+                                    <a class="btn btn-info" href="{% url 'waggle:lesson' pk=object.pk course=request.session.course_title module=module.id %}" role="button">Continue this Module</a>
+                                    {% endif %}
 								</div>
                                 <b>{{module.title}}</b>
-                                <p style="padding-top:5px;width:80%;"> {{module.description}} </p>
-							  	<br/>
+                                <p style="padding-top:5px;width:75%;"> {{module.description}} </p>
 							</div>
 						 </div>
 					 </nav>
 				</td>
 			</tr>
+            {% endif %}
+            {% endfor %}
             {% endfor %}
             <!-- end for -->
 		  </table>
