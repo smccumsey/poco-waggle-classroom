@@ -1,9 +1,9 @@
-#Module 2
+#Module 0
 
 #Challenge 1
 
 '''
-miss_s = titanic_starter_table[5]
+url to Sheets csv file
 '''
 import sys
 
@@ -13,99 +13,73 @@ def report( name, shortd, longd):
 
 #Mock data goes first
 
-row1 = {'Age': '22',
-  'Embarked': 'S',
-  'Fare': '7.25',
-  'Name': 'Braund, Mr. Owen Harris',
-  'Pclass': '3',
-  'Sex': 'male',
-  'Survived': '0'
-}
-
-row2 = {'Age': '38',
-  'Embarked': 'C',
-  'Fare': '71.2833',
-  'Name': 'Cuming, Mrs. John Bradley (Florence Briggs Thayer)',
-  'Pclass': '1',
-  'Sex': 'female',
-  'Survived': '1'
-}
-
-row3 = {'Age': '26',
-  'Embarked': 'S',
-  'Fare': '7.925',
-  'Name': 'Heikkinen, Miss. Laina',
-  'Pclass': '3',
-  'Sex': 'female',
-  'Survived': '1'
-}
-
-row4 = {'Age': '2',
-  'Embarked': 'S',
-  'Fare': '21.075',
-  'Name': 'Palsson, Master. Gosta Leonard',
-  'Pclass': '3',
-  'Sex': 'male',
-  'Survived': '0'
-}
-
-row5 = {'Age': '14',
-  'Embarked': 'C',
-  'Fare': '30.0708',
-  'Name': 'Nasser, Mrs. Nicholas (Adele Achem)',
-  'Pclass': '2',
-  'Sex': 'female',
-  'Survived': '1'
-}
-
-row6 = {'Age': '4',
-  'Embarked': 'S',
-  'Fare': '16.7',
-  'Name': 'Sandstrom, Miss. Marguerite Rut',
-  'Pclass': '3',
-  'Sex': 'female',
-  'Survived': '1'
-}
-
-row7 = {'Age': '58',
-  'Embarked': 'S',
-  'Fare': '26.55',
-  'Name': 'Bonnell, Miss. Elizabeth',
-  'Pclass': '1',
-  'Sex': 'female',
-  'Survived': '1'
-}
-
-titanic_starter_table = [row1, row2, row3, row4, row5, row6, row7]
+from csv import DictReader # helps with handling csv formatted data
+from urllib2 import urlopen # helps with pulling data off the web
 
 try:
-	
-    #user submission
-    #Type python code here
-    miss_s = titanic_starter_table  
+	url = '''
+	https://docs.google.com/spreadsheets/d/1lxQxIoD5OrxQQ2FN8gxsEUugmOi2ZcfKgxkWl_SP7pQ/pub?gid=0&single=true&output=csv
+	'''
+	url = url.strip()
+	response = urlopen(url)
+	first_table = [row for row in DictReader(response)]
 
 except Exception as e:
-	report('Generic error', 'On your own', e)
+	report('Generic error', 'Some problem with url submitted', e)
+	sys.exit(1)
+
+if not isinstance(first_table, list):
+	report('Data type bug', 'Spreadsheet data does not look correct', 'No further help available')
+	sys.exit(1)
+
+if len(first_table) < 3:
+	report('Length bug', 'Expecting 3 or more rows of data', 'No further help available')
+	sys.exit(1)
+
+if not isinstance(first_table[0], dict):
+	report('Data type bug', 'Spreadsheet data does not look correct', 'No further help available')
+	sys.exit(1)
+
+if len(first_table[0].keys()) != 5:
+	report('Length bug', 'Expecting  5 columns in spreadsheet', 'No further help available')
+	sys.exit(1)
+
+
+check = all([type(row) == dict for row in first_table])
+if not check:
+	report('Data type bug', 'Spreadsheet data does not look correct', 'No further help available')
+	sys.exit(1)
+
+# Name,Nickname,Hometown,HS Mascot,Scary
+
+try:
+	first_table[0]['Name']
+except KeyError as e:
+	report('Key error', "Don't see a column Name - remember case matters", e)
 	sys.exit(1)
 
 try:
-	miss_s		# does var exist?
-except NameError as e:
-	report('Name error', 'Typically a typo', e)
-	sys.exit(1)
-
-if not isinstance(miss_s, dict):
-	report('Data type bug', 'miss_s is not a dictionary', 'No further help available')
-	sys.exit(1)
-
-if len(miss_s) != 7:
-	report('Length bug', 'miss_s should have length of 7 but has length ' + str(len(miss_s)), 'No further help available')
+	first_table[0]['Nickname']
+except KeyError as e:
+	report('Key error', "Don't see a column Nickname - remember case matters", e)
 	sys.exit(1)
 
 try:
-	check = (miss_s == row6)
-except Exception as e:
-	report('Generic error', 'On your own', e)
-else:
-	if not check:
-		report('Value bug', 'Wrong value in miss_s of ' + str(miss_s), 'Be careful with indexing of titanic_starter_table')
+	first_table[0]['Hometown']
+except KeyError as e:
+	report('Key error', "Don't see a column Hometown - remember case matters", e)
+	sys.exit(1)
+
+try:
+	first_table[0]['HS Mascot']
+except KeyError as e:
+	report('Key error', "Don't see a column HS Mascot - remember case and spaces matters", e)
+	sys.exit(1)
+
+try:
+	first_table[0]['Scary']
+except KeyError as e:
+	report('Key error', "Don't see a column Scary - remember case matters", e)
+	sys.exit(1)
+
+

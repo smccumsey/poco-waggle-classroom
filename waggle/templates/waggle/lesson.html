@@ -30,6 +30,10 @@ pre {
     white-space: pre-wrap;
     background: hsl(30,80%,90%);
 }
+.panel {
+    box-shadow: 0 0px 0px rgba(0, 0, 0, 0.05);
+    border: 0px solid #dddddd;
+}
 .table-border tbody tr td, .table-border tbody tr th, .table-border thead tr th {
     border-bottom: 2px solid white;
     border-color: white;
@@ -273,7 +277,7 @@ function showLess(){
 
 function postNote(videoID, updated_notes, currentTime) {
     //ajax post
-     var csrftoken = Cookies.get('csrftoken');
+    var csrftoken = Cookies.get('csrftoken');
 
     $.ajax({
         method: "POST",
@@ -371,7 +375,7 @@ function writeFeedback( feedbackString, ID) {
         output= "<h4>".concat(feedbackString).concat("</h4>");
     }
     else if ( feedbackString == ''){
-        output= "<h4> Run your code to receive feedback. </h4>";
+        output= "<h4> Submit your code to receive feedback. </h4>";
     }
     else {
         //else, setup table
@@ -500,7 +504,7 @@ function signOut() {
                                     <h4 style="text-align:center;"> Video menu</h4>
                                     <ul class="nav nav-pills nav-stacked">
                                         {%for video in videos%}
-                                        <li><a class="btn btn-primary btn{{video.id}} btn-xs col-lg-12" style="text-align:left;border:#eee;background:white;color:black;margin-bottom:4px;white-space: normal;" role="button" data-toggle="collapse" data-target=".demo{{video.id}}" aria-expanded="false" aria-controls="demo{{video.id}}">
+                                        <li><a class="btn btn-primary btn{{video.id}} btn-xs col-lg-12" onclick="videoClick({{video.id}})" style="text-align:left;border:#eee;background:white;color:black;margin-bottom:4px;white-space: normal;" role="button" data-toggle="collapse" data-target=".demo{{video.id}}" aria-expanded="false" aria-controls="demo{{video.id}}">
                                             <span class="glyphicon glyphicon-collapse-down"></span> 
                                             {{video.title}}
                                         </a></li>
@@ -566,7 +570,7 @@ function signOut() {
                             {%for video in videos%}
                             <script>
                             $(document).ready(function(){
-                                    $(".demo{{video.id}}").on("hide.bs.collapse", function(){
+                                  $(".demo{{video.id}}").on("hide.bs.collapse", function(){
                                         $(".btn{{video.id}}").html('<span class="glyphicon glyphicon-collapse-down" style="color:black"></span> {{video.title}}');
                                         document.getElementById("video_{{video.id}}").pause();
                                   });
@@ -594,7 +598,7 @@ function signOut() {
                         <div class="panel panel-default" style="border:0;">
                             <div class="panel-body">
                                 <!-- CODE EDITOR GOES HERE.-->
-                                <textarea id="code-{{assessment.id}}" name="code_id{{assessment.id}}" >{{ap.code_submission}}&#13;&#10;</textarea>
+                                <textarea id="code-{{assessment.id}}" name="code_id{{assessment.id}}" >{% if not ap.code_submission %}{{assessment.code_editor_filler}}{% else %}{{ap.code_submission}}{% endif %}&#13;&#10;</textarea>
                                     <br/>
                                     <button id="spinnerbtn_{{assessment.id}}" type="button" class="btn btn-default has-spinner" onclick="submitCode('code-{{assessment.id}}',{{forloop.parentloop.counter0}})">
                                         <span class="spinner"><i class="icon-spin icon-refresh"><img src="http://assets2.bostonlogic.com/images/spinner.gif" width="10" height="10"></i></span>
@@ -722,6 +726,39 @@ function signOut() {
 
     </script>
     <script>
+    function videoClick(videoID) {
+        var csrftoken = Cookies.get('csrftoken');
+
+        $.ajax({
+            method: "POST",
+            url: "{{request.path}}",
+            beforeSend: function( xhr ) {
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            },
+        data: { videoID: videoID , video_click: "True" } 
+
+        })
+        .done(function( response) {
+            console.log( "Note saved to DB: " + response);
+            });
+    }
+
+    function contentClick(contentID) {
+        var csrftoken = Cookies.get('csrftoken');
+
+        $.ajax({
+            method: "POST",
+            url: "{{request.path}}",
+            beforeSend: function( xhr ) {
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            },
+        data: { contentID: contentID , content_click: "True"} 
+
+        })
+        .done(function( response) {
+            console.log( "Note saved to DB: " + response);
+            });
+    }
 
     function submitCode(codemirrorID, idx) {
         //begin spinner
@@ -755,6 +792,11 @@ function signOut() {
     $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
         var target = $(e.target).attr("href") // activated tab
         console.log(target);
+        if ((target).indexOf("content") !== -1){
+            {% for content in contents %}
+                contentClick({{content.id}});
+            {% endfor %}
+        }
         if ((target).indexOf("debug") == -1){
             {% for video in videos %}
                 var v = document.getElementById("video_{{video.id}}");

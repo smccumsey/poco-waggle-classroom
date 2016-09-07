@@ -6,7 +6,7 @@ from django.views.generic.edit import FormView, CreateView
 from waggle.forms import CodeForm
 from django.contrib.auth.models import User
 from .models import Related, Content, Assessment, Module, Course, Video, Student
-from .models import AssessmentProgress, VideoProgress, CourseProgress, ModuleProgress
+from .models import ContentProgress, AssessmentProgress, VideoProgress, CourseProgress, ModuleProgress
 
 from django.utils import timezone
 from datetime import datetime
@@ -67,6 +67,9 @@ class LessonView(generic.DetailView):
         print(context.items())
         # set up progress data for student if it doesnt exist
         student_instance = context['object'].students
+        for content_instance in context['contents']:
+            content_prog,created = student_instance.contentprogress_set.get_or_create(content=content_instance)
+            print(content_prog,created)
         for assessment_instance in context['assessments']:
             assessment_prog,created = student_instance.assessmentprogress_set.get_or_create(assessment=assessment_instance)
             print(assessment_prog,created)
@@ -78,7 +81,12 @@ class LessonView(generic.DetailView):
     def setupEnv(self, code, envFile, username):
         test_filename = '/home/smccumsey/waggle-classroom/waggle/media/tmp/test_{}.py'.format(username)
         code_lines = code.splitlines()
-        new_code = '\n\t#user submission'.expandtabs(4)+'\n'+'\n'.join(map(lambda s:('\t'+s).expandtabs(4),code_lines)) #lines after first must be indented
+        first_line = (code_lines[0]).expandtabs(0) 
+        if len(code_lines)>1:
+            other_lines = code_lines[1:]
+            new_code = first_line+ "\n"+'\n'.join(map(lambda s:('\t'+s).expandtabs(8),other_lines)) #lines after first must be indented
+        else: 
+            new_code = first_line
         print(new_code)
         with open(test_filename, "w") as outfile, open(envFile, 'r', encoding='utf-8') as infile:
             text = infile.read()
@@ -100,14 +108,29 @@ class LessonView(generic.DetailView):
         postdata = request.POST.dict()
         print('POST DATA')
         print(postdata)
-        if(request.POST.get('html_notes')):
+        if(request.POST.get('video_click')):
+            videoID = request.POST.get('videoID')
+            my_student = Student.objects.get(user=request.user) 
+            my_video = Video.objects.get(id=int(videoID))
+            video_progress = VideoProgress.objects.get(student=my_student, video=my_video)
+            video_progress.clicks_on_video_open_counter = video_progress.clicks_on_video_open_counter + 1
+            video_progress.save()
+            return HttpResponse('django says the video click was recorded')
+        elif(request.POST.get('content_click')):
+            contentID = request.POST.get('contentID')
+            my_student = Student.objects.get(user=request.user) 
+            my_content = Content.objects.get(id=int(contentID))
+            content_progress = ContentProgress.objects.get(student=my_student, content=my_content)
+            content_progress.clicks_on_content_tab_counter = content_progress.clicks_on_content_tab_counter + 1
+            content_progress.save()
+            return HttpResponse('django says the content click was recorded')
+        elif(request.POST.get('html_notes')):
             updated_note_table = request.POST.get('html_notes')
             videoID = request.POST.get('videoID')
             video_timepoint = request.POST.get('time')
             print("VIDEOID=%s,\t HTML_NOTES: %s" % (videoID, updated_note_table))
             my_student = Student.objects.get(user=request.user) 
             my_video = Video.objects.get(id=int(videoID))
-
             video_progress = VideoProgress.objects.get(student=my_student, video=my_video)
             video_progress.video_notes = updated_note_table
             video_progress.video_timepoint= video_timepoint
@@ -126,11 +149,20 @@ class LessonView(generic.DetailView):
             print('RAW RESULT',result_feedback)
             if result_feedback[0]: #stdout
                 print("STDOUT")
-                def convert(x):
-                    if 'Error(' in repr(x):
-                        return repr(x).replace("\"", '').replace("\'",'*')
-                    return str(x)
-                parsed_result_feedback  = json.dumps([ {k:convert(v) for k,v in (eval(err)).items()} for err in result_feedback[0].splitlines()])
+                out_string = result_feedback[0]
+                def parseLong(err):
+                    span = re.search('Long.+}', err).span()
+                    old = err[(span[0]+7):(span[1]-1)]
+                    print("ERR0",old)
+                    if "Error(" in old:
+                        new = repr(old)[1:-1].replace("\'","*").replace("\"","`")
+                        print("ERR1",new)
+                        return(err.replace(old, "'"+new+"'"))
+                    return err
+                    
+                out_string = [parseLong(err) for err in out_string.splitlines()]
+                print(out_string)
+                parsed_result_feedback  = json.dumps([ {k:v for k,v in (eval(err)).items()} for err in out_string])
             elif result_feedback[1]: #stderr
                 print("STERR")
                 error_string = result_feedback[1]
@@ -145,6 +177,10 @@ class LessonView(generic.DetailView):
             assessment_progress = AssessmentProgress.objects.get(student=Student.objects.get(user=request.user), assessment=Assessment.objects.get(id=int(assessmentID)))
             assessment_progress.code_submission = usr_code
             assessment_progress.errors_list = parsed_result_feedback
+            assessment_progress.attempted = True
+            assessment_progress.number_of_attempts = assessment_progress.number_of_attempts+1
+            if parsed_result_feedback == 'good':
+                assessment_progress.solved = True
             assessment_progress.save()
             return HttpResponse(parsed_result_feedback)
         return self.get(request, *args, **kwargs)

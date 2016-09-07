@@ -18,7 +18,7 @@ from urllib2 import urlopen # helps with pulling data off the web
 
 try:
 	url = '''
-	
+	&&&
 	'''
 	url = url.strip()
 	response = urlopen(url)

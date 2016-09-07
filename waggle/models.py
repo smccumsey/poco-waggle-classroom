@@ -23,8 +23,8 @@ def assessment_directory_path(instance, filename):
 class Assessment(models.Model):
     module = models.ForeignKey(Module, on_delete=models.CASCADE, related_name='assessments')
     description = models.TextField()
-    assess_file = models.FileField(upload_to=assessment_directory_path, null=True)
-    code_editor_filler = models.TextField(null=True)
+    assess_file = models.FileField(upload_to=assessment_directory_path, null=True,blank=True)
+    code_editor_filler = models.TextField(null=True,blank=True)
     order = models.PositiveSmallIntegerField(null=True)
     def __str__(self):
         return 'assessment_%s from %s' % (self.order, self.module.title)
@@ -64,6 +64,7 @@ class Student(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='students')
     course_progress = models.ManyToManyField(Course, through='CourseProgress', through_fields=('student','course'))
     module_progress = models.ManyToManyField(Module, through='ModuleProgress', through_fields=('student','module'))
+    content_progress = models.ManyToManyField(Content, through='ContentProgress', through_fields=('student','content'))
     assessment_progress = models.ManyToManyField(Assessment, through='AssessmentProgress', through_fields=('student','assessment'))
     video_progress = models.ManyToManyField(Video, through='VideoProgress', through_fields=('student','video'))
     def __str__(self):
@@ -84,31 +85,34 @@ class ModuleProgress(models.Model):
     def __str__(self):
         return "%s progress for %s module" % (self.student, self.module)
 
+class ContentProgress(models.Model):
+    student = models.ForeignKey(Student, on_delete=models.CASCADE, null=True)
+    content = models.ForeignKey(Content, on_delete=models.CASCADE, null=True)
+    clicks_on_content_tab_counter = models.PositiveSmallIntegerField(default=0)
+
 class AssessmentProgress(models.Model):
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
     assessment = models.ForeignKey(Assessment, on_delete=models.CASCADE, null=True)
-    code_submission = models.TextField(default="#Type python code below")
+    code_submission = models.TextField(blank=True, null=True)
     errors_list = models.TextField(default='')
+    timestamp = models.DateTimeField(auto_now_add=True)
+    attempted = models.BooleanField(default=False)
+    number_of_attempts = models.PositiveSmallIntegerField(default=0)
+    solved = models.BooleanField(default=False)
     def __str__(self):
         return "%s progress for %s" % (self.student, self.assessment)
+
+class AssessmentSubission(models.Model):
+    assessmentprogresses = models.ManyToManyField(AssessmentProgress, related_name="submissions")
+    def __str__(self):
+        return self.assessmentprogress
 
 class VideoProgress(models.Model):
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
     video = models.ForeignKey(Video, on_delete=models.CASCADE, null=True)
     video_notes = models.TextField(null=True)
     video_timepoint = models.DecimalField(max_digits=5, decimal_places=2, null=True)
+    clicks_on_video_open_counter = models.PositiveSmallIntegerField(default=0)
     def __str__(self):
         return "%s progress for %s" % (self.student, self.video)
 
-    
-
-'''
-registered_courses
-module_progress
-# assessment progress
-history_of_submitted_code
-submission_results
-# content progress
-video_notes
-video_time
-'''
