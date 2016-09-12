@@ -20,10 +20,15 @@ def assessment_directory_path(instance, filename):
     # file will be uploaded to MEDIA_ROOT/course_<id>/module_<id>/assessmentFiles/<filename>
     return 'course_{0}/module_{1}/assessmentFiles/{2}'.format(instance.module.course.id, instance.module.id, filename)
 
+def assessment_image_directory_path(instance, filename):
+    # file will be uploaded to MEDIA_ROOT/course_<id>/module_<id>/image_<order>/<filename>
+    return 'course_{0}/module_{1}/image_{2}/{3}'.format(instance.module.course.id, instance.module.id, instance.order, filename)
+
 class Assessment(models.Model):
     module = models.ForeignKey(Module, on_delete=models.CASCADE, related_name='assessments')
     description = models.TextField()
     assess_file = models.FileField(upload_to=assessment_directory_path, null=True,blank=True)
+    image = models.ImageField(upload_to=assessment_image_directory_path, null=True, blank=True)
     code_editor_filler = models.TextField(null=True,blank=True)
     order = models.PositiveSmallIntegerField(null=True)
     def __str__(self):
@@ -102,10 +107,17 @@ class AssessmentProgress(models.Model):
     def __str__(self):
         return "%s progress for %s" % (self.student, self.assessment)
 
-class AssessmentSubission(models.Model):
-    assessmentprogresses = models.ManyToManyField(AssessmentProgress, related_name="submissions")
+class AssessmentSubmission(models.Model):
+    student = models.ForeignKey(Student, on_delete=models.CASCADE)
+    assessment = models.ForeignKey(Assessment, on_delete=models.CASCADE, null=True)
+    code_submission = models.TextField(blank=True, null=True)
+    errors_list = models.TextField(default='')
+    timestamp = models.DateTimeField(auto_now_add=True)
+    attempted = models.BooleanField(default=False)
+    number_of_attempts = models.PositiveSmallIntegerField(default=0)
+    solved = models.BooleanField(default=False)
     def __str__(self):
-        return self.assessmentprogress
+        return "%s submission for %s" % (self.student, self.assessment)
 
 class VideoProgress(models.Model):
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
