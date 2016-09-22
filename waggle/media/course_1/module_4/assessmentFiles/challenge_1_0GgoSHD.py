@@ -18,14 +18,7 @@ def report( name, shortd, longd):
 #No mock data for this challenge.
 
 try:
-	#Type python code here
-        one = 11
-        two = 2
-        three = 3
-        
-        
-        
-          
+	&&&  # paste user code here
 
 except IndentationError as e:
 	report('Indentation error', 'Make sure each line of code starts in column 1', e)

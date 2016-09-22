@@ -362,6 +362,27 @@ function switchToAssessment(){
 */
 
 function fillModal(msg){
+    var entityMap = {
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': '&quot;',
+        "'": '&#39;',
+        "/": '&#x2F;'
+    };
+
+    function escapeHtml(string) {
+        return String(string).replace(/[&<>"'\/]/g, function (s) {
+                      return entityMap[s];
+                        });
+    }
+
+    msg = escapeHtml(msg);
+
+    while(msg.indexOf("*") !== -1){
+        msg = msg.replace('*','<code>').replace('*','</code>');
+    }
+
     document.getElementById("longd").innerHTML=msg;
 }
 
@@ -397,15 +418,13 @@ function writeFeedback( feedbackString, ID) {
                     var name = val['Name'];
                     var shortd = val['Short'];
                     var longd = val['Long'];
+                    console.log(longd) // need to escape html chars
                     longd = longd.replace(/'/g, "*");
 
                     var cell1 = "<td><center><span style='color:red;' class= 'glyphicon glyphicon-thumbs-down'></span></center></td>";
                     var cell2 = "<td>"+name+"</td>";
                     var cell3 = "<td>"+shortd+"</td>";
                     var cell4 = "<td><button type='button' class='btn btn-default btn-md btn-block' data-toggle='modal' data-target='#longdModal'";
-                    while(longd.indexOf("*") !== -1){
-                        longd = longd.replace('*','<code>').replace('*','</code>');
-                    }
                     cell4 += " onclick=\"fillModal('"+longd+"')\""
                     cell4 += ">Tell me more</button></td>";
 
@@ -672,6 +691,9 @@ function signOut() {
         <div class="col-lg-4 col-md-4 col-sm-4" > 
             <div data-spy="affix" data-offset-top="250">
 
+            <div id = 'chatbot' style="visibilty:hidden;">
+            </div>
+            <div id = 'discussion'>
             <table id="previewTable" style="width:100%;" class="table-responsive">
                 <tr>
                     <td>
@@ -685,7 +707,11 @@ function signOut() {
                            var disqus_config = function () {
                                this.page.url ="http://smccumsey.pythonanywhere.com{{request.path}}";  // Replace PAGE_URL with your page's canonical URL variable
                                this.page.identifier = "/lesson/{{module_obj.id}}/"; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
-                                   };
+                               this.callbacks.onNewComment = [function(comment) { 
+                                   //alert(comment.id);
+                                   //alert(comment.text);
+                                }];
+                           };
                         (function() { // DON'T EDIT BELOW THIS LINE
                              var d = document, s = d.createElement('script');
                                  s.src = '//http-smccumsey-pythonanywhere-com.disqus.com/embed.js';
@@ -700,11 +726,13 @@ function signOut() {
             </table>
             <div id="disqus_container_2"></div>
 
-        <div class="spinnerbox">
-            <center><img src="{{STATIC_URL}}/images/spinner.gif"/></center>
-        </div>
+            <div class="spinnerbox">
+                <center><img src="{{STATIC_URL}}/images/spinner.gif"/></center>
+            </div>
 
-    </div></div>
+        </div>
+        </div>
+    </div>
     </div>
 
     <script>
@@ -761,7 +789,6 @@ function signOut() {
     }
 
     function submitCode(codemirrorID, idx) {
-        //begin spinner
         console.log(codemirrorID);
         console.log(idx);
         var code = editors[idx].getValue();
@@ -769,6 +796,9 @@ function signOut() {
 
         var csrftoken = Cookies.get('csrftoken');
         var code_assessmentID = codemirrorID.split("-").pop();
+        // clear output area
+        document.getElementById('result_'+code_assessmentID).innerHTML = "";
+        //begin spinner
         $('#spinnerbtn_'+code_assessmentID).toggleClass('active');
 
         $.ajax({
@@ -792,6 +822,14 @@ function signOut() {
     $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
         var target = $(e.target).attr("href") // activated tab
         console.log(target);
+        if ((target).indexOf("assessment") !== -1){
+            document.getElementById("discussion").style.visibility = 'hidden';
+            document.getElementById("chatbot").style.visibility = 'visible';
+        }
+        else {
+            document.getElementById("chatbot").style.visibility = 'hidden';
+            document.getElementById("discussion").style.visibility = 'visible';
+        }
         if ((target).indexOf("content") !== -1){
             {% for content in contents %}
                 contentClick({{content.id}});

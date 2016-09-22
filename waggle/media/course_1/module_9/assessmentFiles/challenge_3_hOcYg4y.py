@@ -30,7 +30,12 @@ loan_table = [row for row in DictReader(response)]  # a mapping function using i
 
 xloan_table = loan_table  # in case user screws with loan_table
 
-int_scores = [int(row['Credit_History']) for row in xloan_table if row['Credit_History'] != ''])
+int_scores = [int(row['Credit_History']) for row in xloan_table if row['Credit_History'] != '']
+
+# image dirs
+
+target_url1 = '/home/smccumsey/waggle-classroom/waggle/media/course_1/module_9/image_3/challenge3.png'
+target_url2 = '/home/smccumsey/waggle-classroom/waggle/media/tmp/attempt_6_3.png'
 
 import matplotlib.pyplot as plt
 
@@ -39,12 +44,9 @@ plt.cla()
 plt.clf()
 
 try:
-	plt.hist(int_scores) 
-        plt.title('Credit History')
-        plt.xlabel('Credit score')
-        plt.ylabel('Number of applicants')
-        plt.xticks([0,1])   - have to comment out the plt.show() function.
-	#plt.savefig('attempt_6_3.png')
+	&&&  # paste user code here 
+        # have to comment out the plt.show() function.
+	plt.savefig(target_url2)
 
 except Exception as e:
 	report('Generic error', 'On your own', e)
@@ -99,7 +101,7 @@ try:
 except Exception as e:
 	report('Generic error', 'On your own', e)
 else:
-	if not check:	
+	if not check.all():	
 		report('Value bug', 'Wrong value in xticks of ' + str(ticks), 'No further help available')
 		all_good = False
 
@@ -107,9 +109,13 @@ if all_good:
 	import matplotlib.image as mpimg
 	import numpy as np
 
-	target_url = '/home/smccumsey/waggle-classroom/waggle/media/course_1/module_9/image_3/challenge3.png'
-	img1 = mpimg.imread(target_url)  # answer
-	img2 = mpimg.imread('./attempt_6_3.png')  #student submission
+
+	img1 = mpimg.imread(target_url1)  # answer
+	img2 = mpimg.imread(target_url2)  #student submission
+        
+        img1 = img1.resize((100,100))
+        img2 = img2.resize((100,100))
+        
 
 	if not np.array_equal(img1,img2): #True if two arrays have the same shape and elements, False otherwise.
 		report('Value bug', 'Image does not match target', 'No further help available')

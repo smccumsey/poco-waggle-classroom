@@ -24,8 +24,11 @@ def report( name, shortd, longd):
 
 from csv import DictReader # helps with handling csv formatted data
 from urllib2 import urlopen # helps with pulling data off the web
+​
 url = 'https://docs.google.com/spreadsheets/d/1_artlzgoj6pDBCBfdt9-Jmc9RT9yLsZ0vTnk3zJmt_E/pub?gid=1291197392&single=true&output=csv'
+​
 response = urlopen(url)
+​
 loan_table = [row for row in DictReader(response)]  # a mapping function using identity
 
 xloan_table = loan_table  # in case user screws with loan_table
@@ -39,11 +42,7 @@ plt.cla()
 plt.clf()
 
 try:
-	plt.hist(int_scores) 
-        plt.title('Credit History')
-        plt.xlabel('Credit score')
-        plt.ylabel('Number of applicants')
-        plt.xticks([0,1])   - have to comment out the plt.show() function.
+	&&&  # paste user code here - have to comment out the plt.show() function.
 	#plt.savefig('attempt_6_3.png')
 
 except Exception as e:
@@ -107,8 +106,7 @@ if all_good:
 	import matplotlib.image as mpimg
 	import numpy as np
 
-	target_url = '/home/smccumsey/waggle-classroom/waggle/media/course_1/module_9/image_3/challenge3.png'
-	img1 = mpimg.imread(target_url)  # answer
+	img1 = mpimg.imread('./course_1/module_9/image_3/challenge3.png')  # answer
 	img2 = mpimg.imread('./attempt_6_3.png')  #student submission
 
 	if not np.array_equal(img1,img2): #True if two arrays have the same shape and elements, False otherwise.

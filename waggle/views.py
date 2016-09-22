@@ -60,7 +60,7 @@ class LessonView(generic.DetailView):
         module_id = int(self.kwargs.get('module'))
         print('MODULE_ID ', module_id)
         context['module_obj'] = Module.objects.get(id=module_id)
-        context['assessments'] =Assessment.objects.filter(module_id=module_id)
+        context['assessments'] =Assessment.objects.filter(module_id=module_id).order_by('order')
         context['contents'] =Content.objects.filter(module_id=module_id)
         context['videos'] =Video.objects.filter(module_id=module_id)
         context['relateds'] =Related.objects.filter(module_id=module_id)
@@ -79,7 +79,11 @@ class LessonView(generic.DetailView):
         return context
 
     def setupEnv(self, code, envFile, username):
-        test_filename = '/home/smccumsey/waggle-classroom/waggle/media/tmp/test_{}.py'.format(username)
+        directory = '/home/smccumsey/waggle-classroom/waggle/media/user_{}_tmp_dir'
+        if not os.path.exists(directory):
+            os.makedirs(directory)
+        #test_filename = '/home/smccumsey/waggle-classroom/waggle/media/user_{}_tmp_dir/test.py'.format(username)
+        test_filename = '/home/smccumsey/waggle-classroom/waggle/media/user_{}.py'.format(username)
         code_lines = code.splitlines()
         first_line = (code_lines[0]).expandtabs(0) 
         if len(code_lines)>1:
@@ -138,8 +142,8 @@ class LessonView(generic.DetailView):
             return HttpResponse('django says the note was saved')
         elif(request.POST.get('submittedcode')):
             usr_code = request.POST.get('submittedcode')
-            if re.search(r'print\(.+\)', usr_code):
-                parsed_result_feedback = "Please do not use print in your assessment submission."
+            if re.search(r'print\(.+\)', usr_code) or re.search(r'plt.show\(.+\)', usr_code):
+                parsed_result_feedback = "Print and show are disabled in assessment submissions. Please practice using these in your notebooks."
                 return HttpResponse(parsed_result_feedback)
             assessmentID = request.POST.get('assessmentID')
             print('USRCODE: %s \nASSESSMENTID: %s' % (usr_code, assessmentID))
