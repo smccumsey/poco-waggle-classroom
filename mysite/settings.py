@@ -30,7 +30,7 @@ ALLOWED_HOSTS = ["smccumsey.pythonanywhere.com"]
 # Application definition
 
 INSTALLED_APPS = [
-    'waggle.apps.WaggleConfig',
+    'main.apps.MainConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -80,7 +80,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'mysite.wsgi.application'
 
-LOGIN_REDIRECT_URL = 'waggle/login.html'
+LOGIN_REDIRECT_URL = 'main/login.html'
 
 # Database
 # https://docs.djangoproject.com/en/1.9/ref/settings/#databases
@@ -93,7 +93,7 @@ DATABASES = {
 }
 
 AUTHENTICATION_BACKENDS = (
-    'waggle.backends.GoogleAuthBackend',
+    'main.backends.GoogleAuthBackend',
     'django.contrib.auth.backends.ModelBackend',
 )
 
@@ -137,8 +137,8 @@ USE_TZ = True
 
 CODEMIRROR_PATH = "/static/codemirror"
 
-STATIC_ROOT = '/home/smccumsey/waggle-classroom/waggle/static/'
+STATIC_ROOT = '/home/smccumsey/waggle-classroom/main/static/'
 STATIC_URL = '/static/'
 
-MEDIA_ROOT='/home/smccumsey/waggle-classroom/waggle/media/'
+MEDIA_ROOT='/home/smccumsey/waggle-classroom/main/media/'
 MEDIA_URL='/media/'
