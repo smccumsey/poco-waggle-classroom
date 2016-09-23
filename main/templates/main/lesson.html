@@ -14,6 +14,28 @@
 
 <style>
 
+.dropdown-menu:before {
+    position: absolute;
+    top: -7px;
+    left: 9px;
+    display: inline-block;
+    border-right: 7px solid transparent;
+    border-bottom: 7px solid #ccc;
+    border-left: 7px solid transparent;
+    border-bottom-color: rgba(0, 0, 0, 0.2);
+    content: '';
+}
+
+.dropdown-menu:after {
+    position: absolute;
+    top: -6px;
+    left: 10px;
+    display: inline-block;
+    border-right: 6px solid transparent;
+    border-bottom: 6px solid #ffffff;
+    border-left: 6px solid transparent;
+    content: '';
+}
 .breadcrumb li a    {
     background:#eee;
 }
@@ -663,8 +685,22 @@ function signOut() {
         
         <div class="col-lg-4 col-md-4 col-sm-4" > 
             <div data-spy="affix" data-offset-top="250">
+            <div id = 'chatbot' style="display:none;">
+                <h2>PUT CHATBOT HERE</h2>
 
-            <div id = 'chatbot' style="visibilty:hidden;">
+                <div class="btn-group">
+                    <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Action
+                    </button>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="#">Action</a>
+                        <a class="dropdown-item" href="#">Another action</a>
+                        <a class="dropdown-item" href="#">Something else here</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="#">Separated link</a>
+                    </div>
+                </div>
+
             </div>
             <div id = 'discussion'>
             <table id="previewTable" style="width:100%;" class="table-responsive">
@@ -796,12 +832,16 @@ function signOut() {
         var target = $(e.target).attr("href") // activated tab
         console.log(target);
         if ((target).indexOf("assessment") !== -1){
-            document.getElementById("discussion").style.visibility = 'hidden';
-            document.getElementById("chatbot").style.visibility = 'visible';
+            //document.getElementById("discussion").style.visibility = 'hidden';
+            //document.getElementById("chatbot").style.visibility = 'visible';
+            $('#discussion').hide();
+            $('#chatbot').show();
         }
         else {
-            document.getElementById("chatbot").style.visibility = 'hidden';
-            document.getElementById("discussion").style.visibility = 'visible';
+            //document.getElementById("chatbot").style.visibility = 'hidden';
+            //document.getElementById("discussion").style.visibility = 'visible';
+            $('#chatbot').hide();
+            $('#discussion').show();
         }
         if ((target).indexOf("content") !== -1){
             {% for content in contents %}

@@ -49,8 +49,8 @@ class LessonView(generic.DetailView):
         context = self.get_context_data(object=self.object)
         print("REQUEST SESSION", request.session.items())
         print("GET context", context.items())
-        if not request.session.get('approved'):
-            return HttpResponseNotFound("<br/><br/><h1 style='text-align:center;vertical_align:middle;'>Please sign-in to <a href='http://smccumsey.pythonanywhere.com/main/login/'>Poco<a> to access this page</h1>")
+        #if not request.session.get('approved'):
+            #return HttpResponseNotFound("<br/><br/><h1 style='text-align:center;vertical_align:middle;'>Please sign-in to <a href='http://smccumsey.pythonanywhere.com/main/login/'>Poco<a> to access this page</h1>")
         return self.render_to_response(context)
 
     def get_context_data(self, **kwargs):
