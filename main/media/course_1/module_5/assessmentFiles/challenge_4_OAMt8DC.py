@@ -103,7 +103,7 @@ if not isinstance(int_all_ages, list):
 	sys.exit(1)
 
 try:
-	check = (int_all_ages == [int(row['Age']) for row in titanic_starter_table]))
+	check = (int_all_ages == [int(row['Age']) for row in titanic_starter_table])
 except Exception as e:
 	report('Generic error', 'On your own', e)
 else:

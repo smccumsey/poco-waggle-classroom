@@ -1,9 +1,11 @@
 #Module 2
 
-#Challenge 5
+#Challenge 4
 
 '''
-sum_all_ages = sum(int_all_ages)
+raw_age_column = [person['Age'] for person in titanic_starter_table]
+
+int_all_ages = [int(age) for age in raw_age_column]
 '''
 
 import sys
@@ -79,35 +81,32 @@ row7 = {'Age': '58',
 
 titanic_starter_table = [row1, row2, row3, row4, row5, row6, row7]
 
-raw_age_column = [person['Age'] for person in titanic_starter_table]
-
-int_all_ages = [int(age) for age in raw_age_column]
-
 try:
-	&&&  # paste user code here
+	all_ages = map(lambda x: x["Age"], titanic_starter_table)
+        int_all_ages = list(map(int, all_ages))   
 
-except TypeError as e:
-	report('Key error', 'Check for correct argument to sum function - it expects a list of ints', e)
+except KeyError as e:
+	report('Key error', 'Remember to quote keys', e)
 except NameError as e:
 	report('Name error', 'Look for typos in variable names', e)
 except Exception as e:
-	report('Generic error', 'On your own - review reducing a list with sum', e)
+	report('Generic error', 'On your own', e)
 	sys.exit(1)
 
 try:
-	sum_all_ages		# does var exist?
+	int_all_ages		# does var exist?
 except NameError as e:
 	report('Name error', 'Typically a typo', e)
 	sys.exit(1)
 
-if not isinstance(sum_all_ages, int):
-	report('Data type bug', 'int_all_ages is not an int', 'No further help available')
+if not isinstance(int_all_ages, list):
+	report('Data type bug', 'int_all_ages is not a list', 'No further help available')
 	sys.exit(1)
 
 try:
-	check = (sum_all_ages == sum(int_all_ages))
+	check = (int_all_ages == [int(row['Age']) for row in titanic_starter_table])
 except Exception as e:
 	report('Generic error', 'On your own', e)
 else:
 	if not check:
-		report('Value bug', 'Wrong value in int_all_ages of ' + str(repr(sum_all_ages)), 'No further help available')
+		report('Value bug', 'Wrong value in int_all_ages of ' + str(repr(int_all_ages)), 'No further help available')

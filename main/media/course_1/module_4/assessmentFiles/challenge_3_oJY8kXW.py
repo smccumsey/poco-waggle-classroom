@@ -44,7 +44,7 @@ else:
 	if not check:
 		report('Value bug', 'Wrong value in box', 'Box labeled month_2 has incorrect value ' + str(month_2))
 try:
-	check = (three == 'March')
+	check = (month_3 == 'March')
 except NameError as e:
 	report('Name error', 'Typically a typo', e)
 except Exception as e:

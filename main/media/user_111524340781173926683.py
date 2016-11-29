@@ -1,22 +1,18 @@
-#Module 6
+#Module 2
 
-#Challenge 3
+#Challenge 7
 
 '''
-import matplotlib.pyplot as plt
+raw_fare_column = [person['Fare'] for person in titanic_starter_table]
 
-amount = [int(row['Credit_History']) for row in loan_table if row['Credit_History'] != '']
-plt.hist(amount, 2)  # same as before
-plt.xlabel("Credit score")
-plt.ylabel("Number of applicants")
-plt.title("Credit History")
-plt.xticks([0,1])  # a list of ticks
+float_all_fares = [float(fare) for fare in raw_fare_column]
 
-plt.show()  # This needs to be commented out of user code
+sum_all_fares = sum(float_all_fares)
+
+average_fare = float(sum_all_fares)/len(float_all_fares)
 '''
+
 import sys
-import matplotlib.image as mpimg
-from datetime import datetime
 
 def report( name, shortd, longd):
 	d = {'Name': name, 'Short': shortd, 'Long': longd}
@@ -24,120 +20,101 @@ def report( name, shortd, longd):
 
 #Mock data goes first
 
-from csv import DictReader # helps with handling csv formatted data
-from urllib2 import urlopen # helps with pulling data off the web
-url = 'https://docs.google.com/spreadsheets/d/1_artlzgoj6pDBCBfdt9-Jmc9RT9yLsZ0vTnk3zJmt_E/pub?gid=1291197392&single=true&output=csv'
-response = urlopen(url)
-loan_table = [row for row in DictReader(response)]  # a mapping function using identity
+row1 = {'Age': '22',
+  'Embarked': 'S',
+  'Fare': '7.25',
+  'Name': 'Braund, Mr. Owen Harris',
+  'Pclass': '3',
+  'Sex': 'male',
+  'Survived': '0'
+}
 
-xloan_table = loan_table  # in case user screws with loan_table
+row2 = {'Age': '38',
+  'Embarked': 'C',
+  'Fare': '71.2833',
+  'Name': 'Cuming, Mrs. John Bradley (Florence Briggs Thayer)',
+  'Pclass': '1',
+  'Sex': 'female',
+  'Survived': '1'
+}
 
-int_scores = [int(row['Credit_History']) for row in xloan_table if row['Credit_History'] != '']
+row3 = {'Age': '26',
+  'Embarked': 'S',
+  'Fare': '7.925',
+  'Name': 'Heikkinen, Miss. Laina',
+  'Pclass': '3',
+  'Sex': 'female',
+  'Survived': '1'
+}
 
-# image dirs
+row4 = {'Age': '2',
+  'Embarked': 'S',
+  'Fare': '21.075',
+  'Name': 'Palsson, Master. Gosta Leonard',
+  'Pclass': '3',
+  'Sex': 'male',
+  'Survived': '0'
+}
+ 
+row5 = {'Age': '14',
+  'Embarked': 'C',
+  'Fare': '30.0708',
+  'Name': 'Nasser, Mrs. Nicholas (Adele Achem)',
+  'Pclass': '2',
+  'Sex': 'female',
+  'Survived': '1'
+}
 
-target_url1 = '/home/smccumsey/waggle-classroom/waggle/media/course_1/module_9/image_3/challenge3.png'
-target_url2 = '/home/smccumsey/waggle-classroom/waggle/media/tmp/attempt_6_3_{}.png'.format(datetime.now())
+row6 = {'Age': '4',
+  'Embarked': 'S',
+  'Fare': '16.7',
+  'Name': 'Sandstrom, Miss. Marguerite Rut',
+  'Pclass': '3',
+  'Sex': 'female',
+  'Survived': '1'
+}
 
-import matplotlib.pyplot as plt
+row7 = {'Age': '58',
+  'Embarked': 'S',
+  'Fare': '26.55',
+  'Name': 'Bonnell, Miss. Elizabeth',
+  'Pclass': '1',
+  'Sex': 'female',
+  'Survived': '1'
+}
 
-plt.close()
-plt.cla()
-plt.clf()
+titanic_starter_table = [row1, row2, row3, row4, row5, row6, row7]
 
 try:
-        import matplotlib.pyplot as plt
-        amount = [int(row['Credit_History']) for row in loan_table if row['Credit_History'] != '']
-        plt.hist(amount, 3)  # same as before
-        plt.xlabel("Credit score")
-        plt.ylabel("Number of applicants")
-        plt.xticks([0,1])  # a list of ticks   
-        # have to comment out the plt.show() function.
+	raw_fare_column = [person['Fare'] for person in titanic_starter_table]
+        float_all_fares = [float(fare) for fare in raw_fare_column]
+        sum_all_fares = sum(float_all_fares)
+        average_fare = float(sum_all_fares)/len(float_all_fares)  
 
+except NameError as e:
+	report('Name error', 'Look for typos in variable names', e)
 except Exception as e:
 	report('Generic error', 'On your own', e)
 	sys.exit(1)
 
 try:
-	ax = plt.gca()
-	fig = plt.gcf()
-	ylab= ax.get_ylabel()
-	xlab = ax.get_xlabel()
-	title = ax.get_title()
-	ticks = ax.get_xticks()
-except Exception as e:
-	report('Generic error', 'Hist plot not set up correctly', e)
+	average_fare		# does var exist?
+except NameError as e:
+	report('Name error', 'Typically a typo', e)
 	sys.exit(1)
 
-# 'Credit History' for title
-# 'Number of applicants' for ylabel
-# 'Credit score' for xlabel
-
-all_good = True  # set False if anything does not match
+if not isinstance(average_fare, float):
+	report('Data type bug', 'average_fare is not a float', 'No further help available')
+	sys.exit(1)
 
 try:
-	check = (ylab == 'Number of applicants')
+        xraw_fare_column = [person['Fare'] for person in titanic_starter_table]
+        xfloat_all_fares = [float(fare) for fare in xraw_fare_column]
+        xsum_all_fares = sum(xfloat_all_fares)
+
+	check = (average_fare == float(xsum_all_fares)/len(xfloat_all_fares))
 except Exception as e:
 	report('Generic error', 'On your own', e)
 else:
 	if not check:
-		report('Value bug', 'Wrong value in ylabel of ' + str(ylab), 'No further help available')
-		all_good = False
-
-try:
-	check = (xlab == 'Credit score')
-except Exception as e:
-	report('Generic error', 'On your own', e)
-else:
-	if not check:
-		report('Value bug', 'Wrong value in xlabel of ' + str(xlab), 'No further help available')
-		all_good = False
-
-try:
-	check = (title == 'Credit History')
-except Exception as e:
-	report('Generic error', 'On your own', e)
-else:
-	if not check:
-		report('Value bug', 'Wrong value in title of ' + str(title), 'No further help available')
-		all_good = False
-
-try:
-	check = (ticks == [0,1])
-except Exception as e:
-	report('Generic error', 'On your own', e)
-else:
-	if not check.all():	
-		report('Value bug', 'Wrong value in xticks of ' + str(ticks), 'No further help available')
-		all_good = False
-
-if all_good:
-    import matplotlib.image as mpimg
-    import numpy as np
-    from scipy.misc import imresize, toimage, imsave
-
-    plt.savefig(target_url2)
-
-    # plot solution
-    plt.close()
-    plt.cla()
-    plt.clf()
-    amount = [int(row['Credit_History']) for row in loan_table if row['Credit_History'] != '']
-    plt.hist(amount, 2)  # same as before
-    plt.xlabel("Credit score")
-    plt.ylabel("Number of applicants")
-    plt.title("Credit History")
-    plt.xticks([0,1])  # a list of ticks
-
-    plt.savefig(target_url1)
-
-
-
-    img1 = mpimg.imread(target_url1)  # answer
-    img2 = mpimg.imread(target_url2)  #student submission
-
-    img1 = img1.flatten()
-    img2 = img2.flatten()
-
-    if not np.array_equal(img1,img2): #True if two arrays have the same shape and elements, False otherwise.
-        report('Value bug', 'Image does not match target', 'No further help available')
+		report('Value bug', 'Wrong value in average_fare of ' + str(repr(average_fare)), 'No further help available')

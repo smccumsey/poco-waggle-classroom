@@ -69,31 +69,55 @@ pre {
     padding: 10px;
 }
 
+.tab-content{
+    border:1px;
+    border-top:1px; 
+    height:100%; 
+    overflow-y:content;
+    position:static;
+}
+
+.tab-content:after{
+    display: block;
+    visibility: hidden;
+    clear: both;
+}
+
+
 .nav-tabs {
+    padding-top:20px;
     margin-bottom: 0;
     font-size:16px;
     font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
 }
 
-.affix2 {
-    background-color:white;
-    padding-top: 10px;
-    position: fixed;
-    top: 250px;
-    bottom: 0;
-    right: 0;
-    overflow-y: scroll;
-    width:30%;
-    height:auto;
-   
+.debug-affix.affix{
+    position:relative;
 }
-.affix {
+.tab-header.affix{
+    overflow-y: scroll;
+    position:fixed;
+    left:0;
+    width:70%;
+    height:auto;
+    padding-left:15px;
+    padding-right:60px;
+    margin:0;
+    display:inline-block;
+    z-index:3;
+    float:none;
+    top:105px;
+    bottom: 0;
+
+}
+
+.disqus-affix.affix {
     overflow-y: scroll;
     padding-right: 20px;
     bottom: 0;
     right: 0;
     position:fixed;
-    top:140px;
+    top:105px;
     width:30%;
     height:auto;
 }
@@ -107,7 +131,7 @@ pre {
 
     #right-disqus{
         background-color:white;
-        padding-top: 10px;
+        padding-top: 20px;
         position: fixed;
         top: 250px;
         bottom: 0;
@@ -121,6 +145,8 @@ pre {
     border:1px solid grey; 
     width:100%; 
     height:200px;
+    position:relative;
+    z-index:1;
 }
 
 .spinnerbox {
@@ -446,7 +472,7 @@ function signOut() {
 
 
 <body onload="init();">
-<div class="navbar navbar-inverse navbar-fixed-top" role="navigation" style="padding-left:10px;padding-right:10px;">
+<div class="navbar navbar-inverse navbar-fixed-top" role="navigation" style="padding-left:10px;padding-right:10px;margin:0;">
     <div class="container-fluid" style="padding-bottom:0px;">
         <div class="navbar-header"  style="padding-bottom:0px;">
             <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
@@ -490,16 +516,24 @@ function signOut() {
     <div class="row">
         <div class="col-lg-8 col-md-8 col-sm-8">
 
+            <div class="nav-wrapper">
+
+            <div class="tab-header" data-spy="affix" data-offset-top="250">
+
             <!-- Nav tabs -->
-            <ul class="nav nav-tabs nav-justified" role="tablist" id="myTab">
+            <ul class="nav nav-tabs nav-justified" role="tablist" id="myTab" style="background-color:white;">
                 <li role="presentation" class="active"><a href="#contents" aria-controls="content" role="tab" data-toggle="tab">Content</a></li>
                 <li role="presentation"><a href="#debug" aria-controls="debug" role="tab" data-toggle="tab">Debugging with Steve</a></li>
                 <li role="presentation"><a href="#assessment" aria-controls="assessment" role="tab" data-toggle="tab">Assessment</a></li>
                 <li role="presentation"><a href="#other" aria-controls="other" role="tab" data-toggle="tab">Other</a></li>
             </ul>
+            </div>
+            </div>
             
+
             <!-- Tab panes -->
-            <div class="tab-content" style="border: 1px ; border-top: 1px; height:100%; overflow-y:content;" id="content">
+
+            <div class="tab-content"  id="content">
 
                 <div role="tabpanel" class="tab-pane active" id="contents">
                     {% for content in contents%}
@@ -509,10 +543,11 @@ function signOut() {
                 </div>
 
                 <div role="tabpanel" class="tab-pane" id="debug">
+                    <div class="debug-affix" data-spy="affix" data-offset-top:"250">
 
                     <div class="container-fluid">
                         <div class="row">
-                            <div class="col-lg-4 col-md-4 col-sm-4" style="background-color:#eee;border-radius:10px;height:100%">
+                            <div class="col-lg-4 col-md-4 col-sm-4" style="background-color:#eee;border-radius:10px;height:100%;">
                                 <br/>
                                 <div id ="video-menu">
                                     <h4 style="text-align:center;"> Video menu</h4>
@@ -598,6 +633,7 @@ function signOut() {
                         </div>
                     </div>
                 </div>
+                            </div>
 
                 <div role="tabpanel" class="tab-pane" id="assessment" style="background: white;">
                     <div id=triple>
@@ -684,23 +720,10 @@ function signOut() {
         </div>
         
         <div class="col-lg-4 col-md-4 col-sm-4" > 
-            <div data-spy="affix" data-offset-top="250">
+            <div class="disqus-affix" data-spy="affix" data-offset-top="250">
             <div id = 'chatbot' style="display:none;">
-                <h2>PUT CHATBOT HERE</h2>
-
-                <div class="btn-group">
-                    <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Action
-                    </button>
-                    <div class="dropdown-menu">
-                        <a class="dropdown-item" href="#">Action</a>
-                        <a class="dropdown-item" href="#">Another action</a>
-                        <a class="dropdown-item" href="#">Something else here</a>
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="#">Separated link</a>
-                    </div>
-                </div>
-
+                 <h2>Chatbot under development (stay tuned).</h2>
+                
             </div>
             <div id = 'discussion'>
             <table id="previewTable" style="width:100%;" class="table-responsive">

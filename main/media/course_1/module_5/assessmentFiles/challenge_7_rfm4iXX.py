@@ -105,11 +105,11 @@ if not isinstance(average_fare, float):
 	sys.exit(1)
 
 try:
-  xraw_fare_column = [person['Fare'] for person in titanic_starter_table]
-  xfloat_all_fares = [float(fare) for fare in xraw_fare_column]
-  xsum_all_fares = sum(xfloat_all_fares)
+        xraw_fare_column = [person['Fare'] for person in titanic_starter_table]
+        xfloat_all_fares = [float(fare) for fare in xraw_fare_column]
+        xsum_all_fares = sum(xfloat_all_fares)
 
-	check = (average_fare == float(xsum_all_fares)/len(xfloat_all_fares)
+	check = (average_fare == float(xsum_all_fares)/len(xfloat_all_fares))
 except Exception as e:
 	report('Generic error', 'On your own', e)
 else:

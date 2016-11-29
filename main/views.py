@@ -50,7 +50,7 @@ class LessonView(generic.DetailView):
         print("REQUEST SESSION", request.session.items())
         print("GET context", context.items())
         #if not request.session.get('approved'):
-            #return HttpResponseNotFound("<br/><br/><h1 style='text-align:center;vertical_align:middle;'>Please sign-in to <a href='http://smccumsey.pythonanywhere.com/main/login/'>Poco<a> to access this page</h1>")
+            #return HttpResponseNotFound("<br/><br/><h1 style='text-align:center;vertical_align:middle;'>Please sign-in to <a href='http://poco.pythonanywhere.com/main/login/'>Poco<a> to access this page</h1>")
         return self.render_to_response(context)
 
     def get_context_data(self, **kwargs):
@@ -78,9 +78,9 @@ class LessonView(generic.DetailView):
         return context
 
     def setupEnv(self, code, envFile, username):
-        directory = '/home/smccumsey/waggle-classroom/main/media/user_{}_tmp_dir'
-        #test_filename = '/home/smccumsey/waggle-classroom/main/media/user_{}_tmp_dir/test.py'.format(username)
-        test_filename = '/home/smccumsey/waggle-classroom/main/media/user_{}.py'.format(username)
+        directory = '/home/poco/waggle-classroom/main/media/user_{}_tmp_dir'
+        #test_filename = '/home/poco/waggle-classroom/main/media/user_{}_tmp_dir/test.py'.format(username)
+        test_filename = '/home/poco/waggle-classroom/main/media/user_{}.py'.format(username)
         code_lines = code.splitlines()
         first_line = (code_lines[0]).expandtabs(0) 
         if len(code_lines)>1:

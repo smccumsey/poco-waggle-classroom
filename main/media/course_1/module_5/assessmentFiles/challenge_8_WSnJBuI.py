@@ -105,11 +105,11 @@ if not isinstance(average_name, float):
 	sys.exit(1)
 
 try:
-  xraw_name_column = [person['Name'] for person in titanic_starter_table]
-  xlen_all_names = [len(name) for name in xraw_name_column]
-  xsum_all_names = sum(xlen_all_names)
+        xraw_name_column = [person['Name'] for person in titanic_starter_table]
+        xlen_all_names = [len(name) for name in xraw_name_column]
+        xsum_all_names = sum(xlen_all_names)
 
-	check = (average_name == float(xsum_all_names)/len(xlen_all_names)
+	check = (average_name == float(xsum_all_names)/len(xlen_all_names))
 except Exception as e:
 	report('Generic error', 'On your own', e)
 else:
