@@ -18,8 +18,16 @@
 
 		var clients = [];
 
+        function sendMail() {
+            var link = "mailto:smccumsey@gmail.com"
+                + "&subject=" + escape("This is my subject")
+                + "&body=" + escape(document.getElementById('myText').value)
+                ;
 
-		function submitOnEnter(myfield, e){
+            window.location.href = link;
+        }
+
+        function submitOnEnter(myfield, e){
 			var keycode;
 			if(window.event)
 				keycode = window.event.keyCode;
@@ -33,7 +41,6 @@
 		   		return false;
 		   	}else
 		   		return true;
-		}
 
 		function getParameterByName(name) {
 			name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
@@ -190,7 +197,7 @@ function sendMessage() {
     var text = "<p>Your message requesting registration was successfully sent.</p>";
     $(".modal-body").html(text);
     $(".modal-title").html("Message sent");
-    alert("The message wasn't actually sent to Steve... that part still needs to be done");
+    //alert("The message wasn't actually sent to Steve... that part still needs to be done");
 }
 
 function requestRegistration(courseName) {

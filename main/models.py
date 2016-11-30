@@ -14,7 +14,7 @@ class Module(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='modules')
     order = models.PositiveSmallIntegerField(null=True)
     def __str__(self):
-        return self.title
+        return ('%s (id=%s)') % (self.title,self.id)
 
 def assessment_directory_path(instance, filename):
     # file will be uploaded to MEDIA_ROOT/course_<id>/module_<id>/assessmentFiles/<filename>
@@ -32,7 +32,7 @@ class Assessment(models.Model):
     code_editor_filler = models.TextField(null=True,blank=True)
     order = models.PositiveSmallIntegerField(null=True)
     def __str__(self):
-        return 'assessment_%s from %s' % (self.order, self.module.title)
+        return 'assessment_%s from %s (id=%s)' % (self.order, self.module.title, self.id)
 
 def notebook_directory_path(instance, filename):
     # file will be uploaded to MEDIA_ROOT/course_<id>/module_<id>/notebooks/<filename>
@@ -107,18 +107,6 @@ class AssessmentProgress(models.Model):
     def __str__(self):
         return "%s progress for %s" % (self.student, self.assessment)
 
-class AssessmentSubmission(models.Model):
-    student = models.ForeignKey(Student, on_delete=models.CASCADE)
-    assessment = models.ForeignKey(Assessment, on_delete=models.CASCADE, null=True)
-    code_submission = models.TextField(blank=True, null=True)
-    errors_list = models.TextField(default='')
-    timestamp = models.DateTimeField(auto_now_add=True)
-    attempted = models.BooleanField(default=False)
-    number_of_attempts = models.PositiveSmallIntegerField(default=0)
-    solved = models.BooleanField(default=False)
-    def __str__(self):
-        return "%s submission for %s" % (self.student, self.assessment)
-
 class VideoProgress(models.Model):
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
     video = models.ForeignKey(Video, on_delete=models.CASCADE, null=True)
@@ -127,4 +115,7 @@ class VideoProgress(models.Model):
     clicks_on_video_open_counter = models.PositiveSmallIntegerField(default=0)
     def __str__(self):
         return "%s progress for %s" % (self.student, self.video)
+
+class AssessmentSubmission(models.Model):
+    submission_record = models.TextField(null=True)
 

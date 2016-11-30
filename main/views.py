@@ -4,7 +4,7 @@ from django.core.urlresolvers import reverse
 from django.views import generic
 from django.views.generic.edit import FormView, CreateView
 from django.contrib.auth.models import User
-from .models import Related, Content, Assessment, Module, Course, Video, Student
+from .models import Related, Content, Assessment, Module, Course, Video, Student, AssessmentSubmission
 from .models import ContentProgress, AssessmentProgress, VideoProgress, CourseProgress, ModuleProgress
 
 from django.utils import timezone
@@ -29,6 +29,7 @@ import logging
 import httplib2
 from django.contrib.auth import login, authenticate
 from django.template.defaultfilters import slugify
+from django.forms.models import model_to_dict
 
 class LessonView(generic.DetailView):
     from django.template.defaultfilters import slugify
@@ -50,7 +51,7 @@ class LessonView(generic.DetailView):
         print("REQUEST SESSION", request.session.items())
         print("GET context", context.items())
         #if not request.session.get('approved'):
-            #return HttpResponseNotFound("<br/><br/><h1 style='text-align:center;vertical_align:middle;'>Please sign-in to <a href='http://poco.pythonanywhere.com/main/login/'>Poco<a> to access this page</h1>")
+            #return HttpResponseNotFound("<br/><br/><h1 style='text-align:center;vertical_align:middle;'>Please sign-in to <a href='http://smccumsey.pythonanywhere.com/main/login/'>Poco<a> to access this page</h1>")
         return self.render_to_response(context)
 
     def get_context_data(self, **kwargs):
@@ -64,6 +65,7 @@ class LessonView(generic.DetailView):
         context['videos'] =Video.objects.filter(module_id=module_id)
         context['relateds'] =Related.objects.filter(module_id=module_id)
         print(context.items())
+        print("VERSION", sys.version)
         # set up progress data for student if it doesnt exist
         student_instance = context['object'].students
         for content_instance in context['contents']:
@@ -78,9 +80,9 @@ class LessonView(generic.DetailView):
         return context
 
     def setupEnv(self, code, envFile, username):
-        directory = '/home/poco/waggle-classroom/main/media/user_{}_tmp_dir'
-        #test_filename = '/home/poco/waggle-classroom/main/media/user_{}_tmp_dir/test.py'.format(username)
-        test_filename = '/home/poco/waggle-classroom/main/media/user_{}.py'.format(username)
+        #directory = '/home/smccumsey/waggle-classroom/main/media/user_{}_tmp_dir'
+        #test_filename = '/home/smccumsey/waggle-classroom/main/media/user_{}_tmp_dir/test.py'.format(username)
+        test_filename = '/home/smccumsey/waggle-classroom/main/media/user_{}.py'.format(username)
         code_lines = code.splitlines()
         first_line = (code_lines[0]).expandtabs(0) 
         if len(code_lines)>1:
@@ -88,7 +90,7 @@ class LessonView(generic.DetailView):
             new_code = first_line+ "\n"+'\n'.join(map(lambda s:('\t'+s).expandtabs(8),other_lines)) #lines after first must be indented
         else: 
             new_code = first_line
-        print(new_code)
+        print("USER CODE AFTER SETUP: {}".format(new_code))
         with open(test_filename, "w") as outfile, open(envFile, 'r', encoding='utf-8') as infile:
             text = infile.read()
             text_with_code = re.sub('&&&', new_code, text,flags=re.M)
@@ -107,8 +109,7 @@ class LessonView(generic.DetailView):
 
     def post(self, request, *args, **kwargs):
         postdata = request.POST.dict()
-        print('POST DATA')
-        print(postdata)
+        print('POST DATA: {}'.format(postdata))
         if(request.POST.get('video_click')):
             videoID = request.POST.get('videoID')
             my_student = Student.objects.get(user=request.user) 
@@ -139,30 +140,32 @@ class LessonView(generic.DetailView):
             return HttpResponse('django says the note was saved')
         elif(request.POST.get('submittedcode')):
             usr_code = request.POST.get('submittedcode')
+            #if re.search(r'print\(.+\)', usr_code) or re.search(r'plt.show\(.+\)', usr_code):
             if re.search(r'print\(.+\)', usr_code) or re.search(r'plt.show\(.+\)', usr_code):
                 parsed_result_feedback = "Print and show are disabled in assessment submissions. Please practice using these in your notebooks."
                 return HttpResponse(parsed_result_feedback)
             assessmentID = request.POST.get('assessmentID')
-            print('USRCODE: %s \nASSESSMENTID: %s' % (usr_code, assessmentID))
+            print('USER CODE: {}'.format(usr_code))
+            print('ASSESSMENT ID: {}'.format(usr_code, assessmentID))
             envFile = Assessment.objects.get(id=int(assessmentID)).assess_file.path
             testFile = self.setupEnv(usr_code, envFile, request.user)
             result_feedback = list(map(lambda x: x.decode('ASCII'), self.runCode(testFile)))
-            print('RAW RESULT',result_feedback)
+            print('RAW RESULT: {}'.format(result_feedback))
             if result_feedback[0]: #stdout
                 print("STDOUT")
                 out_string = result_feedback[0]
                 def parseLong(err):
                     span = re.search('Long.+}', err).span()
                     old = err[(span[0]+7):(span[1]-1)]
-                    print("ERR0",old)
+                    #print("LONG ERR0",old)
                     if "Error(" in old:
                         new = repr(old)[1:-1].replace("\'","*").replace("\"","`")
-                        print("ERR1",new)
+                        #print("LONG ERR1",new)
                         return(err.replace(old, "'"+new+"'"))
                     return err
                     
                 out_string = [parseLong(err) for err in out_string.splitlines()]
-                print(out_string)
+                #print(out_string)
                 parsed_result_feedback  = json.dumps([ {k:v for k,v in (eval(err)).items()} for err in out_string])
             elif result_feedback[1]: #stderr
                 print("STERR")
@@ -170,11 +173,15 @@ class LessonView(generic.DetailView):
                 name = "Error"
                 shortd = [x for x in error_string.split() if 'Error' in x].pop()[:-1]
                 longd =  error_string[(error_string.find(shortd)):-1] #+ error_string[(error_string.find('\n')):(error_string.find(shortd))] 
+                if 'Indentation' in shortd:
+                    name = 'Indentation error'
+                    shortd = 'Make sure you are using tabs for indentation, and not spaces.'
+                
                 feedback = {"Name":name, "Short":shortd, "Long":longd}
                 parsed_result_feedback = json.dumps([feedback])
             else:
                 parsed_result_feedback = "good"
-            print('PARSED RESULT',parsed_result_feedback)
+            print('PARSED RESULT: {}'.format(parsed_result_feedback))
             assessment_progress = AssessmentProgress.objects.get(student=Student.objects.get(user=request.user), assessment=Assessment.objects.get(id=int(assessmentID)))
             assessment_progress.code_submission = usr_code
             assessment_progress.errors_list = parsed_result_feedback
@@ -183,6 +190,8 @@ class LessonView(generic.DetailView):
             if parsed_result_feedback == 'good':
                 assessment_progress.solved = True
             assessment_progress.save()
+            ap_record = str(model_to_dict(assessment_progress))
+            AssessmentSubmission.objects.create(submission_record = ap_record)
             return HttpResponse(parsed_result_feedback)
         return self.get(request, *args, **kwargs)
 
