@@ -69,24 +69,46 @@ pre {
     padding: 10px;
 }
 
+.tab-content{
+    border:1px;
+    border-top:1px; 
+    height:100%; 
+    overflow-y:content;
+    position:static;
+}
+
+.tab-content:after{
+    display: block;
+    visibility: hidden;
+    clear: both;
+}
+
+
 .nav-tabs {
+    padding-top:20px;
     margin-bottom: 0;
     font-size:16px;
     font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
-    white-space: nowrap;
-    overflow-x: auto;
-    overflow-y: hidden;
-    min-height: 46px;
-    height: auto;
-    background-color:white;
-    padding-top:30px;
 }
-.nav-tabs-affix.affix {
+
+.debug-affix.affix{
+    position:relative;
+}
+.tab-header.affix{
+    overflow-y: scroll;
     position:fixed;
-    top:100px;
-    width:64%;
+    left:0;
+    width:70%;
     height:auto;
-    z-index:10;
+    padding-left:15px;
+    padding-right:60px;
+    margin:0;
+    display:inline-block;
+    z-index:3;
+    float:none;
+    top:105px;
+    bottom: 0;
+
 }
 
 .disqus-affix.affix {
@@ -95,7 +117,7 @@ pre {
     bottom: 0;
     right: 0;
     position:fixed;
-    top:130px;
+    top:105px;
     width:30%;
     height:auto;
 }
@@ -109,7 +131,7 @@ pre {
 
     #right-disqus{
         background-color:white;
-        padding-top: 10px;
+        padding-top: 20px;
         position: fixed;
         top: 250px;
         bottom: 0;
@@ -123,6 +145,7 @@ pre {
     border:1px solid grey; 
     width:100%; 
     height:200px;
+    position:relative;
     z-index:1;
 }
 
@@ -140,29 +163,6 @@ pre {
 }
 
 .modal-dialog {
-    padding-top: 10%;
-}
-
-.spinner {
-    display: inline-block;
-    opacity: 0;
-    width: 0;
-
-    -webkit-transition: opacity 0.25s, width 0.25s;
-    -moz-transition: opacity 0.25s, width 0.25s;
-    -o-transition: opacity 0.25s, width 0.25s;
-    transition: opacity 0.25s, width 0.25s;
-}
-
-.has-spinner.active {
-    cursor:progress;
-}
-
-.has-spinner.active .spinner {
-    opacity: 1;
-    width: auto; /* This doesn't work, just fix for unkown width elements */
-}
-</style>
 
 <script src="{{STATIC_URL}}/codemirror/lib/codemirror.js"></script>
 <script src="{{STATIC_URL}}/codemirror/addon/hint/show-hint.js"></script>
@@ -804,6 +804,9 @@ function signOut() {
         var csrftoken = Cookies.get('csrftoken');
 
         $.ajax({
+        var csrftoken = Cookies.get('csrftoken');
+
+        $.ajax({
             method: "POST",
             url: "{{request.path}}",
             beforeSend: function( xhr ) {
@@ -815,13 +818,6 @@ function signOut() {
         .done(function( response) {
             console.log( "Note saved to DB: " + response);
             });
-    }
-
-    function submitQuestion(challengeID) {
-        // send txt in modal to Profs email
-        // modal should show thread convo for Q and A btwn student/prof
-        // post student Q to server
-        $('#botModal').modal('show')
     }
 
     function submitCode(codemirrorID, idx) {
@@ -855,23 +851,18 @@ function signOut() {
             document.getElementById('result_'+code_assessmentID).innerHTML = feedback;
         });
     }
-
     $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
         var target = $(e.target).attr("href") // activated tab
         console.log(target);
         if ((target).indexOf("assessment") !== -1){
-            document.getElementById("main-content").className = "col-lg-12 col-md-12 col-sm-12";
-            document.getElementById("side-content").className = "col-lg-0 col-md-0 col-sm-0";
-            // adjust affix too!
-            $('.disqus-affix').hide();
+            //document.getElementById("discussion").style.visibility = 'hidden';
+            //document.getElementById("chatbot").style.visibility = 'visible';
             $('#discussion').hide();
-            $('#chatbot').hide();
-
+            $('#chatbot').show();
         }
         else {
-            document.getElementById("main-content").className = "col-lg-8 col-md-8 col-sm-8";
-            document.getElementById("side-content").className = "col-lg-4 col-md-4 col-sm-4";
-            $('.disqus-affix').show();
+            //document.getElementById("chatbot").style.visibility = 'hidden';
+            //document.getElementById("discussion").style.visibility = 'visible';
             $('#chatbot').hide();
             $('#discussion').show();
         }
@@ -888,14 +879,6 @@ function signOut() {
         }
         });
 
-
     </script>
-<script>
-   //$('.nav-tabs-affix').affix({
-$("#assessmentTab").click(function() {
-               $('.nav-tabs-affix.affix').css({"width":"100%"});
-      });
-</script>
-
     </body>
     </html>

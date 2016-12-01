@@ -16,9 +16,11 @@ Including another URLconf
 from django.conf.urls import include, url
 from django.contrib import admin
 from django.views.generic.base import RedirectView
+from django.http import HttpResponse
 
 urlpatterns = [
     url(r'^main/', include('main.urls')),
     url(r'^admin/', admin.site.urls),
-    url(r'^.*$', RedirectView.as_view(url='http://smccumsey.pythonanywhere.com/main/login/', permanent=False), name='login'),
+    url(r'^google8a43fbed4f8a62b6\.html$', lambda r: HttpResponse("google-site-verification: google8a43fbed4f8a62b6.html", content_type="text/plain")),
+    url(r'^.*$', RedirectView.as_view(url='http://poco.pythonanywhere.com/main/login/', permanent=False), name='login'),
 ]

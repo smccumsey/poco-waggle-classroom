@@ -49,40 +49,42 @@ class LessonView(generic.DetailView):
         self.object = self.get_object()
         context = self.get_context_data(object=self.object)
         print("REQUEST SESSION", request.session.items())
-        print("GET context", context.items())
+        print("GET ITEMS: ", context.items())
         #if not request.session.get('approved'):
-            #return HttpResponseNotFound("<br/><br/><h1 style='text-align:center;vertical_align:middle;'>Please sign-in to <a href='http://smccumsey.pythonanywhere.com/main/login/'>Poco<a> to access this page</h1>")
+            #return HttpResponseNotFound("<br/><br/><h1 style='text-align:center;vertical_align:middle;'>Please sign-in to <a href='http://poco.pythonanywhere.com/main/login/'>Poco<a> to access this page</h1>")
+        print("RESPONSE:", self.render_to_response(context))
         return self.render_to_response(context)
 
     def get_context_data(self, **kwargs):
         # Call the base implementation first to get a context
         context = super(LessonView, self).get_context_data(**kwargs)
         module_id = int(self.kwargs.get('module'))
-        print('MODULE_ID ', module_id)
+        #print('MODULE_ID ', module_id)
         context['module_obj'] = Module.objects.get(id=module_id)
-        context['assessments'] =Assessment.objects.filter(module_id=module_id).order_by('order')
-        context['contents'] =Content.objects.filter(module_id=module_id)
-        context['videos'] =Video.objects.filter(module_id=module_id)
-        context['relateds'] =Related.objects.filter(module_id=module_id)
-        print(context.items())
-        print("VERSION", sys.version)
+        context['assessments'] = Assessment.objects.filter(module_id=module_id).order_by('order')
+        context['contents'] = Content.objects.filter(module_id=module_id)
+        context['videos'] = Video.objects.filter(module_id=module_id)
+        context['relateds'] = Related.objects.filter(module_id=module_id)
+        print("GET CONTEXT DATA: ", context.items())
+        #print("VERSION", sys.version)
+
         # set up progress data for student if it doesnt exist
         student_instance = context['object'].students
         for content_instance in context['contents']:
             content_prog,created = student_instance.contentprogress_set.get_or_create(content=content_instance)
-            print(content_prog,created)
+            #print(content_prog,created)
         for assessment_instance in context['assessments']:
             assessment_prog,created = student_instance.assessmentprogress_set.get_or_create(assessment=assessment_instance)
-            print(assessment_prog,created)
+            #print(assessment_prog,created)
         for video_instance in context['videos']:
             video_prog,created = student_instance.videoprogress_set.get_or_create(video=video_instance)
-            print(video_prog,created)
+            #print(video_prog,created)
         return context
 
     def setupEnv(self, code, envFile, username):
-        #directory = '/home/smccumsey/waggle-classroom/main/media/user_{}_tmp_dir'
-        #test_filename = '/home/smccumsey/waggle-classroom/main/media/user_{}_tmp_dir/test.py'.format(username)
-        test_filename = '/home/smccumsey/waggle-classroom/main/media/user_{}.py'.format(username)
+        #directory = '/home/poco/waggle-classroom/main/media/user_{}_tmp_dir'
+        #test_filename = '/home/poco/waggle-classroom/main/media/user_{}_tmp_dir/test.py'.format(username)
+        test_filename = '/home/poco/waggle-classroom/main/media/user_{}.py'.format(username)
         code_lines = code.splitlines()
         first_line = (code_lines[0]).expandtabs(0) 
         if len(code_lines)>1:
