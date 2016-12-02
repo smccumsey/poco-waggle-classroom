@@ -69,58 +69,26 @@ pre {
     padding: 10px;
 }
 
-.tab-content{
-    border:1px;
-    border-top:1px; 
-    height:100%; 
-    overflow-y:content;
-    position:static;
-}
-
-.tab-content:after{
-    display: block;
-    visibility: hidden;
-    clear: both;
-}
-
-
 .nav-tabs {
-    padding-top:20px;
     margin-bottom: 0;
     font-size:16px;
     font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    white-space: nowrap;
+    overflow-x: auto;
+    overflow-y: hidden;
+    min-height: 46px;
+    height: auto;
+    background-color:white;
+    padding-top:30px;
 }
-
-.debug-affix.affix{
-    position:relative;
-}
-.tab-header.affix{
-    overflow-y: scroll;
+.nav-tabs-affix.affix {
     position:fixed;
-    left:0;
-    width:70%;
+    top:100px;
+    width:100%;
     height:auto;
-    padding-left:15px;
-    padding-right:60px;
-    margin:0;
-    display:inline-block;
-    z-index:3;
-    float:none;
-    top:105px;
-    bottom: 0;
-
+    z-index:10;
 }
 
-.disqus-affix.affix {
-    overflow-y: scroll;
-    padding-right: 20px;
-    bottom: 0;
-    right: 0;
-    position:fixed;
-    top:105px;
-    width:30%;
-    height:auto;
-}
 @media (min-width: 768px){
     #left {
         position: absolute;
@@ -131,7 +99,7 @@ pre {
 
     #right-disqus{
         background-color:white;
-        padding-top: 20px;
+        padding-top: 10px;
         position: fixed;
         top: 250px;
         bottom: 0;
@@ -145,7 +113,6 @@ pre {
     border:1px solid grey; 
     width:100%; 
     height:200px;
-    position:relative;
     z-index:1;
 }
 
@@ -163,6 +130,29 @@ pre {
 }
 
 .modal-dialog {
+    padding-top: 10%;
+}
+
+.spinner {
+    display: inline-block;
+    opacity: 0;
+    width: 0;
+
+    -webkit-transition: opacity 0.25s, width 0.25s;
+    -moz-transition: opacity 0.25s, width 0.25s;
+    -o-transition: opacity 0.25s, width 0.25s;
+    transition: opacity 0.25s, width 0.25s;
+}
+
+.has-spinner.active {
+    cursor:progress;
+}
+
+.has-spinner.active .spinner {
+    opacity: 1;
+    width: auto; /* This doesn't work, just fix for unkown width elements */
+}
+</style>
 
 <script src="{{STATIC_URL}}/codemirror/lib/codemirror.js"></script>
 <script src="{{STATIC_URL}}/codemirror/addon/hint/show-hint.js"></script>
@@ -293,15 +283,15 @@ function postNote(videoID, updated_notes, currentTime) {
     var csrftoken = Cookies.get('csrftoken');
 
     $.ajax({
-        method: "POST",
-        url: "{{request.path}}",
-        beforeSend: function( xhr ) {
-            xhr.setRequestHeader("X-CSRFToken", csrftoken);
-        },
-    data: { videoID: videoID , html_notes: updated_notes, time: currentTime} 
+method: "POST",
+url: "{{request.path}}",
+beforeSend: function( xhr ) {
+xhr.setRequestHeader("X-CSRFToken", csrftoken);
+},
+data: { videoID: videoID , html_notes: updated_notes, time: currentTime} 
 
-    })
-    .done(function( response) {
+})
+.done(function( response) {
         console.log( "Note saved to DB: " + response);
         });
 }
@@ -359,8 +349,8 @@ function fillModal(msg){
 
     function escapeHtml(string) {
         return String(string).replace(/[&<>"'\/]/g, function (s) {
-                      return entityMap[s];
-                        });
+                return entityMap[s];
+                });
     }
 
     msg = escapeHtml(msg);
@@ -405,14 +395,14 @@ function writeFeedback( feedbackString, ID) {
                     var shortd = val['Short'];
                     var longd = val['Long'];
                     console.log(longd) // need to escape html chars
-                    longd = longd.replace(/'/g, "*");
+                        longd = longd.replace(/'/g, "*");
 
                     var cell1 = "<td><center><span style='color:red;' class= 'glyphicon glyphicon-thumbs-down'></span></center></td>";
                     var cell2 = "<td>"+name+"</td>";
                     var cell3 = "<td>"+shortd+"</td>";
                     var cell4 = "<td><button type='button' class='btn btn-default btn-md btn-block' data-toggle='modal' data-target='#longdModal'";
                     cell4 += " onclick=\"fillModal('"+longd+"')\""
-                    cell4 += ">Tell me more</button></td>";
+                        cell4 += ">Tell me more</button></td>";
 
                     outputTable += "<tr class='table-border danger'>".concat(cell1).concat(cell2).concat(cell3).concat(cell4).concat("</tr>");
                 }
@@ -480,19 +470,19 @@ function signOut() {
 
 <div class="container-fluid">
     <div class="row">
-        <div id="main-content" class="col-lg-8 col-md-8 col-sm-8">
+        <div id="main-content" class="col-lg-12 col-md-12 col-sm-12">
 
             <!-- Nav tabs -->
 
             <div class="nav-tabs-affix" data-spy="affix" data-offset-top="250">
-            <ul class="nav nav-tabs nav-justified" role="tablist" id="myTab" >
-                <li role="presentation" class="active"><a id="otherTab" href="#contents" aria-controls="content" role="tab" data-toggle="tab">Content</a></li>
-                <li role="presentation"><a id="otherTab" href="#debug" aria-controls="debug" role="tab" data-toggle="tab">Debugging with Steve</a></li>
-                <li role="presentation"><a id="assessmentTab" href="#assessment" aria-controls="assessment" role="tab" data-toggle="tab">Assessment</a></li>
-                <li role="presentation"><a id="otherTab" href="#other" aria-controls="other" role="tab" data-toggle="tab">Other</a></li>
-            </ul>
+                <ul class="nav nav-tabs nav-justified" role="tablist" id="myTab" >
+                    <li role="presentation" class="active"><a id="otherTab" href="#contents" aria-controls="content" role="tab" data-toggle="tab">Content</a></li>
+                    <li role="presentation"><a id="otherTab" href="#debug" aria-controls="debug" role="tab" data-toggle="tab">Debugging with Steve</a></li>
+                    <li role="presentation"><a id="assessmentTab" href="#assessment" aria-controls="assessment" role="tab" data-toggle="tab">Assessment</a></li>
+                    <li role="presentation"><a id="otherTab" href="#other" aria-controls="other" role="tab" data-toggle="tab">Other</a></li>
+                </ul>
             </div>
-            
+
             <!-- Tab panes -->
             <div class="tab-content" style="border: 1px ; border-top: 1px; height:100%; overflow-y:content;" id="content">
 
@@ -500,7 +490,7 @@ function signOut() {
                     {% for content in contents%}
                     <iframe id="iframe" src="{{content.html_notebook.url}}" style="border:0px;" height=1000% width=95%></iframe>
                     {% endfor %}
-                        
+
                 </div>
 
                 <div role="tabpanel" class="tab-pane" id="debug">
@@ -521,74 +511,74 @@ function signOut() {
                                     </ul>
                                 </div>
                                 <div id="video-notes">
-                                {%for video in videos%}
-                                {% for vp in object.students.videoprogress_set.all %}
-                                {% if video == vp.video%} 
-                                <div id="{{video.id}}" class="collapse demo{{video.id}}">
-                                    <table id="noteTable{{video.id}}" class="table table-responsive">
-                                        {% if vp.video_notes %}
-                                        {{vp.video_notes|safe}}
-                                        {% else %}
-                                        <tr>
-                                            <td style="border:none;">
-                                                <textarea autofocus id="newNote{{video.id}}" rows="2" style="width:100%" onfocus="takeNote(true, 'video_{{video.id}}');" onblur="takeNote(false, 'video_{{video.id}}');"></textarea>
-                                            </td>
-                                            <td valign="middle" style="border:none; vertical-align:middle;">
-                                            </td>
-                                        </tr>
-                                         <tr>
-                                            <td style="border:none;text-align:left;">
-                                                <button type="button" class="btn btn-primary btn-sm" onclick="saveNote('video_{{video.id}}');">Save Note</button>
-                                            </td>
-                                            <td valign="middle" style="border:none; vertical-align:middle;">
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td style="border:none;">
-                                                <b>Notes:</b>
-                                            </td>
-                                            <td style="border:none;">
-                                                &nbsp;
-                                            </td>
-                                        </tr>
-                                        {% endif %}
-                                    </table><hr/>
-                                </div>
+                                    {%for video in videos%}
+                                    {% for vp in object.students.videoprogress_set.all %}
+                                    {% if video == vp.video%} 
+                                    <div id="{{video.id}}" class="collapse demo{{video.id}}">
+                                        <table id="noteTable{{video.id}}" class="table table-responsive">
+                                            {% if vp.video_notes %}
+                                            {{vp.video_notes|safe}}
+                                            {% else %}
+                                            <tr>
+                                                <td style="border:none;">
+                                                    <textarea autofocus id="newNote{{video.id}}" rows="2" style="width:100%" onfocus="takeNote(true, 'video_{{video.id}}');" onblur="takeNote(false, 'video_{{video.id}}');"></textarea>
+                                                </td>
+                                                <td valign="middle" style="border:none; vertical-align:middle;">
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="border:none;text-align:left;">
+                                                    <button type="button" class="btn btn-primary btn-sm" onclick="saveNote('video_{{video.id}}');">Save Note</button>
+                                                </td>
+                                                <td valign="middle" style="border:none; vertical-align:middle;">
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="border:none;">
+                                                    <b>Notes:</b>
+                                                </td>
+                                                <td style="border:none;">
+                                                    &nbsp;
+                                                </td>
+                                            </tr>
+                                            {% endif %}
+                                        </table><hr/>
+                                    </div>
 
-                                {% endif %}
-                                {%endfor%}
-                                {%endfor%}
+                                    {% endif %}
+                                    {%endfor%}
+                                    {%endfor%}
 
                                 </div>
                             </div>
 
 
                             <div class="col-lg-8 col-md-8 col-sm-8" >
-                            {%for video in videos%}
-                            <div id="demo{{video.id}}" class="collapse demo{{video.id}}">
-                                <center><h3 style="font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;"> {{video.title}} </h3></center>
-                                <div class="embed-responsive embed-responsive-4by3">
-                                    <video class="embed-responsive-item" id="video_{{video.id}}" controls width=100%>
-                                        <source src='{{video.video_URL}}' type='video/mp4'>
-                                        Your browser does not support the video tag.
-                                    </video>
+                                {%for video in videos%}
+                                <div id="demo{{video.id}}" class="collapse demo{{video.id}}">
+                                    <center><h3 style="font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;"> {{video.title}} </h3></center>
+                                    <div class="embed-responsive embed-responsive-4by3">
+                                        <video class="embed-responsive-item" id="video_{{video.id}}" controls width=100%>
+                                            <source src='{{video.video_URL}}' type='video/mp4'>
+                                            Your browser does not support the video tag.
+                                        </video>
+                                    </div>
                                 </div>
-                            </div>
-                            {%endfor%}
+                                {%endfor%}
 
-                            {%for video in videos%}
-                            <script>
-                            $(document).ready(function(){
-                                  $(".demo{{video.id}}").on("hide.bs.collapse", function(){
-                                        $(".btn{{video.id}}").html('<span class="glyphicon glyphicon-collapse-down" style="color:black"></span> {{video.title}}');
-                                        document.getElementById("video_{{video.id}}").pause();
-                                  });
-                                  $(".demo{{video.id}}").on("show.bs.collapse", function(){
-                                      $(".btn{{video.id}}").html('<span class="glyphicon glyphicon-collapse-up" style="color:#428bca"></span>  {{video.title}}');
-                                  });
-                            });
-                            </script>
-                            {%endfor%}
+                                {%for video in videos%}
+                                <script>
+$(document).ready(function(){
+        $(".demo{{video.id}}").on("hide.bs.collapse", function(){
+            $(".btn{{video.id}}").html('<span class="glyphicon glyphicon-collapse-down" style="color:black"></span> {{video.title}}');
+            document.getElementById("video_{{video.id}}").pause();
+            });
+        $(".demo{{video.id}}").on("show.bs.collapse", function(){
+            $(".btn{{video.id}}").html('<span class="glyphicon glyphicon-collapse-up" style="color:#428bca"></span>  {{video.title}}');
+            });
+        });
+                                </script>
+                                {%endfor%}
                             </div>
                         </div>
                     </div>
@@ -608,26 +598,26 @@ function signOut() {
                             <div class="panel-body">
                                 <!-- CODE EDITOR GOES HERE.-->
                                 <textarea id="code-{{assessment.id}}" name="code_id{{assessment.id}}" >{% if not ap.code_submission %}{{assessment.code_editor_filler}}{% else %}{{ap.code_submission}}{% endif %}&#13;&#10;</textarea>
-                                    <br/>
-                                    <button id="spinnerbtn_{{assessment.id}}" type="button" class="btn btn-default has-spinner" onclick="submitCode('code-{{assessment.id}}',{{forloop.parentloop.counter0}})">
-                                        <span class="spinner"><i class="icon-spin icon-refresh"><img src="http://assets2.bostonlogic.com/images/spinner.gif" width="10" height="10"></i></span>
-                                        Submit Code
-                                    </button>
-                                    <button type="button" class="btn btn-danger" onclick="submitQuestion({{assessment.id}})">Ask question
-                                    </button>
+                                <br/>
+                                <button id="spinnerbtn_{{assessment.id}}" type="button" class="btn btn-default has-spinner" onclick="submitCode('code-{{assessment.id}}',{{forloop.parentloop.counter0}})">
+                                    <span class="spinner"><i class="icon-spin icon-refresh"><img src="http://assets2.bostonlogic.com/images/spinner.gif" width="10" height="10"></i></span>
+                                    Submit Code
+                                </button>
+                                <button type="button" class="btn btn-danger" onclick="submitQuestion({{assessment.id}})">Ask question
+                                </button>
                             </div>
                         </div>
                         <div class="panel panel-default" style="border:0;">
                             <!-- OUTPUT/TEST RESULTS GO HERE. -->
                             <div class="panel-body">
-                                
+
                                 <p id="result_{{assessment.id}}"></p> 
                                 <script>
-                                    var feedback = writeFeedback('{{ap.errors_list|escapejs}}', '{{assessment.id}}');
-                                    console.log(feedback);
-                                    document.getElementById('result_{{assessment.id}}').innerHTML = feedback;
+var feedback = writeFeedback('{{ap.errors_list|escapejs}}', '{{assessment.id}}');
+console.log(feedback);
+document.getElementById('result_{{assessment.id}}').innerHTML = feedback;
                                 </script>
-                                
+
                             </div>
                         </div>
                         <!-- End triple -->
@@ -640,51 +630,51 @@ function signOut() {
                     </div>
                 </div>
 
-                    <!-- Modal -->
-                    <div class="modal fade" id="botModal" role="dialog">
-                        <div class="modal-dialog">
+                <!-- Modal -->
+                <div class="modal fade" id="botModal" role="dialog">
+                    <div class="modal-dialog">
 
-                            <!-- Modal content-->
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                    <h4 class="modal-title">
+                        <!-- Modal content-->
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                <h4 class="modal-title">
                                     <img src="{{STATIC_URL}}/images/chatbot.jpg" width="100" height="75"> 
                                     <span style="display:inline-block; width: 10;"></span>
                                     Need help? Ask away ... </h4>
-                                </div>
-                                <div class="modal-body">
-                                    <p> TO: </p>
-                                    <p> FROM: </p>
-                                    <p> SUBJECT: </p>
-                                    <textarea rows="4" cols="50">Submit your question here.</textarea>
-                                </div>
-                                <div class="modal-footer">
-                                    <p align="left">Display previous conversation here. </p><br/>
-                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                </div>
                             </div>
-
-                        </div>
-                    </div>
-
-                    <!-- Modal -->
-                    <div class="modal fade" id="longdModal" role="dialog">
-                        <div class="modal-dialog">
-
-                            <!-- Modal content-->
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                    <h4 class="modal-title">Long Description</h4>
-                                </div>
-                                <div class="modal-body">
-                                    <span id="longd"> empty </span>
-                                </div>
+                            <div class="modal-body">
+                                <p> TO: </p>
+                                <p> FROM: </p>
+                                <p> SUBJECT: </p>
+                                <textarea rows="4" cols="50">Submit your question here.</textarea>
                             </div>
-
+                            <div class="modal-footer">
+                                <p align="left">Display previous conversation here. </p><br/>
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            </div>
                         </div>
+
                     </div>
+                </div>
+
+                <!-- Modal -->
+                <div class="modal fade" id="longdModal" role="dialog">
+                    <div class="modal-dialog">
+
+                        <!-- Modal content-->
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                <h4 class="modal-title">Long Description</h4>
+                            </div>
+                            <div class="modal-body">
+                                <span id="longd"> empty </span>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
 
                 <div role="tabpanel" class="tab-pane" id="other">
                     <center>
@@ -694,191 +684,123 @@ function signOut() {
                     </center>
                     <h4>Available downlads:</h4>
                     &emsp;<table class="table-striped table-condensed table-border table-responsive">
-                    <thead><tr style="background-color:#eee">
-                    <th>Description</th><th>&emsp;Downloadable File</th>
-                    </tr></thead>
-                    <tbody>
-                    {% for related_item in relateds %}
-                    <tr>
-                        <td>{{related_item.description}}</td>
-                        <td>&emsp;<a href="{{related_item.notebook.url}}" download>{{related_item.title}}</a></td>
-                    </tr>
-                    {% endfor %}
-                    </tbody>
+                        <thead><tr style="background-color:#eee">
+                                <th>Description</th><th>&emsp;Downloadable File</th>
+                        </tr></thead>
+                        <tbody>
+                        {% for related_item in relateds %}
+                        <tr>
+                            <td>{{related_item.description}}</td>
+                            <td>&emsp;<a href="{{related_item.notebook.url}}" download>{{related_item.title}}</a></td>
+                        </tr>
+                        {% endfor %}
+                        </tbody>
                     </table>
                 </div>
 
-                
+
             </div>
 
         </div>
-        
-        <div id="side-content" class="col-lg-4 col-md-4 col-sm-4" > 
-            <div class="disqus-affix" data-spy="affix" data-offset-top="250">
-            <div id = 'chatbot' style="display:none;">
-                <h2 style="color:red">Chatbot under development (stay tuned).</h2>
-                
-                <h3> Need help? </h3>
-                <textarea rows="4" cols="50">Submit your question here.</textarea>
-            </div>
-            <div id = 'discussion'>
-            <table id="previewTable" style="width:100%;" class="table-responsive">
-                <tr>
-                    <td>
-                        <div id="disqus_thread"></div>
-                        <div id="right-disqus">
-                        <script>
-
-/**
-   *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
-    *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables */
-                           var disqus_config = function () {
-                               this.page.url ="http://smccumsey.pythonanywhere.com{{request.path}}";  // Replace PAGE_URL with your page's canonical URL variable
-                               this.page.identifier = "/lesson/{{module_obj.id}}/"; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
-                               this.callbacks.onNewComment = [function(comment) { 
-                                   //alert(comment.id);
-                                   //alert(comment.text);
-                                }];
-                           };
-                        (function() { // DON'T EDIT BELOW THIS LINE
-                             var d = document, s = d.createElement('script');
-                                 s.src = '//http-smccumsey-pythonanywhere-com.disqus.com/embed.js';
-                                     s.setAttribute('data-timestamp', +new Date());
-                                         (d.head || d.body).appendChild(s);
-                                         })();
-                        </script>
-                        <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-                    </td>
-                </tr>
-
-            </table>
-            <div id="disqus_container_2"></div>
-
-            <div class="spinnerbox">
-                <center><img src="{{STATIC_URL}}/images/spinner.gif"/></center>
-            </div>
 
         </div>
-        </div>
-    </div>
-    </div>
 
-    <script>
-        var editors = [];
-        {% for assessment in assessments %}
-            editors[{{forloop.counter0}}] = CodeMirror.fromTextArea(document.getElementById("code-{{assessment.id}}"), {
-            mode: {name: "python",
-            version: 3,
-            singleLineStringErrors: false},
-            lineNumbers: true,
-            indentUnit: 4,
-            indentWithTabs:true,
-            matchBrackets: true,
-            autoRefresh: true,
-            });
-            setTimeout(function() {
-                    editors[{{forloop.counter0}}].refresh()
-                    }, 1);
-        {% endfor %}
+        <script>
+var editors = [];
+{% for assessment in assessments %}
+editors[{{forloop.counter0}}] = CodeMirror.fromTextArea(document.getElementById("code-{{assessment.id}}"), {
+mode: {name: "python",
+version: 3,
+singleLineStringErrors: false},
+lineNumbers: true,
+indentUnit: 4,
+indentWithTabs:true,
+matchBrackets: true,
+autoRefresh: true,
+});
+setTimeout(function() {
+        editors[{{forloop.counter0}}].refresh()
+        }, 1);
+{% endfor %}
 
-    </script>
-    <script>
-    function videoClick(videoID) {
-        var csrftoken = Cookies.get('csrftoken');
+        </script>
+        <script>
+function videoClick(videoID) {
+    var csrftoken = Cookies.get('csrftoken');
 
-        $.ajax({
-            method: "POST",
-            url: "{{request.path}}",
-            beforeSend: function( xhr ) {
-                xhr.setRequestHeader("X-CSRFToken", csrftoken);
-            },
-        data: { videoID: videoID , video_click: "True" } 
+    $.ajax({
+method: "POST",
+url: "{{request.path}}",
+beforeSend: function( xhr ) {
+xhr.setRequestHeader("X-CSRFToken", csrftoken);
+},
+data: { videoID: videoID , video_click: "True" } 
 
-        })
-        .done(function( response) {
-            console.log( "Note saved to DB: " + response);
-            });
-    }
+})
+.done(function( response) {
+        console.log( "Note saved to DB: " + response);
+        });
+}
 
-    function contentClick(contentID) {
-        var csrftoken = Cookies.get('csrftoken');
+function contentClick(contentID) {
+    var csrftoken = Cookies.get('csrftoken');
 
-        $.ajax({
-        var csrftoken = Cookies.get('csrftoken');
+    $.ajax({
+method: "POST",
+url: "{{request.path}}",
+beforeSend: function( xhr ) {
+xhr.setRequestHeader("X-CSRFToken", csrftoken);
+},
+data: { contentID: contentID , content_click: "True"} 
 
-        $.ajax({
-            method: "POST",
-            url: "{{request.path}}",
-            beforeSend: function( xhr ) {
-                xhr.setRequestHeader("X-CSRFToken", csrftoken);
-            },
-        data: { contentID: contentID , content_click: "True"} 
+})
+.done(function( response) {
+        console.log( "Note saved to DB: " + response);
+        });
+}
 
-        })
-        .done(function( response) {
-            console.log( "Note saved to DB: " + response);
-            });
-    }
+function submitQuestion(challengeID) {
+    // send txt in modal to Profs email
+    // modal should show thread convo for Q and A btwn student/prof
+    // post student Q to server
+    $('#botModal').modal('show')
+}
 
-    function submitCode(codemirrorID, idx) {
-        console.log(codemirrorID);
-        console.log(idx);
-        var code = editors[idx].getValue();
-        console.log(code);
+function submitCode(codemirrorID, idx) {
+    console.log(codemirrorID);
+    console.log(idx);
+    var code = editors[idx].getValue();
+    console.log(code);
 
-        var csrftoken = Cookies.get('csrftoken');
-        var code_assessmentID = codemirrorID.split("-").pop();
-        // clear output area
-        document.getElementById('result_'+code_assessmentID).innerHTML = "";
-        //begin spinner
+    var csrftoken = Cookies.get('csrftoken');
+    var code_assessmentID = codemirrorID.split("-").pop();
+    // clear output area
+    document.getElementById('result_'+code_assessmentID).innerHTML = "";
+    //begin spinner
+    $('#spinnerbtn_'+code_assessmentID).toggleClass('active');
+
+    $.ajax({
+method: "POST",
+url: "{{request.path}}",
+beforeSend: function( xhr ) {
+xhr.setRequestHeader("X-CSRFToken", csrftoken);
+},
+data: { assessmentID: code_assessmentID , submittedcode: code} 
+
+})
+.done(function( response) {
+        //end spinner
         $('#spinnerbtn_'+code_assessmentID).toggleClass('active');
-
-        $.ajax({
-            method: "POST",
-            url: "{{request.path}}",
-            beforeSend: function( xhr ) {
-                xhr.setRequestHeader("X-CSRFToken", csrftoken);
-            },
-        data: { assessmentID: code_assessmentID , submittedcode: code} 
-
-        })
-        .done(function( response) {
-            //end spinner
-            $('#spinnerbtn_'+code_assessmentID).toggleClass('active');
-            console.log( "Data Saved: " + response);
-            var feedback = writeFeedback( response, code_assessmentID);
-            console.log(feedback);
-            document.getElementById('result_'+code_assessmentID).innerHTML = feedback;
+        console.log( "Data Saved: " + response);
+        var feedback = writeFeedback( response, code_assessmentID);
+        console.log(feedback);
+        document.getElementById('result_'+code_assessmentID).innerHTML = feedback;
         });
-    }
-    $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
-        var target = $(e.target).attr("href") // activated tab
-        console.log(target);
-        if ((target).indexOf("assessment") !== -1){
-            //document.getElementById("discussion").style.visibility = 'hidden';
-            //document.getElementById("chatbot").style.visibility = 'visible';
-            $('#discussion').hide();
-            $('#chatbot').show();
-        }
-        else {
-            //document.getElementById("chatbot").style.visibility = 'hidden';
-            //document.getElementById("discussion").style.visibility = 'visible';
-            $('#chatbot').hide();
-            $('#discussion').show();
-        }
-        if ((target).indexOf("content") !== -1){
-            {% for content in contents %}
-                contentClick({{content.id}});
-            {% endfor %}
-        }
-        if ((target).indexOf("debug") == -1){
-            {% for video in videos %}
-                var v = document.getElementById("video_{{video.id}}");
-                v.pause();
-            {% endfor %}
-        }
-        });
+}
 
-    </script>
-    </body>
-    </html>
+
+
+        </script>
+
+        </body>
+        </html>

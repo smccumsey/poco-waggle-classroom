@@ -14,7 +14,6 @@ import re
 import json
 import imp
 import ntpath
-from importlib.machinery import SourceFileLoader
 import os
 import sys
 import subprocess
@@ -50,9 +49,10 @@ class LessonView(generic.DetailView):
         context = self.get_context_data(object=self.object)
         print("REQUEST SESSION", request.session.items())
         print("GET ITEMS: ", context.items())
-        #if not request.session.get('approved'):
-            #return HttpResponseNotFound("<br/><br/><h1 style='text-align:center;vertical_align:middle;'>Please sign-in to <a href='http://poco.pythonanywhere.com/main/login/'>Poco<a> to access this page</h1>")
         print("RESPONSE:", self.render_to_response(context))
+        #ADMIN CHECK
+        if request.user.is_superuser:
+            return HttpResponseNotFound("<br/><br/><h1 style='text-align:center;vertical_align:middle;'>Signed in as admin, please resign-in to <a href='http://poco.pythonanywhere.com/main/login/'>Poco<a> to access this page</h1>")
         return self.render_to_response(context)
 
     def get_context_data(self, **kwargs):
@@ -285,7 +285,7 @@ class LoginView(generic.TemplateView):
     def post(self, request, *args, **kwargs):
         usr_token = request.POST.get('idtoken')
         user = authenticate(token=usr_token)
-        print("USERID!",user,user.pk)
+        print("USERID",user,user.pk)
         if user is not None:
             if user.is_active:
                 login(request, user)
@@ -294,9 +294,9 @@ class LoginView(generic.TemplateView):
 
                 # Redirect to a success page.
             else:
-                print('bar')
                 # Return a 'disabled account' error message
+                return HttpResponseNotFound("<br/><br/><h1 style='text-align:center;vertical_align:middle;'>Disabled account!</h1>")
         else:
-            print('baz')
             # Return an 'invalid login' error message.
+            return HttpResponseNotFound("<br/><br/><h1 style='text-align:center;vertical_align:middle;'>Invalid login!</h1>")
 
