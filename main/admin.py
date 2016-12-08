@@ -64,10 +64,14 @@ class AssessmentFilter(admin.SimpleListFilter):
             return queryset.filter(assessment__module__title__contains = "10. ")
 
 class AssessmentProgressAdmin(admin.ModelAdmin):
-    list_display = ('__str__', 'solved')
+    list_display = ('assessment', 'get_name', 'solved')
+    search_fields = ['student__user__last_name', 'student__user__first_name']
     list_filter = (AssessmentFilter,)
     model = AssessmentProgress
     ordering = ['assessment']
+    def get_name(self, obj):
+        return obj.student.user.first_name + ' ' + obj.student.user.last_name
+    get_name.short_description = 'Full name'
 
 admin.site.register(Course)
 admin.site.register(Module)
