@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites'
     #'social.apps.django_app.default',
     #'oauth2_provider',
     #'corsheaders',
@@ -84,6 +85,7 @@ LOGIN_REDIRECT_URL = 'main/login.html'
 
 # Database
 # https://docs.djangoproject.com/en/1.9/ref/settings/#databases
+SITE_ID=1
 
 DATABASES = {
     'default': {
@@ -142,3 +144,12 @@ STATIC_URL = '/static/'
 
 MEDIA_ROOT='/home/poco/waggle-classroom/main/media/'
 MEDIA_URL='/media/'
+
+#Email
+EMAIL_HOST = 'smtp.gmail.com'
+#EMAIL_HOST_USER = 'smccumsey@gmail.com'
+#EMAIL_HOST_PASSWORD = 'cdywpwdnayznuuex'
+EMAIL_HOST_USER = 'poco.classroom@gmail.com'
+EMAIL_HOST_PASSWORD = 'fodpjrxpalumbuvk'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True

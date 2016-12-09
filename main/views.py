@@ -29,6 +29,10 @@ import httplib2
 from django.contrib.auth import login, authenticate
 from django.template.defaultfilters import slugify
 from django.forms.models import model_to_dict
+from django.core.mail import EmailMultiAlternatives
+from django.contrib.sites.models import Site
+
+
 
 class LessonView(generic.DetailView):
     from django.template.defaultfilters import slugify
@@ -251,6 +255,16 @@ class ProfileView(generic.DetailView):
     template_name = 'main/profile.html'
     model = User
 
+    def send_email(self, user, text_body):
+         text_body = 'MESSAGE:\n{} '.format(text_body)
+         site = Site.objects.get_current()
+         print("SITE: {}".format(site.domain))
+         from_address = '%s <no-reply@%s>' % (site.name, site.domain)
+         subject = "POCO user sign-up"
+         to_addresses = ('{}'.format('fickas@cs.uoregon.edu'),) #admin
+         msg = EmailMultiAlternatives(subject, text_body, from_address, to_addresses)
+         msg.send()
+
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
         context = self.get_context_data(object=self.object)
@@ -258,8 +272,7 @@ class ProfileView(generic.DetailView):
         print("REQUEST SESSION", request.session.items())
         print("GET context", context.items())
         return self.render_to_response(context)
-    # student_instance = user_instance.students
-    # course_prog = CourseProgress.create(student=student_instance)
+
     def get_context_data(self, **kwargs):
         # Call the base implementation first to get a context
         context = super(ProfileView, self).get_context_data(**kwargs)
@@ -270,7 +283,14 @@ class ProfileView(generic.DetailView):
             course_prog,created = student_instance.courseprogress_set.get_or_create(course=course_instance)
         return context
 
+    def post(self, request, *args, **kwargs):
+        if request.POST.get('messageContents'):
+            msg = request.POST.get('messageContents')
+            self.send_email(self.get_object(), msg)
+            return HttpResponse("post received to send email")
+        return HttpResponse("post received, no action taken by django")
 
+    
 class GoogleView(generic.TemplateView):
     template_name = 'main/google8a43fbed4f8a62b6.html'
 

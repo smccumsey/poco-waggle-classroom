@@ -10,11 +10,11 @@
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
 
+    <script src="{{STATIC_URL}}/js-cookie/src/js.cookie.js"></script>
     <script src="{{STATIC_URL}}/jquery/dist/jquery.js"></script>
     <script src="{{STATIC_URL}}/bootstrap/js/bootstrap.js"></script>
 
-	<script type="text/javascript">
-
+    <script type="text/javascript">
 
 		var clients = [];
 
@@ -193,7 +193,29 @@
 
 
   <script>
+
+    function postEmailMessage(message, currentTime) {
+        //ajax post
+        var csrftoken = Cookies.get('csrftoken');
+
+        $.ajax({
+    method: "POST",
+    url: "{{request.path}}",
+    beforeSend: function( xhr ) {
+    xhr.setRequestHeader("X-CSRFToken", csrftoken);
+    },
+    data: { messageContents: message} 
+
+    })
+    .done(function( response) {
+            console.log( "email sent: " + response);
+            });
+    }
+
 function sendMessage() {
+    var message = $("#modalMessage").text();
+    postEmailMessage(message);
+
     var text = "<p>Your message requesting registration was successfully sent.</p>";
     $(".modal-body").html(text);
     $(".modal-title").html("Message sent");
@@ -203,7 +225,9 @@ function sendMessage() {
 function requestRegistration(courseName) {
     var text = "<p>Currently you are not approved to take the course <i>"+courseName+"</i>.</p>";
     text += "<p><b> Please send Professor Fickas a message to gain access.</b></p>";
+    text += "<div id=modalMessage>";
     text += "<p><center><textarea style='background:#FFFFE0;width:100%;' rows='9'>Hello, &#13;&#10;&#9;I would like to register for '"+courseName+"'.&nbsp;Please let me know when I've been registered.&#13;&#10;&#13;&#10;{{object.first_name}}&nbsp;{{object.last_name}}&#13;&#10;{{object.email}}</textarea></center></p>";
+    text += "</div>";
     text += "<button type='button' id='myButton' class='btn btn-primary' onclick='sendMessage()'>Send Message</button>";
     $(".modal-body").html(text);
     $('#myModal').modal('show')
