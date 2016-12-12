@@ -2,6 +2,8 @@ from django.contrib import admin
 from .models import Course, Module, Assessment, Content, Related, Video, AssessmentSubmission
 from .models import Student, CourseProgress, ModuleProgress, AssessmentProgress, VideoProgress, ContentProgress
 
+from django.contrib.auth.admin import UserAdmin
+from django.contrib.auth.models import User
 class AssessmentFilter(admin.SimpleListFilter):
     # Human-readable title which will be displayed in the
     # right admin sidebar just above the filter options.
@@ -63,6 +65,7 @@ class AssessmentFilter(admin.SimpleListFilter):
         if self.value() == 'ten':
             return queryset.filter(assessment__module__title__contains = "10. ")
 
+
 class AssessmentProgressAdmin(admin.ModelAdmin):
     list_display = ('assessment', 'get_name', 'solved')
     search_fields = ['student__user__last_name', 'student__user__first_name']
@@ -72,6 +75,24 @@ class AssessmentProgressAdmin(admin.ModelAdmin):
     def get_name(self, obj):
         return obj.student.user.first_name + ' ' + obj.student.user.last_name
     get_name.short_description = 'Full name'
+
+class UserAdmin(admin.ModelAdmin):
+    actions = ['make_inactive','make_active']
+    list_display = ('email', 'first_name', 'last_name', 'is_active', 'date_joined', 'is_staff')
+    list_filter = ('is_active', )
+
+    def make_inactive(self, request, queryset):
+        queryset.update(is_active=False)
+    make_inactive.short_description = "Mark selected users as inactive"
+
+    def make_active(self, request, queryset):
+        queryset.update(is_active=True)
+    make_active.short_description = "Mark selected users as active"
+
+
+admin.site.unregister(User)
+admin.site.register(User, UserAdmin)
+
 
 admin.site.register(Course)
 admin.site.register(Module)
