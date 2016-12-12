@@ -153,103 +153,110 @@ class LessonView(generic.DetailView):
             assessmentID = request.POST.get('assessmentID')
             print('USER CODE: {}'.format(usr_code))
             print('ASSESSMENT ID: {}'.format(usr_code, assessmentID))
-            envFile = Assessment.objects.get(id=int(assessmentID)).assess_file.path
-            testFile = self.setupEnv(usr_code, envFile, request.user)
-            result_feedback = list(map(lambda x: x.decode('ASCII'), self.runCode(testFile)))
-            print('RAW RESULT: {}'.format(result_feedback))
-            if result_feedback[0]: #stdout
-                print("STDOUT")
-                out_string = result_feedback[0]
-                def parseLong(err):
-                    span = re.search('Long.+}', err).span()
-                    old = err[(span[0]+7):(span[1]-1)]
-                    #print("LONG ERR0",old)
-                    if "Error(" in old:
-                        new = repr(old)[1:-1].replace("\'","*").replace("\"","`")
-                        #print("LONG ERR1",new)
-                        return(err.replace(old, "'"+new+"'"))
-                    return err
-                    
-                out_string = [parseLong(err) for err in out_string.splitlines()]
-                #print(out_string)
-                parsed_result_feedback  = json.dumps([ {k:v for k,v in (eval(err)).items()} for err in out_string])
-            elif result_feedback[1]: #stderr
-                print("STERR")
-                error_string = result_feedback[1]
-                name = "Error"
-                shortd = [x for x in error_string.split() if 'Error' in x].pop()[:-1]
-                longd =  error_string[(error_string.find(shortd)):-1] #+ error_string[(error_string.find('\n')):(error_string.find(shortd))] 
-                if 'Indentation' in shortd:
-                    name = 'Indentation error'
-                    shortd = 'Make sure you are using tabs for indentation, and not spaces.'
-                
+            if len(usr_code.strip()) == 0:
+                name = "Emtpy submission"
+                shortd = "No code in the text editor" 
+                longd = "Please enter code before submitting solution."
                 feedback = {"Name":name, "Short":shortd, "Long":longd}
                 parsed_result_feedback = json.dumps([feedback])
             else:
-                parsed_result_feedback = "good"
-            print('PARSED RESULT: {}'.format(parsed_result_feedback))
-            assessment_progress = AssessmentProgress.objects.get(student=Student.objects.get(user=request.user), assessment=Assessment.objects.get(id=int(assessmentID)))
-            assessment_progress.code_submission = usr_code
-            assessment_progress.errors_list = parsed_result_feedback
-            assessment_progress.attempted = True
-            assessment_progress.number_of_attempts = assessment_progress.number_of_attempts+1
-            if parsed_result_feedback == 'good':
-                assessment_progress.solved = True
-            assessment_progress.save()
-            ap_record = str(model_to_dict(assessment_progress))
-            AssessmentSubmission.objects.create(submission_record = ap_record)
-            return HttpResponse(parsed_result_feedback)
-        return self.get(request, *args, **kwargs)
+                envFile = Assessment.objects.get(id=int(assessmentID)).assess_file.path
+                testFile = self.setupEnv(usr_code, envFile, request.user)
+                result_feedback = list(map(lambda x: x.decode('ASCII'), self.runCode(testFile)))
+                print('RAW RESULT: {}'.format(result_feedback))
+                if result_feedback[0]: #stdout
+                    print("STDOUT")
+                    out_string = result_feedback[0]
+                    def parseLong(err):
+                        span = re.search('Long.+}', err).span()
+                        old = err[(span[0]+7):(span[1]-1)]
+                        #print("LONG ERR0",old)
+                        if "Error(" in old:
+                            new = repr(old)[1:-1].replace("\'","*").replace("\"","`")
+                            #print("LONG ERR1",new)
+                            return(err.replace(old, "'"+new+"'"))
+                        return err
+                        
+                    out_string = [parseLong(err) for err in out_string.splitlines()]
+                    #print(out_string)
+                    parsed_result_feedback  = json.dumps([ {k:v for k,v in (eval(err)).items()} for err in out_string])
+                elif result_feedback[1]: #stderr
+                    print("STERR")
+                    error_string = result_feedback[1]
+                    name = "Error"
+                    shortd = [x for x in error_string.split() if 'Error' in x].pop()[:-1]
+                    longd =  error_string[(error_string.find(shortd)):-1] #+ error_string[(error_string.find('\n')):(error_string.find(shortd))] 
+                    if 'Indentation' in shortd:
+                        name = 'Indentation error'
+                        shortd = 'Make sure you are using tabs for indentation, and not spaces.'
+                    
+                    feedback = {"Name":name, "Short":shortd, "Long":longd}
+                    parsed_result_feedback = json.dumps([feedback])
+                else:
+                    parsed_result_feedback = "good"
+                print('PARSED RESULT: {}'.format(parsed_result_feedback))
+                assessment_progress = AssessmentProgress.objects.get(student=Student.objects.get(user=request.user), assessment=Assessment.objects.get(id=int(assessmentID)))
+                assessment_progress.code_submission = usr_code
+                assessment_progress.errors_list = parsed_result_feedback
+                assessment_progress.attempted = True
+                assessment_progress.number_of_attempts = assessment_progress.number_of_attempts+1
+                if parsed_result_feedback == 'good':
+                    assessment_progress.solved = True
+                assessment_progress.save()
+                ap_record = str(model_to_dict(assessment_progress))
+                AssessmentSubmission.objects.create(submission_record = ap_record)
+                return HttpResponse(parsed_result_feedback)
+            return self.get(request, *args, **kwargs)
 
-class MenuView(generic.DetailView):
-    template_name = 'main/menu.html'
-    model=User
+    class MenuView(generic.DetailView):
+        template_name = 'main/menu.html'
+        model=User
 
-    # student_instance = user_instance.students
-    # module_prog = ModuleProgress.create(student=student_instance)
-    def get(self, request, *args, **kwargs):
-        request.session['course_title'] = self.kwargs['course']
-        self.object = self.get_object()
-        context = self.get_context_data(object=self.object)
-        studentId = context['user'].students.id
-        courseId = context['course_obj'].id
-        print("REQUEST SESSION", request.session.items())
-        print(studentId, courseId)
-        print(CourseProgress.objects.all().values())
-        print("GET context", context.items())
-        if not (CourseProgress.objects.filter(student_id=studentId, course_id=courseId,approved=True)):
-            request.session['approved'] = False
-            return HttpResponseNotFound("<br/><br/><h1 style='text-align:center;vertical_align:middle;'>Please register for the course to access this page</h1>")
+        # student_instance = user_instance.students
+        # module_prog = ModuleProgress.create(student=student_instance)
+        def get(self, request, *args, **kwargs):
+            request.session['course_title'] = self.kwargs['course']
+            self.object = self.get_object()
+            context = self.get_context_data(object=self.object)
+            studentId = context['user'].students.id
+            courseId = context['course_obj'].id
+            print("REQUEST SESSION", request.session.items())
+            print(studentId, courseId)
+            print(CourseProgress.objects.all().values())
+            print("GET context", context.items())
+            if not (CourseProgress.objects.filter(student_id=studentId, course_id=courseId,approved=True)):
+                request.session['approved'] = False
+                return HttpResponseNotFound("<br/><br/><h1 style='text-align:center;vertical_align:middle;'>Please register for the course to access this page</h1>")
 
-        request.session['approved'] = True
-        return self.render_to_response(context)
+            request.session['approved'] = True
+            return self.render_to_response(context)
 
-    def get_context_data(self, **kwargs):
-        # Call the base implementation first to get a context
-        context = super(MenuView, self).get_context_data(**kwargs)
-        courses = [(slugify(c.title),c) for c in Course.objects.all()]
-        course_title= self.kwargs.get('course')
-        course_lookup = [c[1] for c in courses if c[0]==course_title].pop() #sloppy
+        def get_context_data(self, **kwargs):
+            # Call the base implementation first to get a context
+            context = super(MenuView, self).get_context_data(**kwargs)
+            courses = [(slugify(c.title),c) for c in Course.objects.all()]
+            course_title= self.kwargs.get('course')
+            course_lookup = [c[1] for c in courses if c[0]==course_title].pop() #sloppy
 
-        context['course_obj'] = course_lookup
-        context['modules'] = Module.objects.filter(course_id=course_lookup.id)
-        # setup module progress for student
-        student_instance = context['object'].students
-        for module_instance in context['modules']:
-            module_prog,created = student_instance.moduleprogress_set.get_or_create(module=module_instance)
+            context['course_obj'] = course_lookup
+            context['modules'] = Module.objects.filter(course_id=course_lookup.id)
+            # setup module progress for student
+            student_instance = context['object'].students
+            for module_instance in context['modules']:
+                module_prog,created = student_instance.moduleprogress_set.get_or_create(module=module_instance)
 
-        return context
+            return context
 
-    def post(self, request, *args, **kwargs):
-        print("UPDATE MODULE PROGRESS", request.POST.dict())
-        if request.POST.get('changeButton'):
-            moduleID = request.POST.get('moduleID')
-            # update module progress
-            module_progress = ModuleProgress.objects.get(student=Student.objects.get(user=request.user), module=Module.objects.get(id=int(moduleID)))
-            module_progress.started = True
-            module_progress.save()
-            return HttpResponse("module progress has been saved with started=True")
-        return HttpResponse("post received, no action taken by django")
+        def post(self, request, *args, **kwargs):
+            print("UPDATE MODULE PROGRESS", request.POST.dict())
+            if request.POST.get('changeButton'):
+                moduleID = request.POST.get('moduleID')
+                # update module progress
+                module_progress = ModuleProgress.objects.get(student=Student.objects.get(user=request.user), module=Module.objects.get(id=int(moduleID)))
+                module_progress.started = True
+                module_progress.save()
+                return HttpResponse("module progress has been saved with started=True")
+            return HttpResponse("post received, no action taken by django")
 
 class ProfileView(generic.DetailView):
     template_name = 'main/profile.html'
